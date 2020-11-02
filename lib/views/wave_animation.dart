@@ -9,8 +9,8 @@ class WaveAnimation extends StatefulWidget {
     this.lineColor: Colors.black,
     this.lineBorder: 2.0,
     this.duration: const Duration(seconds: 4),
-    this.angle:0.0,
-    this.amplitude:20,
+    this.angle: 0.0,
+    this.amplitude: 20,
   });
 
   final Duration duration;
@@ -32,18 +32,18 @@ class _WaveAnimationState extends State<WaveAnimation>
 
   void initState() {
     super.initState();
-    double _test = widget.duration.inSeconds*25.0;
-  _animationController= AnimationController(
-
+    double _test = widget.duration.inSeconds * 25.0;
+    _animationController = AnimationController(
         duration: widget.duration, upperBound: _test, vsync: this);
-  _animationController.addListener(_listener);
-  _animationController.repeat();
+    _animationController.addListener(_listener);
+    _animationController.repeat();
   }
 
-  void _listener(){
+  void _listener() {
     setState(() {});
   }
-  void dispose(){
+
+  void dispose() {
     super.dispose();
     _animationController.dispose();
   }
@@ -53,17 +53,16 @@ class _WaveAnimationState extends State<WaveAnimation>
     return CustomPaint(
       size: Size.infinite,
       painter: _Wave(
-          animation: _animationController.value,
-          lineColor: widget.lineColor,
-          filledColor: widget.filledColor,
-          lineBorder: widget.lineBorder,
-          angle: widget.angle,
+        animation: _animationController.value,
+        lineColor: widget.lineColor,
+        filledColor: widget.filledColor,
+        lineBorder: widget.lineBorder,
+        angle: widget.angle,
         amplitude: widget.amplitude,
       ),
     );
   }
 }
-
 
 class _Wave extends CustomPainter {
   _Wave({
@@ -82,17 +81,18 @@ class _Wave extends CustomPainter {
   final double angle;
   final double amplitude;
 
-
   List<Offset> _waves = List();
 
   double _eachGap = 100 / ScreenUtil().screenWidth;
 
-
   List<Offset> _makeWaves(Size _size) {
     List<Offset> _res = List();
     for (double i = -_size.width; i < _size.width * 2; i++) {
-      _res.add(Offset(i,
-          this.amplitude * sin(animation + 0.01 * i) + _size.height / 2 - (_eachGap * i)));
+      _res.add(Offset(
+          i,
+          this.amplitude * sin(animation + 0.01 * i) +
+              _size.height / 2 -
+              (_eachGap * i)));
     }
     return _res;
   }

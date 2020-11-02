@@ -1,4 +1,6 @@
 
+import 'file:///D:/flutter_project/EveryDayBible/lib/views/every_day_bible.dart';
+import 'package:everydaybible/utils/bible_parser.dart';
 import 'package:everydaybible/views/wave_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +14,9 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash>  {
 
+  BibleParser _parser = BibleParser();
   void initState(){
+
     super.initState();
   }
   void dispose(){
@@ -29,22 +33,26 @@ class _SplashState extends State<Splash>  {
                 style: Theme.of(context).textTheme.headline2,
                 children: [
                   TextSpan(text: "Every Day\n"),
-                  TextSpan(text: "Title",style: TextStyle(color: Theme.of(context).primaryColor)),
+                  TextSpan(text: "Title",style: TextStyle(color: Theme.of(context).primaryColor,fontWeight: FontWeight.bold)),
                 ])),
       );
     }
 
-    Widget _splashAnimation() {
+/*    Widget _splashAnimation() {
       return WaveAnimation(
         amplitude: 40,
       );
-    }
+    }*/
 
     Widget _button() {
       return Align(
         alignment: Alignment(0.0, 0.7),
-        child: RaisedButton(
-          onPressed: () {},
+        child: FlatButton(
+          onPressed: () {
+            Navigator.push(context, MaterialPageRoute(
+                builder: (context)=>EveryDayBible()
+            ));
+          },
           child: Text("button"),
         ),
       );
@@ -53,7 +61,7 @@ class _SplashState extends State<Splash>  {
     return Stack(
       children: [
         _title(),
-        _splashAnimation(),
+       // _splashAnimation(),
         _button(),
       ],
     );
@@ -62,6 +70,7 @@ class _SplashState extends State<Splash>  {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
+    _parser.init();
     return Scaffold(
       body: _body(),
     );

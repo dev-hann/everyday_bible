@@ -1,9 +1,6 @@
-
-
 import 'package:flutter/material.dart';
 
 import 'views/splash.dart';
-
 
 void main() {
   runApp(MyApp());
@@ -24,4 +21,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
