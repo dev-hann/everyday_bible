@@ -11,8 +11,12 @@ class WaveAnimation extends StatefulWidget {
     this.duration: const Duration(seconds: 4),
     this.angle: 0.0,
     this.amplitude: 20,
-  });
+    this.height:double.infinity,
+    this.width:double.infinity,
 
+  });
+  final double width;
+  final double height;
   final Duration duration;
   final Color filledColor;
   final Color lineColor;
@@ -32,9 +36,8 @@ class _WaveAnimationState extends State<WaveAnimation>
 
   void initState() {
     super.initState();
-    double _test = widget.duration.inSeconds * 25.0;
     _animationController = AnimationController(
-        duration: widget.duration, upperBound: _test, vsync: this);
+        duration: widget.duration, vsync: this);
     _animationController.addListener(_listener);
     _animationController.repeat();
   }
@@ -51,7 +54,7 @@ class _WaveAnimationState extends State<WaveAnimation>
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      size: Size.infinite,
+      size: Size(widget.width,widget.height),
       painter: _Wave(
         animation: _animationController.value,
         lineColor: widget.lineColor,
@@ -90,7 +93,7 @@ class _Wave extends CustomPainter {
     for (double i = -_size.width; i < _size.width * 2; i++) {
       _res.add(Offset(
           i,
-          this.amplitude * sin(animation + 0.01 * i) +
+          this.amplitude * sin(2*animation*pi + 0.01 * i) +
               _size.height / 2 -
               (_eachGap * i)));
     }
@@ -108,13 +111,13 @@ class _Wave extends CustomPainter {
     return Paint()
       ..color = lineColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = lineBorder;
+      ..strokeWidth = lineBorder
+      ;
   }
 
   @override
   void paint(Canvas canvas, Size size) {
     _waves = _makeWaves(size);
-
     for (int i = 0; i < _waves.length - 1; i++) {
       canvas.drawLine(_waves[i], _waves[i + 1], _linePaint());
       canvas.drawLine(

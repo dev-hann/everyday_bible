@@ -44,7 +44,13 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  fonts:
+  - family: Fondamento
+    fonts:
+    - asset: assets/fonts/Fondamento-Regular.ttf
+  - family: Norican
+    fonts:
+    - asset: assets/fonts/Norican-Regular.ttf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
