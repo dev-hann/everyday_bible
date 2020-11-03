@@ -1,6 +1,5 @@
 
 class Bible{
-
   static final Bible _bible = Bible._internal();
 
   factory Bible(){
@@ -9,10 +8,10 @@ class Bible{
 
   Bible._internal();
 
-  DateTime dateTime = DateTime.now();
+  DateTime _dateTime = DateTime.now();
   Map<int,String> contents = Map();
   String audio;
-  String get title => contents[0];
+  String title;
 
-
+  get dateTime =>_dateTime;
 }
