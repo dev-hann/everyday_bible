@@ -1,6 +1,8 @@
-import 'package:everydaybible/models/bible.dart';
+import 'package:everydaybible/controller/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:snap/Export.dart';
 
 class EveryDayBible extends StatefulWidget {
   @override
@@ -9,86 +11,124 @@ class EveryDayBible extends StatefulWidget {
   }
 }
 
-class _EveryDayBibleState extends State<EveryDayBible> with SingleTickerProviderStateMixin{
-  Bible _bible = Bible();
+class _EveryDayBibleState extends State<EveryDayBible>
+    with TickerProviderStateMixin {
+  BibleController _bibleController;
   ScrollController _scrollController;
-  AnimationController _playAnimation;
+  AnimationController _playButtonAnimation;
+  double _currentScrollPos = 0.0;
 
-  double _currentScrollPos=0.0;
-  void initState(){
+  void initState() {
     super.initState();
-    _playAnimation = AnimationController(vsync: this,duration: Duration(milliseconds: 300));
+    _bibleController = Provider.of<BibleController>(context, listen: false);
+    _playButtonAnimation =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
     _scrollController = ScrollController()..addListener(_scrollListener);
   }
 
-  void _scrollListener(){
-    double _max =_scrollController.position.maxScrollExtent;
-    double _current =_scrollController.offset ;
-    _currentScrollPos = _current/_max;
+  void _scrollListener() {
+    double _max = _scrollController.position.maxScrollExtent;
+    double _current = _scrollController.offset;
+    _currentScrollPos = _current / _max;
 
     setState(() {});
   }
-Widget _appBar(){
-    return AppBar(
-      title: Text(_bible.title),
-      automaticallyImplyLeading: false,
-      actions: [
-           IconButton(
-             onPressed: (){
-               if(_playAnimation.isCompleted){
-                _playAnimation.reverse() ;
-               }else {
-                 _playAnimation.forward();
-               }
-             },
-             icon: AnimatedIcon(
-               progress: _playAnimation,
-               icon: AnimatedIcons.play_pause,
-             ),
-           ),
-      ],
-    );
-}
-Widget _body() {
-  Widget _contents() {
-    return ListView(
-      controller: _scrollController,
-      children: _bible.contents.entries
-          .map((e) =>
-          ListTile(
-            leading: Text("${e.key}"),
-            title: Text("${e.value}"),
-          ))
-          .toList(),
-    );
+
+  void dispose() {
+    super.dispose();
+    _bibleController.audioDispose();
   }
 
-  Widget _sideBar(){
-    return Align(
-      alignment: Alignment.topRight,
-      child: SizedBox(
-        height: ScreenUtil().screenHeight*_currentScrollPos,
-        width: 2,
-        child: ColoredBox(
-          color: Theme.of(context).primaryColorDark,
+  Widget _body() {
+    Widget _title() {
+      return Align(
+          alignment: Alignment(-0.8, -0.8),
+          child: Text.rich(
+            TextSpan(children: [
+//              TextSpan(text: _bibleController.dateTime.toString()+"\n",style: Theme.of(context).textTheme.bodyText1),
+              TextSpan(text: _bibleController.title + "\n"),
+              TextSpan(
+                  text: _bibleController.subTitle,
+                  style: Theme.of(context).textTheme.subtitle2)
+            ]),
+            style: Theme.of(context)
+                .textTheme
+                .headline4
+                .copyWith(fontWeight: FontWeight.bold),
+          ));
+    }
+
+    Widget _gospelList() {
+      return Align(
+        alignment: Alignment(1, 0),
+        child: Text(
+          """
+Flutter: How to Use Gradients and the GradientAppBar Plugin ...www.digitalocean.com › tutorials › flutter-flutter-gradient
+Apr 22, 2019 — The key to this is the addition of a decoration and boxDecoration to our Container widget. This allows us to define a LinearGradient which can be given colors , as well as a begin and end Alignment .""",
+        ),
+      );
+    }
+
+    return Container(
+      decoration: _backgroundColor(),
+      padding: EdgeInsets.all(20),
+      child: Center(
+        child: Stack(
+          children: [
+            _title(),
+            _gospelList(),
+            _bottom(),
+          ],
         ),
       ),
     );
   }
-  return Stack(
-    children: [
-      _contents(),
-      _sideBar()
-    ],
-  );
 
-}
-  @override
-
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(),
-      body: _body(),
+  Widget _bottom() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+//        color: Colors.grey,
+        height: kToolbarHeight,
+        child: Row(
+          children: [
+            IconButton(
+              onPressed: () {
+                if (_playButtonAnimation.isCompleted) {
+                  _playButtonAnimation.reverse();
+                  _bibleController.audioPause();
+                } else {
+                  _playButtonAnimation.forward();
+                  _bibleController.audioPlay();
+                }
+              },
+              icon: CircleAvatar(
+                backgroundColor: Theme.of(context).primaryColorDark,
+                child: AnimatedIcon(
+                  icon: AnimatedIcons.play_pause,
+                  progress: _playButtonAnimation,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Text(_bibleController.totalDuration.toString())
+          ],
+        ),
+      ),
     );
+  }
+
+  BoxDecoration _backgroundColor() {
+    return BoxDecoration(
+      gradient: LinearGradient(colors: <Color>[
+        Theme.of(context).primaryColorLight,
+        Theme.of(context).primaryColorDark,
+      ], begin: Alignment.topLeft, end: Alignment.bottomCenter),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: _body());
   }
 }

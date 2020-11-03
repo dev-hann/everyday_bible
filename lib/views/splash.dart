@@ -1,6 +1,9 @@
-import 'package:everydaybible/utils/bible_parser.dart';
+import 'package:everydaybible/controller/controller.dart';
+import 'package:everydaybible/utils/animations/page_animation.dart';
+import 'package:everydaybible/utils/animations/spreading_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
 import 'every_day_bible.dart';
 
@@ -11,13 +14,24 @@ class Splash extends StatefulWidget {
   }
 }
 
-class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
-  BibleParser _parser = BibleParser();
-  AnimationController _animationController;
+class _SplashState extends State<Splash> with TickerProviderStateMixin {
+  AnimationController _titleAnimation;
+  AnimationController _fadeOutAnimation;
+
+  bool _isLoading = true;
 
   void initState() {
     super.initState();
-    _animationController = AnimationController(
+    Provider.of<BibleController>(context, listen: false)
+        .loadData()
+        .whenComplete(() {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+    _fadeOutAnimation =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    _titleAnimation = AnimationController(
       duration: Duration(milliseconds: 1500),
       vsync: this,
     )..forward();
@@ -28,14 +42,14 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
       TextStyle _theme = Theme.of(context).textTheme.headline2;
       Widget _aniContainer(Widget text) {
         return AnimatedBuilder(
-          animation: _animationController,
+          animation: _titleAnimation,
           builder: (_, child) {
             return Container(
               padding: EdgeInsets.only(
-                left: _animationController.value * 20,
+                left: _titleAnimation.value * 20,
               ),
               child: Opacity(
-                opacity: _animationController.value,
+                opacity: _titleAnimation.value,
                 child: text,
               ),
             );
@@ -49,18 +63,22 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _aniContainer(Text(
-              "Every Day",
-              style: _theme,
-              //             style: _theme.copyWith(fontFamily: "Norican",fontWeight: FontWeight.bold),
-//              style: _theme.copyWith(fontFamily: "Fondamento"),
-            )),
-            _aniContainer(Text(
-              "Bible",
-              style: _theme.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColorDark),
-            ))
+            _aniContainer(
+              Text(
+                "Every Day",
+                style: _theme,
+/*                //             style: _theme.copyWith(fontFamily: "Norican",fontWeight: FontWeight.bold),
+//              style: _theme.copyWith(fontFamily: "Fondamento"),*/
+              ),
+            ),
+            _aniContainer(
+              Text(
+                "Animation",
+                style: _theme.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColorDark),
+              ),
+            ),
           ],
         ),
       );
@@ -69,43 +87,68 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
     Widget _button() {
       return Align(
         alignment: Alignment(0.8, 0.8),
-        child: FutureBuilder(
-          future: _parser.init(),
-          builder: (_, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return FlatButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => EveryDayBible()));
-                },
-                child: Text("Button"),
-              );
-            } else {
-              return SizedBox(
-                height: 20,
+        child: (_isLoading)
+            ? SizedBox(
                 width: 20,
+                height: 20,
                 child: CircularProgressIndicator(),
-              );
-            }
-          },
-        ),
+              )
+            : FlatButton(
+                onPressed: () {
+                 _fadeOutAnimation.forward().whenComplete(() {
+                   Navigator.push(context, FadePageRoute(builder: (context)=>EveryDayBible()));
+                 });
+                },
+                child: Text(
+                  "hello",
+                  style: TextStyle(
+                      color: Theme.of(context).primaryColorLight, fontSize: 22),
+                ),
+              ),
       );
     }
 
     BoxDecoration _backgroundColor() {
       return BoxDecoration(
-        gradient: LinearGradient(
-            colors: <Color>[
+        gradient: LinearGradient(colors: <Color>[
           Theme.of(context).primaryColorLight.withOpacity(0.7),
           Theme.of(context).primaryColorDark,
         ], begin: Alignment.topLeft, end: Alignment.bottomCenter),
       );
     }
 
+    Widget _fadeOut() {
+      return FadeTransition(
+        opacity: _fadeOutAnimation,
+        child: SizedBox.expand(
+          child: ColoredBox(
+            color: Theme.of(context).primaryColorLight,
+          ),
+        ),
+      );
+
+      /* return AnimatedBuilder(
+          animation: _fadeOutAnimationController,
+          builder: (_,child){
+            return CustomPaint(
+              size: Size.infinite,
+              painter: SpreadingAnimation(
+                beginPos: Alignment(0.8, 0.8),
+                  color: Theme.of(context).primaryColorLight,
+                  animation: _fadeOutAnimationController.value
+              ),
+            );
+          });*/
+    }
+
     return Container(
       decoration: _backgroundColor(),
       child: Stack(
-        children: [_title(), _button()],
+        children: [
+          _title(),
+          _fadeOut(),
+          _button(),
+        ],
       ),
     );
   }

@@ -1,17 +1,11 @@
+class Bible {
+  Bible({this.title, this.audio, this.gospel, this.subTitle});
 
-class Bible{
-  static final Bible _bible = Bible._internal();
+  final DateTime _dateTime = DateTime.now();
+  final Map<int, String> gospel;
+  final String audio;
+  final String title;
+  final String subTitle;
 
-  factory Bible(){
-    return _bible;
-  }
-
-  Bible._internal();
-
-  DateTime _dateTime = DateTime.now();
-  Map<int,String> contents = Map();
-  String audio;
-  String title;
-
-  get dateTime =>_dateTime;
+  get dateTime => _dateTime;
 }
