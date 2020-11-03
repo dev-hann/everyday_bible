@@ -1,4 +1,3 @@
-
 import 'package:everydaybible/utils/bible_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,29 +13,33 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
   BibleParser _parser = BibleParser();
-  AnimationController _titleAniController;
+  AnimationController _animationController;
 
   void initState() {
     super.initState();
-   _parser.init();
-    _titleAniController =
-    AnimationController(duration: Duration(milliseconds: 1500), vsync: this)
-      ..forward()
-      ..addListener((){setState(() {});});
+    _animationController = AnimationController(
+      duration: Duration(milliseconds: 1500),
+      vsync: this,
+    )..forward();
   }
-
 
   Widget _body() {
     Widget _title() {
-      TextStyle _theme = Theme
-          .of(context)
-          .textTheme
-          .headline2;
+      TextStyle _theme = Theme.of(context).textTheme.headline2;
       Widget _aniContainer(Widget text) {
-        return AnimatedContainer(
-          padding: EdgeInsets.only(left: _titleAniController.value * 20),
-          duration: Duration.zero,
-          child: Opacity(opacity: _titleAniController.value, child: text),
+        return AnimatedBuilder(
+          animation: _animationController,
+          builder: (_, child) {
+            return Container(
+              padding: EdgeInsets.only(
+                left: _animationController.value * 20,
+              ),
+              child: Opacity(
+                opacity: _animationController.value,
+                child: text,
+              ),
+            );
+          },
         );
       }
 
@@ -49,34 +52,52 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
             _aniContainer(Text(
               "Every Day",
               style: _theme,
- //             style: _theme.copyWith(fontFamily: "Norican",fontWeight: FontWeight.bold),
+              //             style: _theme.copyWith(fontFamily: "Norican",fontWeight: FontWeight.bold),
 //              style: _theme.copyWith(fontFamily: "Fondamento"),
             )),
             _aniContainer(Text(
-              "Title",
+              "Bible",
               style: _theme.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: Theme
-                      .of(context)
-                      .primaryColorDark),
+                  color: Theme.of(context).primaryColorDark),
             ))
           ],
         ),
       );
     }
 
-
+    Widget _button() {
+      return Align(
+        alignment: Alignment(0.8, 0.8),
+        child: FutureBuilder(
+          future: _parser.init(),
+          builder: (_, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return FlatButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => EveryDayBible()));
+                },
+                child: Text("Button"),
+              );
+            } else {
+              return SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
+      );
+    }
 
     BoxDecoration _backgroundColor() {
       return BoxDecoration(
-        gradient: LinearGradient(colors: [
-          Theme
-              .of(context)
-              .primaryColorLight
-              .withOpacity(0.7),
-          Theme
-              .of(context)
-              .primaryColorDark,
+        gradient: LinearGradient(
+            colors: <Color>[
+          Theme.of(context).primaryColorLight.withOpacity(0.7),
+          Theme.of(context).primaryColorDark,
         ], begin: Alignment.topLeft, end: Alignment.bottomCenter),
       );
     }
@@ -84,9 +105,7 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
     return Container(
       decoration: _backgroundColor(),
       child: Stack(
-        children: [
-          _title(),
-        ],
+        children: [_title(), _button()],
       ),
     );
   }
