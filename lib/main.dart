@@ -2,7 +2,9 @@ import 'package:everydaybible/controller/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'views/splash.dart';
+import 'views/views.dart';
+
+
 
 void main() {
   runApp(MyApp());
@@ -22,8 +24,11 @@ class MyApp extends StatelessWidget {
           iconTheme: IconThemeData(
             color: Colors.white
           ),
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor: Colors.transparent
+          ),
           textTheme: TextTheme(
-            bodyText2: TextStyle(color: Colors.white,fontSize: 18)
+            bodyText2: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold)
           ),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),

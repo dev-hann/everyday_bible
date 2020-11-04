@@ -1,11 +1,4 @@
-import 'package:everydaybible/controller/controller.dart';
-import 'package:everydaybible/utils/animations/page_animation.dart';
-import 'package:everydaybible/utils/animations/spreading_animation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
-
-import 'every_day_bible.dart';
+part of views;
 
 class Splash extends StatefulWidget {
   @override

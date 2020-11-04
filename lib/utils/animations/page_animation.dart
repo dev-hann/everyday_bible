@@ -1,4 +1,3 @@
-import 'package:everydaybible/views/every_day_bible.dart';
 import 'package:flutter/material.dart';
 
 class FadePageRoute extends PageRoute {
