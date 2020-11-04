@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 class BibleController extends ChangeNotifier {
   static const _bibleAddress = "https://sum.su.or.kr:8888/bible/today";
 
+  final BibleWebParser _bibleWebParser = BibleWebParser();
+
+  final BibleAudioPlayer _bibleAudioPlayer = BibleAudioPlayer();
+
   Bible _bible;
-
-  BibleWebParser _bibleWebParser = BibleWebParser();
-
-  BibleAudioPlayer _bibleAudioPlayer = BibleAudioPlayer();
 
   DateTime get dateTime => _bible.dateTime;
 
@@ -21,20 +21,32 @@ class BibleController extends ChangeNotifier {
 
   Map<int, String> get gospels => _bible.gospel;
 
-  int get totalDuration => _totalDuration;
-  int _totalDuration = 0;
+  String get totalDuration => dateTimeFrom(_totalDuration);
 
-  Future loadData() async {
+  String get currentDuration => dateTimeFrom(_currentDuration);
+
+  Duration _totalDuration = Duration.zero;
+  Duration _currentDuration = Duration.zero;
+
+  String dateTimeFrom(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$twoDigitMinutes:$twoDigitSeconds";
+    //   return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  Future init() async {
     if (_bible == null) {
       print("Loading Today Bible Data..");
       await _bibleWebParser.connectWith(_bibleAddress);
-      _setData();
+      await _setData();
       print("Load Completed!");
-      _audioPlayerInit();
+      await _audioPlayerInit();
     }
   }
 
-  void _setData() {
+  Future _setData() async {
     print("Set Data..");
     _bible = Bible(
       title: _bibleWebParser.todayTitle,
@@ -42,13 +54,26 @@ class BibleController extends ChangeNotifier {
       audio: _bibleWebParser.todayAudio,
       gospel: _bibleWebParser.todayGospel,
     );
+    return;
   }
 
   Future _audioPlayerInit() async {
-   /* await audioPlay().whenComplete(()async{
-      await audioStop();
-    } );
-    _totalDuration = await _bibleAudioPlayer.totalDuration;*/
+    await _bibleAudioPlayer.setURL(_bible.audio);
+    await _totalDurationStream();
+    await _currentDurationStream();
+  }
+
+  Future _currentDurationStream() async {
+    _bibleAudioPlayer.currentDuration.listen((event) {
+      _currentDuration = event;
+      notifyListeners();
+    });
+  }
+
+  Future _totalDurationStream() async {
+    _bibleAudioPlayer.totalDuration.listen((event) {
+      _totalDuration = event;
+    });
   }
 
   Future audioPlay() async {

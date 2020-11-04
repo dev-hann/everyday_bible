@@ -16,10 +16,14 @@ class MyApp extends StatelessWidget {
         title: 'EveyDay Bible',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          accentColor: Colors.brown.shade800,
+          accentColor: Colors.brown.shade700,
           primarySwatch: Colors.brown,
+          cardColor: Colors.brown.shade900,
+          iconTheme: IconThemeData(
+            color: Colors.white
+          ),
           textTheme: TextTheme(
-            bodyText2: TextStyle(color: Colors.white70,fontSize: 18)
+            bodyText2: TextStyle(color: Colors.white,fontSize: 18)
           ),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),

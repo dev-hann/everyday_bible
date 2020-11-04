@@ -3,8 +3,14 @@ import 'package:audioplayers/audioplayers.dart';
 class BibleAudioPlayer {
   AudioPlayer _audioPlayer = AudioPlayer();
 
-  Future<int> get totalDuration=> _audioPlayer.getDuration();
-  Stream<Duration> get currentChanged => _audioPlayer.onAudioPositionChanged;
+  Stream<Duration> get totalDuration=> _audioPlayer.onDurationChanged;
+  Stream<Duration> get currentDuration => _audioPlayer.onAudioPositionChanged;
+
+
+
+  Future setURL(String url)async{
+      await _audioPlayer.setUrl(url);
+  }
   Future play(String url) async {
      await _audioPlayer.play(url);
   }
