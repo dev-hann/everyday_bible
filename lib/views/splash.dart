@@ -22,13 +22,13 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
 
   void initState() {
     super.initState();
-    Provider.of<BibleController>(context, listen: false)
+   /* Provider.of<BibleController>(context, listen: false)
         .loadData()
         .whenComplete(() {
       setState(() {
         _isLoading = false;
       });
-    });
+    });*/
     _fadeOutAnimation =
         AnimationController(vsync: this, duration: Duration(milliseconds: 500));
     _titleAnimation = AnimationController(
@@ -73,7 +73,7 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
             ),
             _aniContainer(
               Text(
-                "Animation",
+                "Bible",
                 style: _theme.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).primaryColorDark),
@@ -85,9 +85,46 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
     }
 
     Widget _button() {
+      AnimationController _btnAnimation= AnimationController(vsync: this,duration: Duration(milliseconds: 1500));
+      Animation _fadeOut = Tween<double>(begin: 1.0,end:0.0).animate(_btnAnimation);
+     Animation _fadeIn = Tween<double>(begin: 0.0,end:1.0).animate(_btnAnimation) ;
+      Provider.of<BibleController>(context, listen: false)
+          .loadData()
+          .whenComplete(() {
+          _btnAnimation.forward();
+      });
+
       return Align(
         alignment: Alignment(0.8, 0.8),
-        child: (_isLoading)
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            FadeTransition(
+              opacity:_fadeOut ,
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(),
+              ),
+            ) ,
+            FadeTransition(
+              opacity: _fadeIn,
+              child: GestureDetector(
+                onTap: () {
+                  _fadeOutAnimation.forward().whenComplete(() {
+                    Navigator.push(context, FadePageRoute(builder: (context)=>EveryDayBible()));
+                  });
+                },
+                child: Text(
+                  "hello",
+                  style: TextStyle(
+                      color: Theme.of(context).primaryColorLight, fontSize: 22),
+                ),
+              ),
+            ),
+          ],
+        )
+        /* (_isLoading)
             ? SizedBox(
                 width: 20,
                 height: 20,
@@ -104,7 +141,7 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
                   style: TextStyle(
                       color: Theme.of(context).primaryColorLight, fontSize: 22),
                 ),
-              ),
+              ),*/
       );
     }
 
@@ -113,7 +150,8 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
         gradient: LinearGradient(colors: <Color>[
           Theme.of(context).primaryColorLight.withOpacity(0.7),
           Theme.of(context).primaryColorDark,
-        ], begin: Alignment.topLeft, end: Alignment.bottomCenter),
+        ],
+            begin: Alignment.topLeft, end: Alignment.bottomCenter),
       );
     }
 
