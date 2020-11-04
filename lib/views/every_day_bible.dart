@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:everydaybible/controller/controller.dart';
+import 'package:everydaybible/views/bottom_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class EveryDayBible extends StatefulWidget {
@@ -12,29 +16,14 @@ class EveryDayBible extends StatefulWidget {
 class _EveryDayBibleState extends State<EveryDayBible>
     with TickerProviderStateMixin {
   BibleController _bibleController;
-  ScrollController _scrollController;
-  AnimationController _playButtonAnimation;
-  double _currentScrollPos = 0.0;
 
   void initState() {
     super.initState();
     _bibleController = Provider.of<BibleController>(context, listen: false);
-    _playButtonAnimation =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    _scrollController = ScrollController()..addListener(_scrollListener);
-  }
-
-  void _scrollListener() {
-    double _max = _scrollController.position.maxScrollExtent;
-    double _current = _scrollController.offset;
-    _currentScrollPos = _current / _max;
-
-    setState(() {});
   }
 
   void dispose() {
     super.dispose();
-    _bibleController.audioDispose();
   }
 
   Widget _body() {
@@ -56,89 +45,87 @@ class _EveryDayBibleState extends State<EveryDayBible>
           ));
     }
 
-    Widget _gospelList() {
-      print(_bibleController.gospels);
-      return Align(
-        alignment: Alignment(1, 0.2),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
+    Widget _gospelListView() {
+      Widget _gospelBox() {
+        Widget _sectionLine(int _chapter) {
 
-/*
-            Text(_bibleController.gospels[0]),
-            Text(_bibleController.gospels[1]),
-*/
-            Text(
-              """
-Flutter: How to Use Gradients and the GradientAppBar Plugin ...www.digitalocean.com › tutorials › flutter-flutter-gradient
-Apr 22, 2019 — The key to this is the addition of a decoration and boxDecoration to our Container widget. This allows us to define a LinearGradient which can be given colors , as well as a begin and end Alignment .""",
-            ),
-            SizedBox(height: 15),
-            Text(
-              """
-Flutter: How to Use Gradients and the GradientAppBar Plugin ...www.digitalocean.com › tutorials › flutter-flutter-gradient
-Apr 22, 2019 — The key to this is the addition of a decoration and boxDecoration to our Container widget. This allows us to define a LinearGradient which can be given colors , as well as a begin and end Alignment .""",
-            )
-          ],
-        ),
-      );
-    }
 
-    Widget _bottom() {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-//        color: Colors.grey,
-          height: kToolbarHeight,
-          child: Row(
+          return Row(
             children: [
-              IconButton(
-                onPressed: () {
-                  if (_playButtonAnimation.isCompleted) {
-                    _playButtonAnimation.reverse();
-                    _bibleController.audioPause();
-                  } else {
-                    _playButtonAnimation.forward();
-                    _bibleController.audioPlay();
-                  }
-                },
-                icon: CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColorDark,
-                  child: AnimatedIcon(
-                    icon: AnimatedIcons.play_pause,
-                    progress: _playButtonAnimation,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              Text(_bibleController.totalDuration.toString())
+              Flexible(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Text("$_chapter"),
+                  )),
+              Expanded(
+                  flex: 9,
+                  child: Divider(
+                    color: Colors.white70,
+                  ))
+            ],
+          );
+        }
+
+        Widget _sectionText() {
+          return Text("${_bibleController.gospels.values.first}");
+        }
+
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [_sectionLine(2), _sectionText()],
+          ),
+        );
+      }
+
+      return Align(
+        alignment: Alignment(0,0.3),
+        child: SizedBox(
+          width: double.infinity,
+          height: ScreenUtil().screenHeight/1.8,
+          child: PageView(
+            scrollDirection: Axis.vertical,
+            children: [
+              _gospelBox(),
+              _gospelBox(),
+              _gospelBox(),
+              _gospelBox(),
             ],
           ),
         ),
       );
     }
-    BoxDecoration _backgroundColor() {
-      return BoxDecoration(
-        gradient: LinearGradient(colors: <Color>[
-          Theme.of(context).primaryColorLight,
-          Theme.of(context).primaryColorDark.withOpacity(0.7),
-          Theme.of(context).primaryColorDark,
 
-        ],
-            stops: [0.1,0.35,0.9],
-            begin: Alignment.topRight, end: Alignment.bottomCenter),
+    Widget _bottomPlayer(){
+      return Align(
+        alignment: Alignment.bottomCenter,
+        child: BottomPlayer(),
       );
     }
+
+
     return Container(
-      decoration: _backgroundColor(),
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(colors: <Color>[
+          Theme.of(context).primaryColorLight.withOpacity(0.6),
+          Theme.of(context).primaryColorDark.withOpacity(0.6),
+          Theme.of(context).primaryColorDark,
+        ], stops: [
+          0.1,
+          0.35,
+          0.9
+        ], begin: Alignment.topRight, end: Alignment.bottomCenter),
+      ),
       child: Center(
         child: Stack(
           children: [
             _title(),
-            _gospelList(),
-            _bottom(),
+            _gospelListView(),
+            _bottomPlayer()
+
           ],
         ),
       ),
@@ -148,6 +135,8 @@ Apr 22, 2019 — The key to this is the addition of a decoration and boxDecorati
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _body());
+    return Scaffold(
+        body: _body(),
+    );
   }
 }
