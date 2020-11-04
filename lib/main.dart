@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
         title: 'EveyDay Bible',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          accentColor: Colors.brown.shade800,
           primarySwatch: Colors.brown,
           textTheme: TextTheme(
             bodyText2: TextStyle(color: Colors.white70,fontSize: 18)

@@ -25,11 +25,13 @@ class BibleController extends ChangeNotifier {
   int _totalDuration = 0;
 
   Future loadData() async {
-    print("Loading Today Bible Data..");
-    await _bibleWebParser.connectWith(_bibleAddress);
-    _setData();
-    print("Load Completed!");
-    _audioPlayerInit();
+    if (_bible == null) {
+      print("Loading Today Bible Data..");
+      await _bibleWebParser.connectWith(_bibleAddress);
+      _setData();
+      print("Load Completed!");
+      _audioPlayerInit();
+    }
   }
 
   void _setData() {
