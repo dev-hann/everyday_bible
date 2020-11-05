@@ -18,7 +18,6 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
       Widget _textAnimation({Widget text, AnimationController controller}) {
         return FadeTransition(
           opacity: CurvedAnimation(parent: controller, curve: Curves.easeIn),
-          //Tween<double>(begin: 0.0,end: 1.0).animate(_titleAnimation),
           child: text,
         );
       }
@@ -69,10 +68,7 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
     Widget _button() {
       AnimationController _btnAnimation = AnimationController(
           vsync: this, duration: Duration(milliseconds: 1000));
-
-      Provider.of<BibleController>(context)
-          .init()
-          .whenComplete(() => _btnAnimation.forward());
+        BibleController().init().whenComplete(() => _btnAnimation.forward());
 
       return Align(
         alignment: Alignment(0.8, 0.8),

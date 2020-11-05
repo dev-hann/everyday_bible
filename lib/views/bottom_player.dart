@@ -1,9 +1,9 @@
 part of views;
 
 class BottomPlayer extends StatefulWidget {
-  BottomPlayer({this.titleAnimation});
+  BottomPlayer({this.url});
 
-  final double titleAnimation;
+  final String url;
 
   @override
   State<StatefulWidget> createState() {
@@ -13,18 +13,52 @@ class BottomPlayer extends StatefulWidget {
 
 class _BottomPlayerState extends State<BottomPlayer>
     with TickerProviderStateMixin {
-  AnimationController _playButtonAnimation;
+  BibleAudioPlayer _audioPlayer;
+
   AnimationController _expandButtonAnimation;
-  BibleController _bibleController;
-  String _currentDuration="00:00";
-  Widget _mode;
+  AnimationController _playButtonAnimation;
+
+  Duration _currentDuration = Duration.zero;
+  Duration _totalDuration = Duration.zero;
+  bool _isMiniMode = true;
+  bool _onChanging = false;
 
   void initState() {
     super.initState();
-    _playButtonAnimation =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    _expandButtonAnimation =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _audioPlayer = BibleAudioPlayer(
+      url: widget.url,
+      currentDuration: _current,
+      totalDuration: _total,
+    );
+    _playButtonAnimation = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+    _expandButtonAnimation = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+  }
+
+  void dispose() {
+    super.dispose();
+    _audioPlayer.dispose();
+  }
+
+  void _current(Duration duration) {
+    if (!_onChanging) {
+      if (_currentDuration != duration) {
+        _currentDuration = duration;
+        setState(() {});
+      }
+    }
+  }
+
+  void _total(Duration duration) {
+    if (_totalDuration != duration) {
+      _totalDuration = duration;
+      setState(() {});
+    }
   }
 
   Widget _expandBtn() {
@@ -32,12 +66,12 @@ class _BottomPlayerState extends State<BottomPlayer>
       onPressed: () {
         if (_expandButtonAnimation.isCompleted) {
           _expandButtonAnimation.reverse();
-          _mode = _miniMode();
         } else {
           _expandButtonAnimation.forward();
-          _mode = _expandMode();
         }
-        setState(() {});
+        setState(() {
+          _isMiniMode = !_isMiniMode;
+        });
       },
       icon: AnimatedIcon(
         icon: AnimatedIcons.menu_close,
@@ -51,14 +85,16 @@ class _BottomPlayerState extends State<BottomPlayer>
       onPressed: () {
         if (_playButtonAnimation.isCompleted) {
           _playButtonAnimation.reverse();
-          _bibleController.audioPause();
+          _audioPlayer.pause();
         } else {
           _playButtonAnimation.forward();
-          _bibleController.audioPlay();
+          _audioPlayer.play();
         }
       },
       icon: CircleAvatar(
-        backgroundColor: Theme.of(context).primaryColorDark,
+        backgroundColor: Theme
+            .of(context)
+            .primaryColorDark,
         child: AnimatedIcon(
           icon: AnimatedIcons.play_pause,
           progress: _playButtonAnimation,
@@ -71,12 +107,13 @@ class _BottomPlayerState extends State<BottomPlayer>
   Widget _miniMode() {
     Widget _progressText() {
       return Text(
-          "$_currentDuration / ${_bibleController.totalDuration}");
+          "${_audioPlayer.dateTimeFrom(_currentDuration)} / ${_audioPlayer
+              .dateTimeFrom(_totalDuration)}");
     }
 
     Widget _title() {
       return Text(
-        _bibleController.title,
+        "",
         overflow: TextOverflow.ellipsis,
       );
     }
@@ -98,14 +135,32 @@ class _BottomPlayerState extends State<BottomPlayer>
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("$_currentDuration"),
-            Text("${_bibleController.totalDuration}")
+            Text("${_audioPlayer.dateTimeFrom(_currentDuration)}"),
+            Text("${_audioPlayer.dateTimeFrom(_totalDuration)}")
           ],
         );
       }
 
       Widget _timeLineBar() {
-        return Slider(value: 0.1, onChanged: (value) {});
+        double _lineValue =
+            _currentDuration.inSeconds / _totalDuration.inSeconds;
+
+        return Slider(
+          value: _lineValue,
+          onChanged: (value) {
+            _currentDuration = Duration(seconds: (_totalDuration.inSeconds * value).round());
+            setState(() {});
+          },
+          onChangeStart: (_) {
+            _onChanging = true;
+            setState(() {});
+          },
+          onChangeEnd: (value) {
+            _audioPlayer.seek(_currentDuration);
+            _onChanging=false;
+            setState(() {});
+          },
+        );
       }
 
       return Padding(
@@ -117,24 +172,41 @@ class _BottomPlayerState extends State<BottomPlayer>
     }
 
     Widget _controlButtons() {
-      Widget _loopBtn(){
-        return IconButton(icon: Icon(Icons.loop), onPressed: (){});
+      Widget _loopBtn() {
+        return IconButton(icon: Icon(Icons.loop), onPressed: () {});
       }
-      Widget _previousBtn(){
+
+      Widget _previousBtn() {
         return IconButton(
-          onPressed: (){},
+          onPressed: () {
+            Duration _res = Duration.zero;
+            if (_currentDuration.inSeconds > 5) {
+              _res = _currentDuration - Duration(seconds: 5);
+            }
+            _audioPlayer.seek(_res);
+            setState(() {});
+          },
           icon: Icon(Icons.skip_previous),
         );
       }
-      Widget _nextBtn(){
+
+      Widget _nextBtn() {
         return IconButton(
-          onPressed: (){},
+          onPressed: () {
+            Duration _res = _totalDuration;
+            final _temp = _currentDuration + Duration(seconds: 5);
+            if (_temp < _res) {
+              _res = _temp;
+            }
+            _audioPlayer.seek(_res);
+            setState(() {});
+          },
           icon: Icon(Icons.skip_next),
         );
       }
 
       return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _loopBtn(),
           _previousBtn(),
@@ -153,21 +225,17 @@ class _BottomPlayerState extends State<BottomPlayer>
     );
   }
 
-  Widget _player(){
-    _currentDuration = Provider.of<BibleController>(context).currentDuration;
+  Widget _player() {
     return AnimatedSize(
       alignment: Alignment.bottomCenter,
       vsync: this,
-      duration: Duration(milliseconds:100),
-      child: Card(
-        child: _mode??_miniMode()
-      ),
+      duration: Duration(milliseconds: 200),
+      child: Card(child: _isMiniMode ? _miniMode() : _expandMode()),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    _bibleController = Provider.of<BibleController>(context);
     return _player();
   }
 }

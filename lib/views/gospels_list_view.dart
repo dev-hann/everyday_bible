@@ -8,14 +8,8 @@ class GospelListView extends StatefulWidget {
 }
 
 class _GospelListViewState extends State<GospelListView> {
-  BibleController _bibleController;
-  List<Widget> _boxList = List();
-  GlobalKey _key = GlobalKey();
+  BibleController _bibleController = BibleController();
 
-  void initState() {
-    super.initState();
-    _bibleController = Provider.of<BibleController>(context, listen: false);
-  }
 
   Widget _gospelBox(int index) {
     Widget _sectionLine(int index) {
