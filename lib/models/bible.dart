@@ -1,3 +1,6 @@
+
+
+
 class Bible {
   Bible({this.title, this.audio, this.gospel, this.subTitle});
 

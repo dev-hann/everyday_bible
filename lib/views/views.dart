@@ -1,9 +1,9 @@
 library views;
 
+
 import 'package:everydaybible/controller/controller.dart';
 import 'package:everydaybible/utils/animations/page_animation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 

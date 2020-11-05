@@ -17,6 +17,7 @@ class _EveryDayBibleState extends State<EveryDayBible>
   }
 
   Widget _title() {
+
     return Text.rich(
       TextSpan(
         children: [
