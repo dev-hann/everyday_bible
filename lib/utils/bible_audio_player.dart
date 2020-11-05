@@ -1,8 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
 
 class BibleAudioPlayer {
+  BibleAudioPlayer({this.url});
+  final String url;
   AudioPlayer _audioPlayer = AudioPlayer();
-
   Stream<Duration> get totalDuration=> _audioPlayer.onDurationChanged;
   Stream<Duration> get currentDuration => _audioPlayer.onAudioPositionChanged;
 

@@ -1,19 +1,17 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:everydaybible/models/bible.dart';
 import 'package:everydaybible/utils/bible_audio_player.dart';
+import 'package:everydaybible/utils/bible_database.dart';
 import 'package:everydaybible/utils/bible_web_parser.dart';
 import 'package:flutter/material.dart';
 
 class BibleController extends ChangeNotifier {
-  static const _bibleAddress = "https://sum.su.or.kr:8888/bible/today";
-
-  final BibleWebParser _bibleWebParser = BibleWebParser();
 
   final BibleAudioPlayer _bibleAudioPlayer = BibleAudioPlayer();
 
-  Bible _bible;
+  final BibleDatabase _bibleDatabase = BibleDatabase();
 
-  DateTime get dateTime => _bible.dateTime;
+  Bible _bible;
 
   String get title => _bible.title;
 
@@ -40,23 +38,13 @@ class BibleController extends ChangeNotifier {
   Future init() async {
     if (_bible == null) {
       print("Loading Today Bible Data..");
-      await _bibleWebParser.connectWith(_bibleAddress);
-      await _setData();
+      await _bibleDatabase.init();
+      _bible = await _bibleDatabase.todayData();
       print("Load Completed!");
-      await _audioPlayerInit();
+     // await _audioPlayerInit();
     }
   }
 
-  Future _setData() async {
-    print("Set Data..");
-    _bible = Bible(
-      title: _bibleWebParser.todayTitle,
-      subTitle: _bibleWebParser.todaySubtitle,
-      audio: _bibleWebParser.todayAudio,
-      gospel: _bibleWebParser.todayGospel,
-    );
-    return;
-  }
 
   Future _audioPlayerInit() async {
     await _bibleAudioPlayer.setURL(_bible.audio);
@@ -92,6 +80,4 @@ class BibleController extends ChangeNotifier {
   Future audioDispose() async {
     await _bibleAudioPlayer.dispose();
   }
-
-
 }
