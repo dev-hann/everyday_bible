@@ -1,8 +1,13 @@
+import 'package:everydaybible/models/bible.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
+import 'package:intl/intl.dart';
 
 class BibleWebParser {
+
+  static const _bibleAddress = "https://sum.su.or.kr:8888/bible/today";
+
   Document _document;
 
   String get todayTitle => _parseByID("bible_text").text.trim();
@@ -13,8 +18,25 @@ class BibleWebParser {
 
   Map<int, String> get todayGospel => _parseGospelsByID('body_list');
 
-  Future connectWith(String address) async {
-    http.Response _res = await http.get(address);
+  String get todayDateTime => DateFormat('yyyy.MM.dd').format(DateTime.now());
+
+
+  Future<Bible> get bible async{
+    print("Start Loading from Today Data!");
+    await _init();
+    return Bible(
+        dateTime: this.todayDateTime,
+        title: this.todayTitle,
+        subTitle: this.todaySubtitle,
+        gospel: this.todayGospel,
+        audio: this.todayAudio
+    );
+  }
+
+
+
+  Future _init() async {
+    http.Response _res = await http.get(_bibleAddress);
     _document = parse(_res.body);
   }
 
@@ -39,4 +61,6 @@ class BibleWebParser {
     });
     return _res;
   }
+
+
 }
