@@ -26,6 +26,7 @@ class BibleController extends ChangeNotifier {
   String get currentDuration => dateTimeFrom(_currentDuration);
 
   Duration _totalDuration = Duration.zero;
+
   Duration _currentDuration = Duration.zero;
 
   String dateTimeFrom(Duration duration) {
@@ -92,7 +93,5 @@ class BibleController extends ChangeNotifier {
     await _bibleAudioPlayer.dispose();
   }
 
-  Stream audioDuration() {
-    //  return _bibleAudioPlayer.durationChanged;
-  }
+
 }
