@@ -9,12 +9,7 @@ class EveryDayBible extends StatefulWidget {
 
 class _EveryDayBibleState extends State<EveryDayBible>
     with TickerProviderStateMixin {
-  BibleController _bibleController;
-
-  void initState() {
-    super.initState();
-    _bibleController = Provider.of<BibleController>(context, listen: false);
-  }
+  BibleController _bibleController=BibleController();
 
   Widget _title() {
 
@@ -59,7 +54,9 @@ class _EveryDayBibleState extends State<EveryDayBible>
               ),
             ),
             Expanded(child: GospelListView()),
-            BottomPlayer()
+            BottomPlayer(
+              url: _bibleController.audio,
+            )
           ],
         ),
       ),
