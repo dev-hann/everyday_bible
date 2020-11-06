@@ -9,10 +9,9 @@ class EveryDayBible extends StatefulWidget {
 
 class _EveryDayBibleState extends State<EveryDayBible>
     with TickerProviderStateMixin {
-  BibleController _bibleController=BibleController();
+  BibleController _bibleController = BibleController();
 
   Widget _title() {
-
     return Text.rich(
       TextSpan(
         children: [
