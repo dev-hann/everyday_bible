@@ -11,7 +11,6 @@ class BibleController  {
 
   BibleController._internal();
 
-
   final BibleDatabase _bibleDatabase = BibleDatabase();
 
   Bible _bible;

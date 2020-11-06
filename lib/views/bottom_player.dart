@@ -20,6 +20,7 @@ class _BottomPlayerState extends State<BottomPlayer>
 
   Duration _currentDuration = Duration.zero;
   Duration _totalDuration = Duration.zero;
+
   bool _isMiniMode = true;
   bool _onChanging = false;
 
