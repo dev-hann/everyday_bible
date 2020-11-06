@@ -1,13 +1,15 @@
 # Every Day Bible
-------------
 EveryDay Read Bible v.1.1.0
 
-##[Todo]
-------------
- +Title
+## Todo
+ ------------
+ ### Views
+ > * Title
+  
+ > * BoyListView
  
- +BoyListView
- 
- +BottomPlayer
- 
- +hello
+ > * BottomPlayer
+
+ ### Functions
+
+ * hello
