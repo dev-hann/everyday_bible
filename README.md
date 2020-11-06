@@ -1,15 +1,19 @@
 # Every Day Bible
-EveryDay Read Bible v.1.1.0
-
+Every Day Read Bible v.1.1.0
+###### Copyright © 2018 Scripture Union Korea. All rights reserved.
 ## Todo
- ------------
  ### Views
- > * Title
+ * Title
   
- > * BoyListView
+ * BoyListView
  
- > * BottomPlayer
+ * BottomPlayer
 
  ### Functions
 
- * hello
+ * Audio Player
+ 
+ * Parsing WebData
+ 
+ 
+ 
