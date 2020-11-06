@@ -47,9 +47,9 @@ class _EveryDayBibleState extends State<EveryDayBible>
         child: Column(
           children: [
             SizedBox(
-              height: ScreenUtil().screenHeight / 4,
+              height: ScreenUtil().screenHeight / 5,
               child: Align(
-                alignment: Alignment(-0.8, 0.5),
+                alignment: Alignment(-0.8, 0.3),
                 child: _title(),
               ),
             ),
