@@ -9,11 +9,6 @@ class GospelListView extends StatefulWidget {
 
 class _GospelListViewState extends State<GospelListView> {
   BibleController _bibleController = BibleController();
-  Map<Key, Widget> _boxList = Map();
-
-  void initState() {
-    super.initState();
-  }
 
   Widget _gospelBox(int index) {
     Widget _sectionLine(int index) {
@@ -55,6 +50,7 @@ class _GospelListViewState extends State<GospelListView> {
 
   @override
   Widget build(BuildContext context) {
+
     return ShaderMask(
       shaderCallback: (Rect rect){
         return LinearGradient(
@@ -77,30 +73,5 @@ class _GospelListViewState extends State<GospelListView> {
       ),
     );
 
-/*
-    return ShaderMask(
-      shaderCallback: (Rect rect){
-        return LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.white,
-            Colors.transparent,
-            Colors.transparent,
-            Colors.transparent,
-            Colors.white
-          ],
-          stops: [0,0.1,0.5,0.9,1]
-        ).createShader(rect);
-      },
-      blendMode: BlendMode.dstOut,
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: 1,
-        itemBuilder: (_, index) {
-          return _gospelBox(index);
-        },
-      ),
-    );*/
   }
 }

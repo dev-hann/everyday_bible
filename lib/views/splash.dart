@@ -8,20 +8,17 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> with TickerProviderStateMixin {
-
   Widget _body() {
-
-    AnimationController  _fadeOutAnimation = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 700));
+    AnimationController _fadeOutAnimation =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 700));
+    Widget _textAnimation({Widget text, AnimationController controller}) {
+      return FadeTransition(
+        opacity: CurvedAnimation(parent: controller, curve: Curves.easeIn),
+        child: text,
+      );
+    }
 
     Widget _title() {
-      Widget _textAnimation({Widget text, AnimationController controller}) {
-        return FadeTransition(
-          opacity: CurvedAnimation(parent: controller, curve: Curves.easeIn),
-          child: text,
-        );
-      }
-
       Widget _titleText() {
         AnimationController _titleAnimation = AnimationController(
           duration: Duration(milliseconds: 1500),
@@ -44,7 +41,7 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
             .then((value) => _subTitleAnimation.forward());
         return _textAnimation(
             text: Text(
-              "Text",
+              "Bible",
               style: Theme.of(context).textTheme.headline2.copyWith(
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.bold),
@@ -68,10 +65,10 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
     Widget _button() {
       AnimationController _btnAnimation = AnimationController(
           vsync: this, duration: Duration(milliseconds: 1000));
-        BibleController().init().whenComplete(() => _btnAnimation.forward());
+      BibleController().init().whenComplete(() => _btnAnimation.forward());
 
       return Align(
-        alignment: Alignment(0.8, 0.8),
+        alignment: Alignment(0.8, 0.7),
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -91,10 +88,31 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
                     Navigator.push(context,
                         FadePageRoute(builder: (context) => EveryDayBible()));
                   },
-                  child: Text("InTro...")),
+                  child: Text("Amen")),
             )
           ],
         ),
+      );
+    }
+
+    Widget _copyRight() {
+      AnimationController _copyrightAnimation = AnimationController(
+        duration: Duration(milliseconds: 1500),
+        vsync: this,
+      );
+      Future.delayed(Duration(milliseconds: 700)).whenComplete(() => _copyrightAnimation.forward());
+
+      return Align(
+        alignment: Alignment(0, 0.9),
+        child: _textAnimation(
+            text: Text(
+              "Copyright © 2018 Scripture Union Korea. All rights reserved.",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  .copyWith(color: Colors.brown.shade300,fontSize: 10),
+            ),
+            controller: _copyrightAnimation),
       );
     }
 
@@ -111,6 +129,7 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
           children: [
             _title(),
             _button(),
+            _copyRight(),
           ],
         ),
       ),
