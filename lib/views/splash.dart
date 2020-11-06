@@ -71,7 +71,7 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
         BibleController().init().whenComplete(() => _btnAnimation.forward());
 
       return Align(
-        alignment: Alignment(0.8, 0.8),
+        alignment: Alignment(0.8, 0.7),
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -97,7 +97,11 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
         ),
       );
     }
-
+    Widget _copyRight(){
+      return Align(
+          alignment: Alignment(0,0.9),
+          child: Text("Copyright © 2018 Scripture Union Korea. All rights reserved.",style: Theme.of(context).textTheme.bodyText1.copyWith(color: Colors.brown.shade300)));
+    }
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(colors: <Color>[
@@ -111,6 +115,7 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
           children: [
             _title(),
             _button(),
+           // _copyRight(),
           ],
         ),
       ),

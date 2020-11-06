@@ -9,10 +9,9 @@ class EveryDayBible extends StatefulWidget {
 
 class _EveryDayBibleState extends State<EveryDayBible>
     with TickerProviderStateMixin {
-  BibleController _bibleController=BibleController();
+  BibleController _bibleController = BibleController();
 
   Widget _title() {
-
     return Text.rich(
       TextSpan(
         children: [
@@ -47,9 +46,9 @@ class _EveryDayBibleState extends State<EveryDayBible>
         child: Column(
           children: [
             SizedBox(
-              height: ScreenUtil().screenHeight / 4,
+              height: ScreenUtil().screenHeight / 5,
               child: Align(
-                alignment: Alignment(-0.8, 0.5),
+                alignment: Alignment(-0.8, 0.4),
                 child: _title(),
               ),
             ),
