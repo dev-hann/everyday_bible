@@ -1,14 +1,18 @@
 part of views;
 
-class GospelListView extends StatefulWidget {
+class MainViewBodyList extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _GospelListViewState();
+    return _MainViewBodyListState();
   }
 }
 
-class _GospelListViewState extends State<GospelListView> {
-  BibleController _bibleController = BibleController();
+class _MainViewBodyListState extends State<MainViewBodyList> {
+  BibleController _bibleController;
+  void initState(){
+    super.initState();
+    _bibleController = Provider.of<BibleController>(context,listen: false);
+  }
 
   Widget _gospelBox(int index) {
     Widget _sectionLine(int index) {
@@ -51,25 +55,27 @@ class _GospelListViewState extends State<GospelListView> {
   @override
   Widget build(BuildContext context) {
 
-    return ShaderMask(
-      shaderCallback: (Rect rect){
-        return LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.white,
-            Colors.transparent
-          ],
-          stops: [0,0.05]
-        ).createShader(rect);
-      },
-      blendMode: BlendMode.dstOut,
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: _bibleController.gospels.length,
-        itemBuilder: (context, index) {
-          return _gospelBox(index);
+    return Expanded(
+      child: ShaderMask(
+        shaderCallback: (Rect rect){
+          return LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.white,
+              Colors.transparent
+            ],
+            stops: [0,0.05]
+          ).createShader(rect);
         },
+        blendMode: BlendMode.dstOut,
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          itemCount: _bibleController.gospels.length,
+          itemBuilder: (context, index) {
+            return _gospelBox(index);
+          },
+        ),
       ),
     );
 

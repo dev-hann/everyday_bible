@@ -1,20 +1,17 @@
 part of views;
 
-class BottomPlayer extends StatefulWidget {
-  BottomPlayer({this.url});
-
-  final String url;
-
+class MainViewBottomPlayer extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _BottomPlayerState();
+    return _MainViewBottomPlayerState();
   }
 }
 
-class _BottomPlayerState extends State<BottomPlayer>
+class _MainViewBottomPlayerState extends State<MainViewBottomPlayer>
     with TickerProviderStateMixin {
+  BibleController _bibleController;
   BibleAudioPlayer _audioPlayer;
-
+  BibleNotification _bibleNotification;
   AnimationController _expandButtonAnimation;
   AnimationController _playButtonAnimation;
 
@@ -24,21 +21,30 @@ class _BottomPlayerState extends State<BottomPlayer>
   bool _isMiniMode = true;
   bool _onChanging = false;
 
+
   void initState() {
     super.initState();
+
+
+
+    _bibleController = Provider.of<BibleController>(context,listen: false);
+
     _audioPlayer = BibleAudioPlayer(
-      url: widget.url,
+      url: _bibleController.audio,
       currentDuration: _current,
       totalDuration: _total,
     );
+
     _playButtonAnimation = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 300),
     );
+
     _expandButtonAnimation = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 300),
     );
+
   }
 
   void dispose() {
@@ -65,7 +71,9 @@ class _BottomPlayerState extends State<BottomPlayer>
   Widget _expandBtn() {
     return IconButton(
       onPressed: () {
-        if (_expandButtonAnimation.isCompleted) {
+        _bibleNotification = BibleNotification()..showMediaStyleNotification();
+
+      if (_expandButtonAnimation.isCompleted) {
           _expandButtonAnimation.reverse();
         } else {
           _expandButtonAnimation.forward();
@@ -93,9 +101,7 @@ class _BottomPlayerState extends State<BottomPlayer>
         }
       },
       icon: CircleAvatar(
-        backgroundColor: Theme
-            .of(context)
-            .primaryColorDark,
+        backgroundColor: Theme.of(context).primaryColorDark,
         child: AnimatedIcon(
           icon: AnimatedIcons.play_pause,
           progress: _playButtonAnimation,
@@ -104,20 +110,20 @@ class _BottomPlayerState extends State<BottomPlayer>
       ),
     );
   }
-
+  Widget _title() {
+    return Text(
+     "",
+      // "${_bibleController.title}",
+      overflow: TextOverflow.ellipsis,
+    );
+  }
   Widget _miniMode() {
     Widget _progressText() {
       return Text(
-          "${_audioPlayer.dateTimeFrom(_currentDuration)} / ${_audioPlayer
-              .dateTimeFrom(_totalDuration)}");
+          "${_audioPlayer.dateTimeFrom(_currentDuration)} / ${_audioPlayer.dateTimeFrom(_totalDuration)}");
     }
 
-    Widget _title() {
-      return Text(
-        "",
-        overflow: TextOverflow.ellipsis,
-      );
-    }
+
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -137,6 +143,7 @@ class _BottomPlayerState extends State<BottomPlayer>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("${_audioPlayer.dateTimeFrom(_currentDuration)}"),
+            _title(),
             Text("${_audioPlayer.dateTimeFrom(_totalDuration)}")
           ],
         );
@@ -149,7 +156,8 @@ class _BottomPlayerState extends State<BottomPlayer>
         return Slider(
           value: _lineValue,
           onChanged: (value) {
-            _currentDuration = Duration(seconds: (_totalDuration.inSeconds * value).round());
+            _currentDuration =
+                Duration(seconds: (_totalDuration.inSeconds * value).round());
             setState(() {});
           },
           onChangeStart: (_) {
@@ -158,7 +166,7 @@ class _BottomPlayerState extends State<BottomPlayer>
           },
           onChangeEnd: (value) {
             _audioPlayer.seek(_currentDuration);
-            _onChanging=false;
+            _onChanging = false;
             setState(() {});
           },
         );

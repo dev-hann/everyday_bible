@@ -65,7 +65,7 @@ class _SplashState extends State<Splash> with TickerProviderStateMixin {
     Widget _button() {
       AnimationController _btnAnimation = AnimationController(
           vsync: this, duration: Duration(milliseconds: 1000));
-      BibleController().init().whenComplete(() => _btnAnimation.forward());
+      Provider.of<BibleController>(context).init().whenComplete(() => _btnAnimation.forward());
 
       return Align(
         alignment: Alignment(0.8, 0.7),

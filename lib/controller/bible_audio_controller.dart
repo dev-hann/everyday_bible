@@ -1,6 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class BibleAudioPlayer {
+class BibleAudioPlayer extends ChangeNotifier{
   BibleAudioPlayer({
     this.url,
     this.totalDuration,
@@ -14,7 +16,6 @@ class BibleAudioPlayer {
   final Function(Duration durtaion) currentDuration;
 
   final String url;
-
   AudioPlayer _audioPlayer = AudioPlayer();
 
   String dateTimeFrom(Duration duration) {
@@ -35,9 +36,9 @@ class BibleAudioPlayer {
     });
   }
 
-  Future play({String url}) async {
-    await _audioPlayer.play(url ?? this.url);
-  }
+  Future play() async {
+    await _audioPlayer.play(url);
+    }
 
   Future pause() async {
     await _audioPlayer.pause();

@@ -1,15 +1,9 @@
 import 'package:everydaybible/models/bible.dart';
 import 'package:everydaybible/utils/bible_database.dart';
+import 'package:flutter/material.dart';
 
-class BibleController  {
+class BibleController extends ChangeNotifier {
 
-  static final BibleController _bibleController = BibleController._internal();
-
-  factory BibleController(){
-    return _bibleController;
-  }
-
-  BibleController._internal();
 
   final BibleDatabase _bibleDatabase = BibleDatabase();
 

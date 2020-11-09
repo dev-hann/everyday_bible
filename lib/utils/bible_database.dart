@@ -1,5 +1,6 @@
 import 'package:everydaybible/models/bible.dart';
 import 'package:everydaybible/utils/bible_web_parser.dart';
+import 'package:everydaybible/utils/bible_notification.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
