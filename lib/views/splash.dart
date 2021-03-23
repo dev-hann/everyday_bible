@@ -1,10 +1,4 @@
-import 'package:everydaybible/controller/controller.dart';
-import 'package:everydaybible/utils/animations/page_animation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
-
-import 'every_day_bible.dart';
+part of views;
 
 class Splash extends StatefulWidget {
   @override
@@ -14,187 +8,146 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> with TickerProviderStateMixin {
-  AnimationController _titleAnimation;
   AnimationController _fadeOutAnimation;
-
-  bool _isLoading = true;
 
   void initState() {
     super.initState();
-   /* Provider.of<BibleController>(context, listen: false)
-        .loadData()
-        .whenComplete(() {
-      setState(() {
-        _isLoading = false;
-      });
-    });*/
     _fadeOutAnimation =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
-    _titleAnimation = AnimationController(
-      duration: Duration(milliseconds: 1500),
-      vsync: this,
-    )..forward();
+        AnimationController(vsync: this, duration: Duration(milliseconds: 700));
   }
 
-  Widget _body() {
-    Widget _title() {
-      TextStyle _theme = Theme.of(context).textTheme.headline2;
-      Widget _aniContainer(Widget text) {
-        return AnimatedBuilder(
-          animation: _titleAnimation,
-          builder: (_, child) {
-            return Container(
-              padding: EdgeInsets.only(
-                left: _titleAnimation.value * 20,
-              ),
-              child: Opacity(
-                opacity: _titleAnimation.value,
-                child: text,
-              ),
-            );
-          },
-        );
-      }
+  Widget _textAnimation({Widget text, AnimationController controller}) {
+    return FadeTransition(
+      opacity: CurvedAnimation(parent: controller, curve: Curves.easeIn),
+      child: text,
+    );
+  }
 
-      return Align(
-        alignment: Alignment(-0.7, -0.5),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _aniContainer(
-              Text(
-                "Every Day",
-                style: _theme,
-/*                //             style: _theme.copyWith(fontFamily: "Norican",fontWeight: FontWeight.bold),
-//              style: _theme.copyWith(fontFamily: "Fondamento"),*/
-              ),
-            ),
-            _aniContainer(
-              Text(
-                "Bible",
-                style: _theme.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColorDark),
-              ),
-            ),
-          ],
-        ),
+  Widget _title() {
+    Widget _titleText() {
+      AnimationController _titleAnimation = AnimationController(
+        duration: Duration(milliseconds: 1500),
+        vsync: this,
       );
-    }
-
-    Widget _button() {
-      AnimationController _btnAnimation= AnimationController(vsync: this,duration: Duration(milliseconds: 1500));
-      Animation _fadeOut = Tween<double>(begin: 1.0,end:0.0).animate(_btnAnimation);
-     Animation _fadeIn = Tween<double>(begin: 0.0,end:1.0).animate(_btnAnimation) ;
-      Provider.of<BibleController>(context, listen: false)
-          .loadData()
-          .whenComplete(() {
-          _btnAnimation.forward();
-      });
-
-      return Align(
-        alignment: Alignment(0.8, 0.8),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            FadeTransition(
-              opacity:_fadeOut ,
-              child: SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(),
-              ),
-            ) ,
-            FadeTransition(
-              opacity: _fadeIn,
-              child: GestureDetector(
-                onTap: () {
-                  _fadeOutAnimation.forward().whenComplete(() {
-                    Navigator.push(context, FadePageRoute(builder: (context)=>EveryDayBible()));
-                  });
-                },
-                child: Text(
-                  "hello",
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColorLight, fontSize: 22),
-                ),
-              ),
-            ),
-          ],
-        )
-        /* (_isLoading)
-            ? SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(),
-              )
-            : FlatButton(
-                onPressed: () {
-                 _fadeOutAnimation.forward().whenComplete(() {
-                   Navigator.push(context, FadePageRoute(builder: (context)=>EveryDayBible()));
-                 });
-                },
-                child: Text(
-                  "hello",
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColorLight, fontSize: 22),
-                ),
-              ),*/
-      );
-    }
-
-    BoxDecoration _backgroundColor() {
-      return BoxDecoration(
-        gradient: LinearGradient(colors: <Color>[
-          Theme.of(context).primaryColorLight.withOpacity(0.7),
-          Theme.of(context).primaryColorDark,
-        ],
-            begin: Alignment.topLeft, end: Alignment.bottomCenter),
-      );
-    }
-
-    Widget _fadeOut() {
-      return FadeTransition(
-        opacity: _fadeOutAnimation,
-        child: SizedBox.expand(
-          child: ColoredBox(
-            color: Theme.of(context).primaryColorLight,
+      return _textAnimation(
+          text: Text(
+            "Every Day",
+            style: Theme.of(context).textTheme.headline2,
           ),
-        ),
-      );
-
-      /* return AnimatedBuilder(
-          animation: _fadeOutAnimationController,
-          builder: (_,child){
-            return CustomPaint(
-              size: Size.infinite,
-              painter: SpreadingAnimation(
-                beginPos: Alignment(0.8, 0.8),
-                  color: Theme.of(context).primaryColorLight,
-                  animation: _fadeOutAnimationController.value
-              ),
-            );
-          });*/
+          controller: _titleAnimation..forward());
     }
 
-    return Container(
-      decoration: _backgroundColor(),
-      child: Stack(
+    Widget _subTitleText() {
+      AnimationController _subTitleAnimation = AnimationController(
+        duration: Duration(milliseconds: 1500),
+        vsync: this,
+      );
+      Future.delayed(Duration(milliseconds: 500))
+          .then((value) => _subTitleAnimation.forward());
+      return _textAnimation(
+          text: Text(
+            "Bible",
+            style: Theme.of(context).textTheme.headline2.copyWith(
+                color: Theme.of(context).primaryColorDark,
+                fontWeight: FontWeight.bold),
+          ),
+          controller: _subTitleAnimation);
+    }
+
+    return Align(
+      alignment: Alignment(-0.7, -0.5),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _title(),
-          _fadeOut(),
-          _button(),
+          _titleText(),
+          _subTitleText(),
         ],
+      ),
+    );
+  }
+
+  Widget _button() {
+    AnimationController _btnAnimation = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1000));
+    Provider.of<BibleController>(context)
+        .init()
+        .whenComplete(() => _btnAnimation.forward());
+
+    return Align(
+      alignment: Alignment(0.8, 0.7),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          FadeTransition(
+            opacity: Tween<double>(begin: 1, end: 0).animate(_btnAnimation),
+            child: SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(),
+            ),
+          ),
+          FadeTransition(
+            opacity: Tween<double>(begin: 0, end: 1).animate(_btnAnimation),
+            child: GestureDetector(
+                onTap: () async {
+                  await _fadeOutAnimation.forward();
+                  Get.to(() => EveryDayBible(),
+                      transition: Transition.fade,
+                      duration: Duration(microseconds: 1000));
+                },
+                child: Text("Amen")),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _copyRight() {
+    AnimationController _copyrightAnimation = AnimationController(
+      duration: Duration(milliseconds: 1500),
+      vsync: this,
+    );
+    Future.delayed(Duration(milliseconds: 700))
+        .whenComplete(() => _copyrightAnimation.forward());
+
+    return Align(
+      alignment: Alignment(0, 0.9),
+      child: _textAnimation(
+        text: Text(
+          "Copyright © 2018 Scripture Union Korea. All rights reserved.",
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1
+              .copyWith(color: Colors.brown.shade300, fontSize: 10),
+        ),
+        controller: _copyrightAnimation,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context);
     return Scaffold(
-      body: _body(),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: <Color>[
+            Get.theme.primaryColorLight.withOpacity(0.7),
+            Get.theme.primaryColorDark,
+          ], begin: Alignment.topLeft, end: Alignment.bottomCenter),
+        ),
+        child: FadeTransition(
+          opacity:
+              Tween<double>(begin: 1.0, end: 0.0).animate(_fadeOutAnimation),
+          child: Stack(
+            children: [
+              _title(),
+              _button(),
+              _copyRight(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
