@@ -1,4 +1,3 @@
-import 'package:everydaybible/views/every_day_bible.dart';
 import 'package:flutter/material.dart';
 
 class FadePageRoute extends PageRoute {
@@ -29,5 +28,5 @@ class FadePageRoute extends PageRoute {
 
   @override
   // TODO: implement transitionDuration
-  Duration get transitionDuration => Duration(milliseconds: 2000);
+  Duration get transitionDuration => Duration(milliseconds: 1000);
 }

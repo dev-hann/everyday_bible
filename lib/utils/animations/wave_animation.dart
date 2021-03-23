@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class WaveAnimation extends StatefulWidget {
   WaveAnimation({
@@ -86,7 +86,7 @@ class _Wave extends CustomPainter {
 
   List<Offset> _waves = List();
 
-  double _eachGap = 100 / ScreenUtil().screenWidth;
+  double _eachGap = 100 /Get.width ;
 
   List<Offset> _makeWaves(Size _size) {
     List<Offset> _res = List();
