@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
                   fontWeight: FontWeight.bold)),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: Splash(),
+        home: LoadingView(),
       ),
     );
   }

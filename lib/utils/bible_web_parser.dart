@@ -5,8 +5,7 @@ import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
 class BibleWebParser {
-
-  static const _bibleAddress = "https://sum.su.or.kr:8888/bible/today";
+  final String _bibleAddress = "https://sum.su.or.kr:8888/bible/today";
 
   Document _document;
 
@@ -20,23 +19,20 @@ class BibleWebParser {
 
   String get todayDateTime => DateFormat('yyyy.MM.dd').format(DateTime.now());
 
-
-  Future<Bible> get bible async{
+  Future<Bible> get bible async {
     print("Start Loading from Today Data!");
     await _init();
     return Bible(
-        dateTime: this.todayDateTime,
-        title: this.todayTitle,
-        subTitle: this.todaySubtitle,
-        gospel: this.todayGospel,
-        audio: this.todayAudio
+      dateTime: this.todayDateTime,
+      title: this.todayTitle,
+      subTitle: this.todaySubtitle,
+      gospel: this.todayGospel,
+      audio: this.todayAudio,
     );
   }
 
-
-
   Future _init() async {
-    http.Response _res = await http.get(_bibleAddress);
+    http.Response _res = await http.get(Uri.dataFromString(_bibleAddress));
     _document = parse(_res.body);
   }
 
@@ -61,6 +57,4 @@ class BibleWebParser {
     });
     return _res;
   }
-
-
 }

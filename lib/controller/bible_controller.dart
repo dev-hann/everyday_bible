@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 class BibleController extends ChangeNotifier {
 
-
   final BibleDatabase _bibleDatabase = BibleDatabase();
 
   Bible _bible;
@@ -21,8 +20,9 @@ class BibleController extends ChangeNotifier {
   Future init() async {
     if (_bible == null) {
       print("Loading Today Bible Data..");
-      await _bibleDatabase.init();
-      _bible = await _bibleDatabase.todayData();
+     // await _bibleDatabase.init();
+     // _bible = await _bibleDatabase.todayData();
+     await Future.delayed(Duration(milliseconds: 1000));
       print("Load Completed!");
     }
   }
