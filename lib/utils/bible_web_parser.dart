@@ -5,42 +5,36 @@ import 'package:html/parser.dart' show parse;
 import 'package:intl/intl.dart';
 
 class BibleWebParser {
-  final String _bibleAddress = "https://sum.su.or.kr:8888/bible/today";
-
-  Document _document;
-
-  String get todayTitle => _parseByID("bible_text").text.trim();
-
-  String get todaySubtitle => _parseByID('bibleinfo_box').text.trim();
-
-  String get todayAudio => _parseByID("video").children[0].attributes['src'];
-
-  Map<int, String> get todayGospel => _parseGospelsByID('body_list');
-
-  String get todayDateTime => DateFormat('yyyy.MM.dd').format(DateTime.now());
+ final String _titleID ="bible_text";
+ final String _subTitleID = 'bibleinfo_box';
+ final String _audioID = "video";
+ final String _gospelID = "body_list";
 
   Future<Bible> get bible async {
+
     print("Start Loading from Today Data!");
-    await _init();
+    Document _doc= await _init();
+
     return Bible(
-      dateTime: this.todayDateTime,
-      title: this.todayTitle,
-      subTitle: this.todaySubtitle,
-      gospel: this.todayGospel,
-      audio: this.todayAudio,
+      dateTime: DateFormat('yyyy.MM.dd').format(DateTime.now()),
+      title: _parseByID(_doc, _titleID).text.trim(),
+      subTitle: _parseByID(_doc, _subTitleID).text.trim(),
+      gospel: _parseGospelsByID(_doc,_gospelID),
+      audio: _parseByID(_doc,_audioID).children[0].attributes['src'],
     );
   }
-
-  Future _init() async {
-    http.Response _res = await http.get(Uri.dataFromString(_bibleAddress));
-    _document = parse(_res.body);
+///"https://sum.su.or.kr:8888/bible/today"
+  Future<Document> _init() async {
+    Uri _uri = Uri.https("sum.su.or.kr:8888", "/bible/today");
+    http.Response _res = await http.get(_uri);
+    return parse(_res.body);
   }
 
-  Element _parseByID(String iD) {
+  Element _parseByID(Document _document ,String iD) {
     return _document.getElementById(iD);
   }
 
-  Map<int, String> _parseGospelsByID(String id) {
+  Map<int, String> _parseGospelsByID(Document _document,String id) {
     Map<int, String> _res = Map();
     int _num;
     String _text;
