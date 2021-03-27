@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
+        Provider(
           create: (_) => BibleController(),
         ),
         ChangeNotifierProvider(
@@ -30,8 +30,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.brown,
           cardColor: Colors.brown.shade900,
           iconTheme: IconThemeData(color: Colors.white),
-          bottomNavigationBarTheme:
-              BottomNavigationBarThemeData(backgroundColor: Colors.transparent),
           textTheme: TextTheme(
               bodyText2: TextStyle(
                   color: Colors.white,
