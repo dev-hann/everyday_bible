@@ -3,7 +3,7 @@ import 'package:everydaybible/utils/bible_database.dart';
 import 'package:everydaybible/utils/bible_web_parser.dart';
 import 'package:flutter/material.dart';
 
-class BibleController extends ChangeNotifier {
+class BibleController{
 
   final BibleDatabase _bibleDatabase = BibleDatabase();
   final BibleWebParser _bibleWebParser = BibleWebParser();
@@ -25,11 +25,14 @@ class BibleController extends ChangeNotifier {
       ///1 . check DB
       ///2. if no TodayData => init Parsing
       ///3. save on DB
+      ///
+
       _bible = await _bibleWebParser.bible;
-      notifyListeners();
       print("Load Completed!");
     }
   }
+
+
 
 
 }
