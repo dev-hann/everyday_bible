@@ -105,7 +105,6 @@ class _EveryDayBibleState extends State<EveryDayBible>
 
   Widget _bottomPlayer() {
     return BottomAudioPlayer(
-      miniMode: true,
       audioAsset: _viewModel.audioAsset,
       title: _viewModel.title,
     );

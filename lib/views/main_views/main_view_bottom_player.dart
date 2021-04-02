@@ -2,13 +2,12 @@ part of views;
 
 class BottomAudioPlayer extends StatefulWidget {
   BottomAudioPlayer({
-    this.miniMode = true,
     this.audioAsset,
     this.title,
   });
+
   final String title;
   final String audioAsset;
-  final bool miniMode;
 
   @override
   _BottomAudioPlayerState createState() => _BottomAudioPlayerState();
@@ -18,95 +17,170 @@ class _BottomAudioPlayerState extends State<BottomAudioPlayer>
     with TickerProviderStateMixin {
   BottomAudioViewModel _viewModel;
 
-  AnimationController _playButtonAnimation;
-  AnimationController _moreButtonAnimation;
-
-  bool get _isPlaying => _playButtonAnimation.value == 1;
-
   void initState() {
     super.initState();
     _viewModel = BottomAudioViewModel(widget.audioAsset)
       ..addListener(() {
         setState(() {});
       });
-    _viewModel.initAudio();
-
-    _playButtonAnimation =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
-    _moreButtonAnimation =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _viewModel.initBottomPlayer(vsync: this);
   }
 
-  Widget _playButton() {
-    return IconButton(
-      onPressed: () {
-        if (_isPlaying) {
-          _playButtonAnimation.reverse();
-          _viewModel.pauseAudio();
-        } else {
-          _playButtonAnimation.forward();
-          _viewModel.playAudio();
-        }
-      },
-      icon: CircleAvatar(
+  Widget _playButton({double iconSize}) {
+    return GestureDetector(
+      onTap: _viewModel.onTapPlayButton,
+      child: Container(
+        decoration: BoxDecoration(
+            color: Get.theme.primaryColorDark,
+            borderRadius: BorderRadius.all(Radius.circular(100))),
+        padding: EdgeInsets.all(5),
         child: AnimatedIcon(
           icon: AnimatedIcons.play_pause,
-          progress: _playButtonAnimation,
+          progress: _viewModel.playButtonAnimation,
+          size: iconSize,
         ),
       ),
     );
   }
 
   Widget _moreButton() {
-    return IconButton(
-      onPressed: () {
-        if (_moreButtonAnimation.value == 0) {
-          _moreButtonAnimation.forward();
-        } else {
-          _moreButtonAnimation.reverse();
-        }
-      },
-      icon: AnimatedIcon(
-        icon: AnimatedIcons.menu_close,
-        progress: _moreButtonAnimation,
+    return GestureDetector(
+      onTap: _viewModel.onTapMoreButton,
+      child: Container(
+        decoration: BoxDecoration(
+            color: Get.theme.primaryColorDark,
+            borderRadius: BorderRadius.all(Radius.circular(100))),
+        padding: EdgeInsets.all(5),
+        child: Icon(_viewModel.isMiniMode ? Icons.menu : Icons.close),
       ),
     );
   }
 
   Widget _titleText() {
     return Text(
-      widget.title??"",
+      widget.title ?? "",
       overflow: TextOverflow.ellipsis,
     );
   }
 
   Widget _durationText() {
-    return Text(_viewModel.audioDurationText??"00:00 / 00:00");
+    return Text(_viewModel.audioDurationText);
   }
 
   Widget _miniModeWidget() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _playButton(),
-        Expanded(
-            child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 5),
-          child: _titleText(),
-        )),
-        _durationText(),
-        _moreButton(),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _playButton(),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            child: SizedBox(
+                width: Get.width/3,
+                child: _titleText()),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: _durationText(),
+          ),
+          _moreButton(),
+        ],
+      ),
+    );
+  }
+
+  Widget _moreModeWidget() {
+    Widget _slider() {
+      return Slider(
+        max: _viewModel.totalSliderValue,
+        min: 0.0,
+        value: _viewModel.currentSliderValue,
+        onChangeStart: _viewModel.sliderOnChangeStart,
+        onChangeEnd: _viewModel.sliderOnChangeEnd,
+        onChanged: _viewModel.sliderOnChanged,
+      );
+    }
+
+    Widget _durationText() {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(_viewModel.currentDurationText),
+          Text(_viewModel.totalDurationText),
+        ],
+      );
+    }
+
+    Widget _buttons() {
+      Widget _forwardButton() {
+        return IconButton(
+          icon: Icon(Icons.fast_forward),
+          onPressed: _viewModel.onTapAudioForward,
+        );
+      }
+
+      Widget _rewindButton() {
+        return IconButton(
+          icon: Icon(Icons.fast_rewind),
+          onPressed: _viewModel.onTapAudioRewind,
+        );
+      }
+
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _rewindButton(),
+          _playButton(iconSize: 50),
+          _forwardButton()
+        ],
+      );
+    }
+
+    Widget _appBar() {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          _moreButton(),
+        ],
+      );
+    }
+
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _appBar(),
+          _slider(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: _durationText(),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: _buttons(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _player() {
+    Widget _child =
+        (_viewModel.isMiniMode) ? _miniModeWidget() : _moreModeWidget();
+
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 200),
+      curve: Curves.bounceInOut,
+      height: _viewModel.playerHeight,
+      color: Get.theme.primaryColorDark,
+      child: Card(child: _child),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      color: Get.theme.primaryColorDark,
-      duration: Duration(milliseconds: 1000),
-      height: widget.miniMode ? kToolbarHeight : kToolbarHeight * 2,
-      child: Card(child: _miniModeWidget()),
-    );
+    return _player();
   }
 }
