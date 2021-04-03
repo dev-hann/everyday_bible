@@ -15,17 +15,7 @@ public class MainActivity extends FlutterActivity {
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
-        new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL)
-                .setMethodCallHandler(
-                        (call, result) -> {
-                            String[] methodList = call.method.split("/");
-                            switch (methodList[0]) {
-                                case "notification":
-                                    new MediaActivity(this,methodList[1], result);
-                                    break;
-                            }
-                        }
-                );
+
     }
 
 }
