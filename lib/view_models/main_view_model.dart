@@ -1,9 +1,6 @@
-import 'dart:async';
+part of view_model;
 
-import 'package:everydaybible/controller/bible_controller.dart';
-import 'package:flutter/foundation.dart';
-
-class MainViewModel extends ChangeNotifier {
+class MainViewModel extends BibleViewModel {
   MainViewModel(this.controller);
 
   final BibleController controller;

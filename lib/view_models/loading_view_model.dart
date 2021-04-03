@@ -1,9 +1,6 @@
-import 'package:everydaybible/controller/bible_controller.dart';
-import 'package:flutter/animation.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/scheduler.dart';
+part of view_model;
 
-class LoadingViewModel extends ChangeNotifier {
+class LoadingViewModel extends BibleViewModel {
   LoadingViewModel(this.controller,{
     TickerProvider vsync,
   }) {

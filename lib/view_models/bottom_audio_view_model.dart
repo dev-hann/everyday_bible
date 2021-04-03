@@ -1,11 +1,6 @@
-import 'dart:async';
+part of view_model;
 
-import 'package:flutter/animation.dart';
-import 'package:flutter/foundation.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/material.dart';
-
-class BottomAudioViewModel extends ChangeNotifier {
+class BottomAudioViewModel extends BibleViewModel {
   BottomAudioViewModel(this.audioAsset);
 
   final String audioAsset;
