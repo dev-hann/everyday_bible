@@ -1,4 +1,4 @@
-import 'package:everydaybible/controller/bible_controller.dart';
+import 'package:everydaybible/utils/bible_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider(
-          create: (_) => BibleController(),
+          create: (_) => BibleDatabase(),
         ),
       ],
       child:GetMaterialApp(

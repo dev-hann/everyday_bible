@@ -13,7 +13,7 @@ class _EveryDayBibleState extends State<EveryDayBible>
 
   void initState() {
     super.initState();
-    final bible = Provider.of<BibleController>(context, listen: false);
+    final bible = Provider.of<BibleDatabase>(context, listen: false);
     _viewModel = MainViewModel(bible)
       ..addListener(() {
         setState(() {});
@@ -33,15 +33,15 @@ class _EveryDayBibleState extends State<EveryDayBible>
   }
 
   Widget _body() {
-    Widget _gospelBox(MapEntry<int, String> gospel) {
-      Widget _sectionLine(int index) {
+    Widget _gospelBox(MapEntry<String, String> gospel) {
+      Widget _sectionLine(String index) {
         return Row(
           children: [
             Flexible(
                 flex: 1,
                 child: Padding(
                   padding: const EdgeInsets.all(3.0),
-                  child: Text("$index"),
+                  child: Text(index),
                 )),
             Expanded(
                 flex: 9,
