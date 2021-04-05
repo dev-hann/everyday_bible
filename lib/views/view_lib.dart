@@ -1,6 +1,6 @@
 library views;
 
-import 'package:everydaybible/controller/bible_controller.dart';
+import 'package:everydaybible/utils/bible_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';

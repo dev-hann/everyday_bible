@@ -1,32 +1,26 @@
 import 'package:everydaybible/models/bible.dart';
-import 'package:everydaybible/utils/bible_web_parser.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:everydaybible/utils/data_loader/firebase_data_loader.dart';
+import 'package:everydaybible/utils/data_loader/hive_data_loader.dart';
 
+///each database init has return [todayBibleData]
 class BibleDatabase {
-  Box<Bible> _database;
-  BibleWebParser _bibleWebParser = BibleWebParser();
+  FirebaseDataLoader _firebaseDataLoader = FirebaseDataLoader();
+  HiveDataLoader _hiveDataLoader = HiveDataLoader();
 
-  Future init() async {
-    print("Init Hive DB ..");
-    await Hive.initFlutter();
-    if (!Hive.isAdapterRegistered(0)) {
-      Hive.registerAdapter(BibleAdapter());
-    }
-    _database = await Hive.openBox<Bible>("Bible");
-    print("Hive Box Opened!");
+  Bible _selectedDateBible;
+
+  Bible get selectedDateBible =>_selectedDateBible;
+
+  Future init() async{
+    //_loadHive();
+    _selectedDateBible = await _firebaseDataLoader.init();
   }
 
-  Future todayData() async {
-    print("Checking Hive DB..");
-    if(_database.isNotEmpty) {
-      final _data = _database.values.last;
-      if (_data.isTodayData()) {
-        return _data;
-      }
-    }
-    print("There's no today Data");
-    await _database.add(await _bibleWebParser.bible);
-    return _database.values.last;
+  void _loadHive() {
+    _hiveDataLoader.init();
+  }
+
+  Future _loadFirebase() async {
+   _selectedDateBible = await _firebaseDataLoader.init();
   }
 }

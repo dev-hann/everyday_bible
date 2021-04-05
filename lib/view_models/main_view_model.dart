@@ -1,15 +1,15 @@
 part of view_model;
 
 class MainViewModel extends BibleViewModel {
-  MainViewModel(this.controller);
+  MainViewModel(this.database);
 
-  final BibleController controller;
+  final BibleDatabase database;
 
-  String get title => controller.title;
+  String get title => database.selectedDateBible.title;
 
-  String get subtitle => controller.subTitle;
+  String get subtitle => database.selectedDateBible.subTitle;
 
-  Map<int, String> get gospels => controller.gospels;
+  Map<String, String> get gospels => database.selectedDateBible.gospel;
 
-  String get audioAsset => controller.audio;
+  String get audioAsset => database.selectedDateBible.audio;
 }

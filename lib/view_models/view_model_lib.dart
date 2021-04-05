@@ -3,7 +3,7 @@ library view_model;
 import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
-import 'package:everydaybible/controller/bible_controller.dart';
+import 'package:everydaybible/utils/bible_database.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
