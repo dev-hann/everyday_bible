@@ -6,8 +6,8 @@ class BottomAudioPlayer extends StatefulWidget {
     this.title,
   });
 
-  final String title;
-  final String audioAsset;
+  final String? title;
+  final String? audioAsset;
 
   @override
   _BottomAudioPlayerState createState() => _BottomAudioPlayerState();
@@ -15,18 +15,18 @@ class BottomAudioPlayer extends StatefulWidget {
 
 class _BottomAudioPlayerState extends State<BottomAudioPlayer>
     with TickerProviderStateMixin {
-  BottomAudioViewModel _viewModel;
+late  BottomAudioViewModel _viewModel;
 
   void initState() {
     super.initState();
-    _viewModel = BottomAudioViewModel(widget.audioAsset)
+    _viewModel = BottomAudioViewModel(widget.audioAsset!)
       ..addListener(() {
         setState(() {});
       });
     _viewModel.initBottomPlayer(vsync: this);
   }
 
-  Widget _playButton({double iconSize}) {
+  Widget _playButton({double? iconSize}) {
     return GestureDetector(
       onTap: _viewModel.onTapPlayButton,
       child: Container(

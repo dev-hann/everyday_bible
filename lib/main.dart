@@ -1,17 +1,19 @@
 import 'package:everydaybible/utils/bible_database.dart';
+import 'package:everydaybible/utils/data_loader/web_data_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart'
 import 'views/view_lib.dart';
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -35,7 +37,8 @@ class MyApp extends StatelessWidget {
                   fontWeight: FontWeight.bold)),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: LoadingView(),
+     // home: Text("!!"),
+       home: LoadingView(),
       ),
     );
   }

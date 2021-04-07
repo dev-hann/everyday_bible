@@ -9,7 +9,7 @@ class LoadingView extends StatefulWidget {
 
 class _LoadingViewState extends State<LoadingView>
     with SingleTickerProviderStateMixin {
-  LoadingViewModel _viewModel;
+ late LoadingViewModel _viewModel;
 
   void initState() {
     super.initState();
@@ -41,7 +41,7 @@ class _LoadingViewState extends State<LoadingView>
         opacity: _viewModel.subtitleAnimationValue,
         child: Text(
           "Bible",
-          style: Get.textTheme.headline2.copyWith(
+          style: Get.textTheme.headline2!.copyWith(
               color: Get.theme.primaryColorDark, fontWeight: FontWeight.bold),
         ),
       );
@@ -88,7 +88,7 @@ class _LoadingViewState extends State<LoadingView>
   Widget _copyRight() {
     return Text(
       "Copyright © 2018 Scripture Union Korea. All rights reserved.",
-      style: Get.textTheme.bodyText1
+      style: Get.textTheme.bodyText1!
           .copyWith(color: Colors.brown.shade300, fontSize: 10),
     );
   }
