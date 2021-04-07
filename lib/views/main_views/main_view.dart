@@ -30,6 +30,7 @@ class _EveryDayBibleState extends State<EveryDayBible>
         ],
       ),
       style: Get.textTheme.headline4!.copyWith(fontWeight: FontWeight.bold),
+      textAlign: TextAlign.center,
     );
   }
 
