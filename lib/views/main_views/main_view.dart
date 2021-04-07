@@ -9,7 +9,7 @@ class EveryDayBible extends StatefulWidget {
 
 class _EveryDayBibleState extends State<EveryDayBible>
     with TickerProviderStateMixin {
- late MainViewModel _viewModel;
+  late MainViewModel _viewModel;
 
   void initState() {
     super.initState();
@@ -20,17 +20,37 @@ class _EveryDayBibleState extends State<EveryDayBible>
       });
   }
 
-  Widget _title() {
-    return Text.rich(
-      TextSpan(
-        children: [
-          TextSpan(text: _viewModel.title),
-          TextSpan(text:"\n"),
-          TextSpan(text: _viewModel.subtitle, style: Get.textTheme.subtitle2),
-        ],
+    Widget titleText() {
+      return Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(text: _viewModel.title),
+            TextSpan(text: "\n"),
+            TextSpan(text: _viewModel.subtitle, style: Get.textTheme.subtitle2),
+          ],
+        ),
+        style: Get.textTheme.headline4!.copyWith(fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      );
+    }
+
+
+
+  AppBar _appBar() {
+    return AppBar(
+      elevation: 5.0,
+      title: Text(_viewModel.title),
+      centerTitle: true,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back_ios_sharp),
+        onPressed: () {},
       ),
-      style: Get.textTheme.headline4!.copyWith(fontWeight: FontWeight.bold),
-      textAlign: TextAlign.center,
+      actions: [
+        IconButton(
+          icon: Icon(Icons.arrow_forward_ios_sharp),
+          onPressed: () {},
+        )
+      ],
     );
   }
 
@@ -115,15 +135,15 @@ class _EveryDayBibleState extends State<EveryDayBible>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: _appBar(),
       body: _gradientBackground(
           child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: kToolbarHeight),
-              child: _title(),
-            ),
+            // SizedBox(
+            //   height: kToolbarHeight,
+            // ),
             Expanded(child: _body())
           ],
         ),
