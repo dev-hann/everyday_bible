@@ -2,12 +2,12 @@ part of views;
 
 class BottomAudioPlayer extends StatefulWidget {
   BottomAudioPlayer({
-    this.audioAsset,
-    this.title,
+   required this.audioAsset,
+   required this.title,
   });
 
-  final String? title;
-  final String? audioAsset;
+  final String title;
+  final String audioAsset;
 
   @override
   _BottomAudioPlayerState createState() => _BottomAudioPlayerState();
@@ -19,7 +19,7 @@ late  BottomAudioViewModel _viewModel;
 
   void initState() {
     super.initState();
-    _viewModel = BottomAudioViewModel(widget.audioAsset!)
+    _viewModel = BottomAudioViewModel(widget.audioAsset)
       ..addListener(() {
         setState(() {});
       });
@@ -58,7 +58,7 @@ late  BottomAudioViewModel _viewModel;
 
   Widget _titleText() {
     return Text(
-      widget.title ?? "",
+      widget.title,
       overflow: TextOverflow.ellipsis,
     );
   }

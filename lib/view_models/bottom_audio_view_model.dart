@@ -3,7 +3,7 @@ part of view_model;
 class BottomAudioViewModel extends BibleViewModel {
   BottomAudioViewModel(this.audioAsset);
 
-  late final String audioAsset;
+  final String audioAsset;
 
   String get currentDurationText => _dateTimeFrom(_audioCurrentDuration);
 
@@ -14,19 +14,14 @@ class BottomAudioViewModel extends BibleViewModel {
 
   ///[todo] RF
   String _dateTimeFrom(Duration? duration) {
+    if(duration==null)  return "00:00";
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     String twoDigitMinutes;
     String twoDigitSeconds;
-    try {
-      twoDigitMinutes = twoDigits(duration!.inMinutes.remainder(60));
-      twoDigitSeconds = twoDigits(duration!.inSeconds.remainder(60));
-    } catch (e) {
-      print(e);
-      return "00:00";
-    }
+      twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+      twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
     return "$twoDigitMinutes:$twoDigitSeconds";
   }
-
 
   ///[todo] make to extension
   AudioPlayer _audioPlayer = AudioPlayer();
@@ -39,13 +34,17 @@ class BottomAudioViewModel extends BibleViewModel {
 
    Duration? _audioTotalDuration;
 
-  double get totalSliderValue =>
-      _audioTotalDuration?.inMilliseconds?.toDouble() ?? 1.0;
+  double get totalSliderValue {
+    if(_audioTotalDuration==null) return 1.0;
+     return _audioTotalDuration!.inMilliseconds.toDouble();
+  }
 
-   Duration? _audioCurrentDuration;
+    Duration? _audioCurrentDuration;
 
-  double get currentSliderValue =>
-      _audioCurrentDuration?.inMilliseconds?.toDouble() ?? 0.0;
+  double get currentSliderValue {
+    if(_audioCurrentDuration==null)return 0.0;
+       return _audioCurrentDuration!.inMilliseconds.toDouble();
+  }
 
   bool _sliderIsOnTapping=false;
 
@@ -97,11 +96,10 @@ class BottomAudioViewModel extends BibleViewModel {
   }
 
   void initBottomPlayer({required TickerProvider vsync}) async {
-
     _loadAnimationController(vsync);
 
     int res = await _audioPlayer.setUrl(audioAsset);
-    print(res);
+
     _audioTotalSub = _audioPlayer.onDurationChanged.listen((event) {
       _audioTotalDuration = event;
       notifyListeners();
