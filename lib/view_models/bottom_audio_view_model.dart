@@ -3,7 +3,7 @@ part of view_model;
 class BottomAudioViewModel extends BibleViewModel {
   BottomAudioViewModel(this.audioAsset);
 
-  final String audioAsset;
+  late final String audioAsset;
 
   String get currentDurationText => _dateTimeFrom(_audioCurrentDuration);
 
@@ -13,13 +13,13 @@ class BottomAudioViewModel extends BibleViewModel {
 
 
   ///[todo] RF
-  String _dateTimeFrom(Duration duration) {
+  String _dateTimeFrom(Duration? duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     String twoDigitMinutes;
     String twoDigitSeconds;
     try {
-      twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-      twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+      twoDigitMinutes = twoDigits(duration!.inMinutes.remainder(60));
+      twoDigitSeconds = twoDigits(duration!.inSeconds.remainder(60));
     } catch (e) {
       print(e);
       return "00:00";
@@ -31,18 +31,18 @@ class BottomAudioViewModel extends BibleViewModel {
   ///[todo] make to extension
   AudioPlayer _audioPlayer = AudioPlayer();
 
-  StreamSubscription _audioCurrentSub;
+  late StreamSubscription _audioCurrentSub;
 
-  StreamSubscription _audioTotalSub;
+  late StreamSubscription _audioTotalSub;
 
-  StreamSubscription _audioStateSub;
+  late StreamSubscription _audioStateSub;
 
-  Duration _audioTotalDuration;
+   Duration? _audioTotalDuration;
 
   double get totalSliderValue =>
       _audioTotalDuration?.inMilliseconds?.toDouble() ?? 1.0;
 
-  Duration _audioCurrentDuration;
+   Duration? _audioCurrentDuration;
 
   double get currentSliderValue =>
       _audioCurrentDuration?.inMilliseconds?.toDouble() ?? 0.0;
@@ -61,7 +61,7 @@ class BottomAudioViewModel extends BibleViewModel {
     notifyListeners();
   }
 
-  AnimationController playButtonAnimation;
+  late AnimationController playButtonAnimation;
 
   void _playButtonPlayIcon() {
     playButtonAnimation.reverse();
@@ -96,7 +96,7 @@ class BottomAudioViewModel extends BibleViewModel {
       });
   }
 
-  void initBottomPlayer({TickerProvider vsync}) async {
+  void initBottomPlayer({required TickerProvider vsync}) async {
 
     _loadAnimationController(vsync);
 
@@ -147,11 +147,11 @@ class BottomAudioViewModel extends BibleViewModel {
   }
 
   void onTapAudioForward(){
-    _seekAudio(_audioCurrentDuration+Duration(seconds: 5));
+    _seekAudio(_audioCurrentDuration!+Duration(seconds: 5));
   }
 
   void onTapAudioRewind(){
-    _seekAudio(_audioCurrentDuration-Duration(seconds: 5));
+    _seekAudio(_audioCurrentDuration!-Duration(seconds: 5));
 
   }
   Future _playAudio() async {

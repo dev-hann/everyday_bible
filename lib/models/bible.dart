@@ -1,45 +1,89 @@
-import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
-@HiveType(typeId: 0)
 class Bible {
-  Bible({this.title, this.audio, this.gospel, this.subTitle, this.dateTime});
+  Bible({
+    required this.title,
+    required this.brief,
+    required this.audio,
+    required this.gospels,
+    required this.subTitle,
+    required this.dateTime,
+  });
 
-  @HiveField(0)
   final String dateTime;
 
-  @HiveField(1)
-  final Map<String, String> gospel;
+  final Map<String, String> gospels;
 
-  @HiveField(2)
   final String audio;
 
-  @HiveField(3)
   final String title;
 
-  @HiveField(4)
+  final String brief;
+
   final String subTitle;
 
   bool isTodayData() {
-    if (this.dateTime == DateFormat('yyyy.MM.dd').format(DateTime.now())) {
+    if (this.dateTime == DateFormat('yyyy-MM-dd').format(DateTime.now())) {
       return true;
     }
     return false;
   }
 
-  factory Bible.fromJson(Map<String, dynamic> json) {
-    final _tmpGospels = json['Gospels'];
+  factory Bible.fromHive(Map<String, dynamic> json) {
     return Bible(
       title: json['Title'],
-      subTitle: json['Subtitle'],
+      brief: json['Brief'],
+      subTitle: json['SubTitle'],
       dateTime: json['DateTime'],
       audio: json['Audio'],
-      gospel: Map.from(json['Gospels']),
+      gospels: Map.from(json['Gospels']),
     );
   }
 
+  factory Bible.fromAPI({
+    required Map<String, dynamic> titleJson,
+    required List<dynamic> contentsJson,
+  }) {
+
+    String _getAudio(String bibleDateFormat) {
+      String _years = bibleDateFormat.split("-")[0];
+      return "https://meditation.su.or.kr/meditation_mp3/" +
+          _years+ "/" + bibleDateFormat.replaceAll('-', "")+ ".mp3";
+    }
+
+    Map<String,String> getGospels(List<dynamic> gospelsJson){
+      Map<String,String> _tmpGospels={};
+      contentsJson.forEach((element) {
+        _tmpGospels[element['Verse'].toString()]=element['Bible_Cn'];
+      });
+      return _tmpGospels;
+    }
+
+    return Bible(
+      title: titleJson['Qt_sj'],
+      brief: titleJson['Qt_Brf'],
+      subTitle: titleJson['Bible_name'] +" "+ titleJson['Bible_chapter'],
+      gospels: getGospels(contentsJson),
+      audio: _getAudio(titleJson['Base_de']),
+      dateTime: titleJson['Base_de'],
+    );
+  }
+
+
   @override
   String toString() {
-    return 'Bible{dateTime: $dateTime, gospel: $gospel, audio: $audio, title: $title, subTitle: $subTitle}';
+    return 'Bible{dateTime: $dateTime, gospels: $gospels, audio: $audio, title: $title, subTitle: $subTitle}';
+  }
+
+  Map<String, dynamic> toMap() {
+    // ignore: unnecessary_cast
+    return {
+      'DateTime': this.dateTime,
+      'Gospels': this.gospels,
+      'Audio': this.audio,
+      'Title': this.title,
+      'Brief': this.brief,
+      'SubTitle': this.subTitle,
+    } as Map<String, dynamic>;
   }
 }

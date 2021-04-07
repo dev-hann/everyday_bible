@@ -2,7 +2,7 @@ part of view_model;
 
 class LoadingViewModel extends BibleViewModel {
   LoadingViewModel(this.bibleDatabase,{
-    TickerProvider vsync,
+   required TickerProvider vsync,
   }) {
     _initAnimation(vsync);
     _initDataLoad();
@@ -10,7 +10,7 @@ class LoadingViewModel extends BibleViewModel {
  final BibleDatabase bibleDatabase;
   bool _isLoading=true;
   bool get loadingCompleted=>!_isLoading;
-  AnimationController _fadeInAnimation;
+  late AnimationController _fadeInAnimation;
 
   double get titleAnimationValue {
     if (_fadeInAnimation.value < 1) {

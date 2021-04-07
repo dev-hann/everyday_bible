@@ -9,7 +9,7 @@ class EveryDayBible extends StatefulWidget {
 
 class _EveryDayBibleState extends State<EveryDayBible>
     with TickerProviderStateMixin {
-  MainViewModel _viewModel;
+ late MainViewModel _viewModel;
 
   void initState() {
     super.initState();
@@ -24,11 +24,12 @@ class _EveryDayBibleState extends State<EveryDayBible>
     return Text.rich(
       TextSpan(
         children: [
-          TextSpan(text: _viewModel.title + "\n"),
+          TextSpan(text: _viewModel.title),
+          TextSpan(text:"\n"),
           TextSpan(text: _viewModel.subtitle, style: Get.textTheme.subtitle2),
         ],
       ),
-      style: Get.textTheme.headline4.copyWith(fontWeight: FontWeight.bold),
+      style: Get.textTheme.headline4!.copyWith(fontWeight: FontWeight.bold),
     );
   }
 
@@ -78,7 +79,7 @@ class _EveryDayBibleState extends State<EveryDayBible>
       blendMode: BlendMode.dstOut,
       child: ListView.builder(
         scrollDirection: Axis.vertical,
-        itemCount: gospels.length,
+        itemCount: gospels!.length,
         itemBuilder: (context, index) {
           return _gospelBox(gospels.entries.toList()[index]);
         },
@@ -86,7 +87,7 @@ class _EveryDayBibleState extends State<EveryDayBible>
     );
   }
 
-  Widget _gradientBackground({Widget child}) {
+  Widget _gradientBackground({required Widget child}) {
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -105,8 +106,8 @@ class _EveryDayBibleState extends State<EveryDayBible>
 
   Widget _bottomPlayer() {
     return BottomAudioPlayer(
-      audioAsset: _viewModel.audioAsset,
-      title: _viewModel.title,
+      audioAsset: _viewModel.audioAsset!,
+      title: _viewModel.title!,
     );
   }
 
