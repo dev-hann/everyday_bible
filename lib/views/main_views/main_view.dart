@@ -20,95 +20,44 @@ class _EveryDayBibleState extends State<EveryDayBible>
       });
   }
 
-    Widget titleText() {
-      return Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(text: _viewModel.title),
-            TextSpan(text: "\n"),
-            TextSpan(text: _viewModel.subtitle, style: Get.textTheme.subtitle2),
-          ],
-        ),
-        style: Get.textTheme.headline4!.copyWith(fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      );
-    }
-
-
-
-  AppBar _appBar() {
-    return AppBar(
-      elevation: 5.0,
-      title: Text(_viewModel.title),
-      centerTitle: true,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back_ios_sharp),
-        onPressed: () {},
-      ),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.arrow_forward_ios_sharp),
+  Widget _sliverAppBar() {
+    Widget _appBar() {
+      return AppBar(
+        title: Text(_viewModel.title),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_sharp),
           onPressed: () {},
-        )
-      ],
-    );
-  }
-
-  Widget _body() {
-    Widget _gospelBox(MapEntry<String, String> gospel) {
-      Widget _sectionLine(String index) {
-        return Row(
-          children: [
-            Flexible(
-                flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: Text(index),
-                )),
-            Expanded(
-                flex: 9,
-                child: Divider(
-                  color: Colors.white70,
-                ))
-          ],
-        );
-      }
-
-      Widget _sectionText(String text) {
-        return Text(text);
-      }
-
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [_sectionLine(gospel.key), _sectionText(gospel.value)],
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.arrow_forward_ios_sharp),
+            onPressed: () {},
+          )
+        ],
       );
     }
 
-    final gospels = _viewModel.gospels;
-    return ShaderMask(
-      shaderCallback: (Rect rect) {
-        return LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.white, Colors.transparent],
-            stops: [0, 0.05]).createShader(rect);
-      },
-      blendMode: BlendMode.dstOut,
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: gospels!.length,
-        itemBuilder: (context, index) {
-          return _gospelBox(gospels.entries.toList()[index]);
-        },
+    return SliverPersistentHeader(
+      pinned: true,
+      floating: true,
+      delegate: _CustomPersistentHeaderDelegate(
+        background: Get.theme.primaryColor,
+        minExtent: kToolbarHeight+24 ,
+        maxExtent: kToolbarHeight * 2,
+        appBar: _appBar(),
+        bottom: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            _viewModel.subtitle,
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
       ),
     );
   }
 
-  Widget _gradientBackground({required Widget child}) {
+  Widget gradientBackground({required Widget child}) {
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -127,29 +76,108 @@ class _EveryDayBibleState extends State<EveryDayBible>
 
   Widget _bottomPlayer() {
     return BottomAudioPlayer(
-      audioAsset: _viewModel.audioAsset!,
-      title: _viewModel.title!,
+      audioAsset: _viewModel.audioAsset,
+      title: _viewModel.title,
     );
+  }
+
+  Widget _gospelsListView() {
+    return SliverList(
+        delegate: SliverChildBuilderDelegate(
+      (_, index) {
+        Widget _gospelBox(MapEntry<String, String> gospel) {
+          Widget _sectionLine(String index) {
+            return Row(
+              children: [
+                Flexible(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Text(index),
+                    )),
+                Expanded(
+                    flex: 9,
+                    child: Divider(
+                      color: Colors.white70,
+                    ))
+              ],
+            );
+          }
+
+          Widget _sectionText(String text) {
+            return Text(text);
+          }
+
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [_sectionLine(gospel.key), _sectionText(gospel.value)],
+            ),
+          );
+        }
+
+        return _gospelBox(_viewModel.gospels.entries.toList()[index]);
+      },
+      childCount: _viewModel.gospels.length,
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(),
-      body: _gradientBackground(
-          child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        child: Column(
-          children: [
-            // SizedBox(
-            //   height: kToolbarHeight,
-            // ),
-            Expanded(child: _body())
+      body: gradientBackground(
+        child: CustomScrollView(
+          slivers: [
+            _sliverAppBar(),
+            _gospelsListView(),
           ],
         ),
-      )),
-      //     bottomSheet: MainViewBottomPlayer(),
+      ),
       bottomNavigationBar: _bottomPlayer(),
     );
+  }
+}
+
+class _CustomPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
+  _CustomPersistentHeaderDelegate({
+    required this.appBar,
+    required this.bottom,
+    required this.maxExtent,
+    required this.minExtent,
+    required this.background,
+  });
+
+  final double maxExtent;
+  final double minExtent;
+  final Color background;
+  final Widget appBar;
+  final Widget bottom;
+
+  double get _bottomHeight => maxExtent - minExtent;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    double _animatedOpacity = (_bottomHeight - shrinkOffset) / _bottomHeight;
+
+    return Stack(
+      children: [
+        appBar,
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Opacity(
+            opacity: (_animatedOpacity < 0) ? 0 : _animatedOpacity,
+            child: SingleChildScrollView(child: bottom),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
   }
 }
