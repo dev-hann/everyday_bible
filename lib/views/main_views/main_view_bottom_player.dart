@@ -74,11 +74,12 @@ late  BottomAudioViewModel _viewModel;
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _playButton(),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: SizedBox(
-                width: Get.width/3,
-                child: _titleText()),
+          Flexible(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: SizedBox(
+                  child: _titleText()),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),

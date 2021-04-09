@@ -69,10 +69,9 @@ class _LoadingViewState extends State<LoadingView>
     Widget _nextButton() {
       return GestureDetector(
           onTap: () async {
-            // await _fadeOutAnimation.forward();
-            Get.to(() => EveryDayBible(),
-                transition: Transition.fade,
-                duration: Duration(microseconds: 1000));
+            Get.to(()=>EveryDayBible(),
+                transition: Transition.fadeIn,
+                duration: Duration(seconds: 1));
           },
           child: Text("Amen"));
     }
