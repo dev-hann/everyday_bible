@@ -224,7 +224,7 @@ class _EveryDayBibleState extends State<EveryDayBible>
   }
 
   Widget _loading() {
-    if (!_viewModel.loading) return SizedBox.shrink();
+    if (!_viewModel.isLoading) return SizedBox.shrink();
     return Container(
       color: Colors.black.withOpacity(0.4),
       child: Center(
@@ -246,44 +246,3 @@ class _EveryDayBibleState extends State<EveryDayBible>
   }
 }
 
-class _CustomPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
-  _CustomPersistentHeaderDelegate({
-    required this.appBar,
-    required this.bottom,
-    required this.maxExtent,
-    required this.minExtent,
-    required this.background,
-  });
-
-  final double maxExtent;
-  final double minExtent;
-  final Color background;
-  final Widget appBar;
-  final Widget bottom;
-
-  double get _bottomHeight => maxExtent - minExtent;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    double _animatedOpacity = (_bottomHeight - shrinkOffset) / _bottomHeight;
-
-    return Stack(
-      children: [
-        appBar,
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Opacity(
-            opacity: (_animatedOpacity < 0) ? 0 : _animatedOpacity,
-            child: SingleChildScrollView(child: bottom),
-          ),
-        ),
-      ],
-    );
-  }
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return true;
-  }
-}

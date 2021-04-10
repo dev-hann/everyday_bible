@@ -5,8 +5,8 @@ class MainViewModel extends BibleViewModel {
     _loadBibleFromDB();
     this.database.bibleNotifier.addListener(() {
       _loadBibleFromDB();
-      loading = false;
-      notifyListeners();
+      _loadingCompleted();
+      gospelScrollController.jumpTo(0.0);
     });
   }
 
@@ -28,7 +28,19 @@ class MainViewModel extends BibleViewModel {
 
   String get dateTime => _selectedBible!.dateTime;
 
-  bool loading = false;
+  bool _loading = false;
+
+  bool get isLoading =>_loading;
+  void _loadingMode(){
+    _loading = true;
+    notifyListeners();
+  }
+  void _loadingCompleted(){
+    _loading = false;
+    notifyListeners();
+  }
+
+  bool get hasTomorrow => !(_dateTime.difference(DateTime.now()).inDays > 5);
 
   ScrollController gospelScrollController = ScrollController();
 
@@ -38,18 +50,13 @@ class MainViewModel extends BibleViewModel {
   }
 
   void onTapYesterday() async {
-    loading = true;
+    _loadingMode();
     notifyListeners();
     await database.loadData(_dateTime.add(Duration(days: -1)));
-    gospelScrollController.jumpTo(0.0);
   }
 
-  bool get hasTomorrow => !(_dateTime.difference(DateTime.now()).inDays > 5);
-
   void onTapTomorrow() async {
-    loading = true;
-    notifyListeners();
+    _loadingMode();
     await database.loadData(_dateTime.add(Duration(days: 1)));
-    gospelScrollController.jumpTo(0.0);
   }
 }
