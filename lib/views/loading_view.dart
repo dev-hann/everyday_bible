@@ -69,7 +69,7 @@ class _LoadingViewState extends State<LoadingView>
     Widget _nextButton() {
       return GestureDetector(
           onTap: () async {
-            Get.to(()=>EveryDayBible(),
+            Get.offAll(()=>EveryDayBible(),
                 transition: Transition.fadeIn,
                 duration: Duration(seconds: 1));
           },

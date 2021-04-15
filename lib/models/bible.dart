@@ -60,7 +60,7 @@ class Bible {
     }
 
     return Bible(
-      title: titleJson['Qt_sj'],
+      title: (titleJson['Qt_sj'] as String).trim(),
       brief: titleJson['Qt_Brf'],
       subTitle: titleJson['Bible_name'] +" "+ titleJson['Bible_chapter'],
       gospels: getGospels(contentsJson),

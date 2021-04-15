@@ -1,5 +1,4 @@
 import 'package:everydaybible/utils/bible_database.dart';
-import 'package:everydaybible/utils/data_loader/web_data_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';

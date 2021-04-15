@@ -25,7 +25,10 @@ dependencies:
     sdk: flutter
   html: ^0.15.0
   http:
-  audioplayers: ^0.18.1
+
+  audio_service: ^0.17.0
+  just_audio: ^0.7.3
+
   cupertino_icons: ^1.0.2
   provider:
   get: ^4.1.3
