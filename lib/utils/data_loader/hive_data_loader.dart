@@ -1,7 +1,6 @@
 import 'package:everydaybible/models/bible.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:intl/intl.dart';
 
 import 'data_loader.dart';
 
@@ -30,7 +29,6 @@ class HiveDataLoader extends DataLoader with HiveMixin {
     print("init HiveDataLoader..");
     await Hive.initFlutter();
     bibleBox = await Hive.openBox<dynamic>("Bible");
-   // await _deleteBox("Bible");
     return bibleFromDate(DateTime.now());
   }
 
@@ -40,10 +38,6 @@ class HiveDataLoader extends DataLoader with HiveMixin {
     print("push new Box $_boxName");
   }
 
-  Future _deleteBox(String boxName)async{
-    await Hive.close();
-    await Hive.deleteBoxFromDisk(boxName);
-  }
 }
 
 mixin HiveMixin on DataLoader {}

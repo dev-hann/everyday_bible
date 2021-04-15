@@ -2,11 +2,13 @@ part of views;
 
 class BottomAudioPlayer extends StatefulWidget {
   BottomAudioPlayer({
-   required this.audioAsset,
-   required this.title,
+    required this.audioAsset,
+    required this.title,
+    required this.subtitle,
   });
 
   final String title;
+  final String subtitle;
   final String audioAsset;
 
   @override
@@ -15,18 +17,54 @@ class BottomAudioPlayer extends StatefulWidget {
 
 class _BottomAudioPlayerState extends State<BottomAudioPlayer>
     with TickerProviderStateMixin {
-late  BottomAudioViewModel _viewModel;
+  late BottomAudioViewModel _viewModel;
 
   void initState() {
     super.initState();
-    _viewModel = BottomAudioViewModel(widget.audioAsset)
-      ..addListener(() {
-        setState(() {});
-      });
+    _viewModel = BottomAudioViewModel(
+      audioAsset: widget.audioAsset,
+      title: widget.title,
+      subtitle: widget.subtitle,
+    )..addListener(_listener);
+
     _viewModel.initBottomPlayer(vsync: this);
   }
 
+  void _listener() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void didUpdateWidget(oldWidget) {
+    if (this.widget.title != oldWidget.title) {
+      _viewModel.removeListener(_listener);
+      _viewModel = BottomAudioViewModel(
+        audioAsset: widget.audioAsset,
+        title: widget.title,
+        subtitle: widget.subtitle,
+      )..addListener(_listener);
+      _viewModel.initBottomPlayer(vsync: this);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   Widget _playButton({double? iconSize}) {
+    Widget _loading() {
+      return SizedBox(
+          height: kToolbarHeight/2,
+          width: kToolbarHeight/2,
+          child: const CircularProgressIndicator());
+    }
+    Widget _button() {
+      return AnimatedIcon(
+        icon: AnimatedIcons.play_pause,
+        progress: (_viewModel.playButtonAnimation)!,
+        size: iconSize,
+      );
+    }
+
+    if(_viewModel.isLoading) return _loading() ;
     return GestureDetector(
       onTap: _viewModel.onTapPlayButton,
       child: Container(
@@ -34,11 +72,7 @@ late  BottomAudioViewModel _viewModel;
             color: Get.theme.primaryColorDark,
             borderRadius: BorderRadius.all(Radius.circular(100))),
         padding: EdgeInsets.all(5),
-        child: AnimatedIcon(
-          icon: AnimatedIcons.play_pause,
-          progress: _viewModel.playButtonAnimation,
-          size: iconSize,
-        ),
+        child: _button(),
       ),
     );
   }
@@ -68,25 +102,30 @@ late  BottomAudioViewModel _viewModel;
   }
 
   Widget _miniModeWidget() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _playButton(),
-          Flexible(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: SizedBox(
-                  child: _titleText()),
-            ),
+    return GestureDetector(
+      onTap: _viewModel.onTapMoreButton,
+      child: ColoredBox(
+        color: Colors.transparent,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _playButton(),
+              Flexible(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: SizedBox(child: _titleText()),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: _durationText(),
+              ),
+              _moreButton(),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: _durationText(),
-          ),
-          _moreButton(),
-        ],
+        ),
       ),
     );
   }
@@ -170,13 +209,15 @@ late  BottomAudioViewModel _viewModel;
   Widget _player() {
     Widget _child =
         (_viewModel.isMiniMode) ? _miniModeWidget() : _moreModeWidget();
-
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
-      curve: Curves.bounceInOut,
-      height: _viewModel.playerHeight,
-      color: Get.theme.primaryColorDark,
-      child: Card(child: _child),
+    return IgnorePointer(
+      ignoring: _viewModel.isLoading,
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 200),
+        curve: Curves.bounceInOut,
+        height: _viewModel.playerHeight,
+        color: Get.theme.primaryColorDark,
+        child: Card(child: _child),
+      ),
     );
   }
 

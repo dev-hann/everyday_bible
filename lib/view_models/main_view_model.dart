@@ -35,6 +35,7 @@ class MainViewModel extends BibleViewModel {
     _loading = true;
     notifyListeners();
   }
+
   void _loadingCompleted(){
     _loading = false;
     notifyListeners();

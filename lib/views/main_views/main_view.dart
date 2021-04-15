@@ -18,6 +18,13 @@ class _EveryDayBibleState extends State<EveryDayBible>
       ..addListener(() {
         setState(() {});
       });
+
+
+  }
+
+  void dispose() {
+    _viewModel.dispose();
+    super.dispose();
   }
 
   Widget gradientBackground({required Widget child}) {
@@ -41,6 +48,7 @@ class _EveryDayBibleState extends State<EveryDayBible>
     return BottomAudioPlayer(
       audioAsset: _viewModel.audioAsset,
       title: _viewModel.title,
+      subtitle: _viewModel.subtitle,
     );
   }
 
@@ -149,34 +157,41 @@ class _EveryDayBibleState extends State<EveryDayBible>
     }
 
     Widget _nextButton() {
-      Widget _dialogWidget(){
+      Widget _dialogWidget() {
         return GestureDetector(
           onTap: Get.back,
           child: Padding(
             padding: const EdgeInsets.all(25.0),
-            child: Center(child: Card(child: Padding(
+            child: Center(
+                child: Card(
+                    child: Padding(
               padding: const EdgeInsets.all(25.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("\"EveryDay Bible\"",style: Get.textTheme.headline4!.copyWith(color: Colors.white),),
+                  Text(
+                    "\"EveryDay Bible\"",
+                    style:
+                        Get.textTheme.headline4!.copyWith(color: Colors.white),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Divider(color: Get.theme.primaryColor,),
+                    child: Divider(
+                      color: Get.theme.primaryColor,
+                    ),
                   ),
                   Text("아직 말씀이 준비 되지 않았습니다."),
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: Text("확인"),
                   ),
-
-
                 ],
               ),
             ))),
           ),
         );
       }
+
       return IconButton(
         icon: Icon(Icons.arrow_forward_ios_sharp),
         onPressed: () {
@@ -237,12 +252,13 @@ class _EveryDayBibleState extends State<EveryDayBible>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _view(),
-        _loading(),
-      ],
+    return AudioServiceWidget(
+      child: Stack(
+        children: [
+          _view(),
+          _loading(),
+        ],
+      ),
     );
   }
 }
-
