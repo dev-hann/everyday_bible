@@ -236,7 +236,10 @@ class _EveryDayBibleState extends State<EveryDayBible>
               Expanded(child: _gospelsListView()),
             ],
           ),
-          bottomNavigationBar: _bottomPlayer(),
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: _bottomPlayer(),
+          ),
         ),
       ),
     );

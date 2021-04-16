@@ -30,7 +30,7 @@ class _LoadingViewState extends State<LoadingView>
       return Opacity(
         opacity: _viewModel.titleAnimationValue,
         child: Text(
-          "Every Day",
+          "Everyday",
           style: Get.textTheme.headline2,
         ),
       );
@@ -42,7 +42,7 @@ class _LoadingViewState extends State<LoadingView>
         child: Text(
           "Bible",
           style: Get.textTheme.headline2!.copyWith(
-              color: Get.theme.primaryColorDark, fontWeight: FontWeight.bold),
+              color: Get.theme.primaryColorDark),
         ),
       );
     }

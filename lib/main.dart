@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: GetMaterialApp(
-        title: 'EveyDay Bible',
+        title: 'Everyday Bible',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           accentColor: Colors.brown[700],
@@ -34,6 +34,9 @@ class MyApp extends StatelessWidget {
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
+            headline2: TextStyle(
+                fontWeight: FontWeight.bold
+            )
           ),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
