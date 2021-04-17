@@ -7,8 +7,7 @@ import 'package:provider/provider.dart';
 import 'views/view_lib.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  // WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
