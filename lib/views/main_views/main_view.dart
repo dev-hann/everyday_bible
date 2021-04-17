@@ -18,8 +18,6 @@ class _EveryDayBibleState extends State<EveryDayBible>
       ..addListener(() {
         setState(() {});
       });
-
-
   }
 
   void dispose() {
@@ -28,19 +26,22 @@ class _EveryDayBibleState extends State<EveryDayBible>
   }
 
   Widget gradientBackground({required Widget child}) {
-    return Container(
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-        colors: <Color>[
-          Get.theme.primaryColorLight.withOpacity(0.6),
-          Get.theme.primaryColorDark.withOpacity(0.5),
-          Get.theme.primaryColorDark,
-        ],
-        stops: [0.1, 0.35, 0.9],
-        begin: Alignment.topRight,
-        end: Alignment.bottomCenter,
-      )),
-      child: child,
+    return ColoredBox(
+      color: Colors.white,
+      child: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+          colors: <Color>[
+            Get.theme.primaryColorLight.withOpacity(0.6),
+            Get.theme.primaryColorDark.withOpacity(0.5),
+            Get.theme.primaryColorDark,
+          ],
+          stops: [0.1, 0.35, 0.9],
+          begin: Alignment.topRight,
+          end: Alignment.bottomCenter,
+        )),
+        child: child,
+      ),
     );
   }
 
@@ -222,19 +223,22 @@ class _EveryDayBibleState extends State<EveryDayBible>
   }
 
   Widget _view() {
-    return Scaffold(
-      body: gradientBackground(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: kToolbarHeight * 0.8),
-              child: _appBar(),
-            ),
-            Expanded(child: _gospelsListView()),
-          ],
+    return gradientBackground(
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: kToolbarHeight * 0.8),
+                child: _appBar(),
+              ),
+              Expanded(child: _gospelsListView()),
+            ],
+          ),
+          bottomNavigationBar: _bottomPlayer(),
         ),
       ),
-      bottomNavigationBar: _bottomPlayer(),
     );
   }
 
