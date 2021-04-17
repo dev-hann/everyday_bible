@@ -7,6 +7,8 @@ enum AudioState {
   Pause,
 }
 
+///[TODO] while [initBottomPlayer] ,if change asset(change Bible Date), can be happened Error!
+
 class BottomAudioViewModel extends BibleViewModel {
   BottomAudioViewModel({
     required this.audioAsset,
@@ -130,7 +132,6 @@ class BottomAudioViewModel extends BibleViewModel {
     await AudioService.start(
       backgroundTaskEntrypoint: _audioPlayerTaskEntryPoint,
     );
-
    await AudioService.customAction('set', {
       "asset": audioAsset,
       "title": title,
