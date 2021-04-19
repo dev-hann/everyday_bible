@@ -4,7 +4,7 @@ abstract class DataLoader{
 
   Future<Bible?> get todayBible async=> await bibleFromDate(DateTime.now());
 
-  Future<Bible?> init();
+  Future<void> initialize();
 
   void dispose();
 

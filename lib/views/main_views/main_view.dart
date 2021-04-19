@@ -10,7 +10,6 @@ class EveryDayBible extends StatefulWidget {
 class _EveryDayBibleState extends State<EveryDayBible>
     with TickerProviderStateMixin {
   late MainViewModel _viewModel;
-
   void initState() {
     super.initState();
     final bible = Provider.of<BibleDatabase>(context, listen: false);
@@ -46,11 +45,7 @@ class _EveryDayBibleState extends State<EveryDayBible>
   }
 
   Widget _bottomPlayer() {
-    return BottomAudioPlayer(
-      audioAsset: _viewModel.audioAsset,
-      title: _viewModel.title,
-      subtitle: _viewModel.subtitle,
-    );
+    return BottomAudioPlayer();
   }
 
   Widget _gospelsListView() {
