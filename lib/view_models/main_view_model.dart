@@ -24,8 +24,6 @@ class MainViewModel extends BibleViewModel {
 
   Map<String, String> get gospels => _selectedBible!.gospels;
 
-  String get audioAsset => _selectedBible!.audio;
-
   String get dateTime => _selectedBible!.dateTime;
 
   bool _loading = false;

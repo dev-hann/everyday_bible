@@ -47,7 +47,7 @@ class LoadingViewModel extends BibleViewModel {
   }
 
   void _initDataLoad() async{
-    await bibleDatabase.init();
+    await bibleDatabase.initialize();
     _isLoading=false;
     notifyListeners();
   }

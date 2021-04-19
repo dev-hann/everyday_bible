@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:everydaybible/models/bible.dart';
 import 'package:everydaybible/utils/data_loader/data_loader.dart';
 import 'package:http/http.dart' as http;
 
+/// [todo] check internet connection check and timeout.
+///
 class WebDataLoader extends DataLoader {
   //https://sum.su.or.kr:8888/Ajax/Bible/BodyBible
   //https://sum.su.or.kr:8888/Ajax/Bible/BodyMatterDetail
@@ -29,14 +32,16 @@ class WebDataLoader extends DataLoader {
     return await http.post(uri, headers: header);
   }
 
+
   @override
-  Future<Bible?> bibleFromDate(DateTime dateTime) async{
+  Future<Bible?> bibleFromDate(DateTime dateTime) async {
     _selectedDateTime = dateTime;
     final titleJson = await _biblePost(titleURI);
     final contentsJson = await _biblePost(contentsURI);
     return Bible.fromAPI(
-        titleJson: jsonDecode(titleJson.body),
-        contentsJson: jsonDecode(contentsJson.body));
+      titleJson: jsonDecode(titleJson.body),
+      contentsJson: jsonDecode(contentsJson.body),
+    );
   }
 
   @override
@@ -45,7 +50,5 @@ class WebDataLoader extends DataLoader {
   }
 
   @override
-  Future<Bible?> init() async {
-    return bibleFromDate(DateTime.now());
-  }
+  Future initialize() async {}
 }

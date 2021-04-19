@@ -11,14 +11,20 @@ enum AudioState {
 
 class BottomAudioViewModel extends BibleViewModel {
   BottomAudioViewModel({
-    required this.audioAsset,
-    required this.title,
-    required this.subtitle,
+    required this.bibleDatabase,
   });
 
-  final String audioAsset;
-  final String title;
-  final String subtitle;
+  final BibleDatabase bibleDatabase;
+
+  Bible? get _selectedBible => bibleDatabase.selectedDateBible;
+
+  String get title => _selectedBible!.title;
+
+  String get subtitle => _selectedBible!.subTitle;
+
+  String get audioURL => _selectedBible!.audioURL;
+
+  Uint8List? get audioByteData => _selectedBible!.audioByteData;
 
   String get currentDurationText => _dateTimeFrom(_audioCurrentDuration);
 
@@ -129,14 +135,19 @@ class BottomAudioViewModel extends BibleViewModel {
     _stateUpdate(AudioState.Loading);
     _disposeAudio();
     _loadAnimationController(vsync);
+
     await AudioService.start(
       backgroundTaskEntrypoint: _audioPlayerTaskEntryPoint,
     );
-   await AudioService.customAction('set', {
-      "asset": audioAsset,
-      "title": title,
-      "subtitle": subtitle,
-    });
+
+    if (audioByteData == null) {
+      final _res = (await http.get(Uri.parse(audioURL))).bodyBytes;
+      Bible? _tmpBible = _selectedBible;
+      _tmpBible?.setAudioByteData(_res);
+      await bibleDatabase.updateBible(_tmpBible!);
+    }
+    await AudioService.customAction('set',
+        {"assetByteData": audioByteData, "title": title, "subtitle": subtitle});
 
     _audioCurrentSub = AudioService.positionStream.listen((event) {
       if (!_sliderIsOnTapping) {
@@ -217,9 +228,9 @@ void _audioPlayerTaskEntryPoint() async {
 class _AudioPlayerTask extends BackgroundAudioTask {
   final AudioPlayer _audioPlayer = AudioPlayer();
   AudioProcessingState? _skipState;
+
   @override
   Future<void> onStart(Map<String, dynamic>? params) async {
-
     return super.onStart(params);
   }
 
@@ -243,18 +254,17 @@ class _AudioPlayerTask extends BackgroundAudioTask {
 
   @override
   Future onCustomAction(String name, arguments) async {
-    switch(name){
+    switch (name) {
       case 'set':
-        final asset = arguments!['asset'];
-        final title = arguments['title'];
-        final subtitle = arguments['subtitle'];
-
-        await _audioPlayer.setUrl(asset);
+        final Uint8List assetByteData = arguments!['assetByteData'];
+        final String title = arguments['title'];
+        final String subtitle = arguments['subtitle'];
+        await _audioPlayer.setAudioSource(_AudioByteDataSource(assetByteData));
 
         print("AudioPlayer : Asset Load Completed!");
 
         final MediaItem _mediaItem = MediaItem(
-          id: asset,
+          id: title,
           album: subtitle,
           title: title,
           duration: _audioPlayer.duration,
@@ -279,12 +289,12 @@ class _AudioPlayerTask extends BackgroundAudioTask {
         _audioPlayer.processingStateStream.listen((state) {
           switch (state) {
             case ProcessingState.completed:
-            // In this example, the service stops when reaching the end.
+              // In this example, the service stops when reaching the end.
               onStop();
               break;
             case ProcessingState.ready:
-            // If we just came from skipping between tracks, clear the skip
-            // state now that we're ready to play.
+              // If we just came from skipping between tracks, clear the skip
+              // state now that we're ready to play.
               _skipState = null;
               break;
             default:
@@ -309,5 +319,25 @@ class _AudioPlayerTask extends BackgroundAudioTask {
   @override
   Future<void> onSeekTo(Duration position) async {
     await _audioPlayer.seek(position);
+  }
+}
+
+class _AudioByteDataSource extends StreamAudioSource {
+  _AudioByteDataSource(this.audioByteData) : super("tag");
+
+  final Uint8List audioByteData;
+
+  @override
+  Future<StreamAudioResponse> request([int? start, int? end]) async {
+    start = start ?? 0;
+    end = end ?? audioByteData.length;
+
+    return StreamAudioResponse(
+      sourceLength: audioByteData.length,
+      contentLength: audioByteData.length,
+      offset: 0,
+      contentType: 'audio/raw',
+      stream: Stream.value(List<int>.from(audioByteData.skip(start).take(end - start))),
+    );
   }
 }

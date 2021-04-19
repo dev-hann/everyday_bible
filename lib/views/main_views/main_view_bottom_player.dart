@@ -1,16 +1,6 @@
 part of views;
 
 class BottomAudioPlayer extends StatefulWidget {
-  BottomAudioPlayer({
-    required this.audioAsset,
-    required this.title,
-    required this.subtitle,
-  });
-
-  final String title;
-  final String subtitle;
-  final String audioAsset;
-
   @override
   _BottomAudioPlayerState createState() => _BottomAudioPlayerState();
 }
@@ -18,13 +8,12 @@ class BottomAudioPlayer extends StatefulWidget {
 class _BottomAudioPlayerState extends State<BottomAudioPlayer>
     with TickerProviderStateMixin {
   late BottomAudioViewModel _viewModel;
+  final bible  = Provider.of<BibleDatabase>(Get.context!);
 
   void initState() {
     super.initState();
     _viewModel = BottomAudioViewModel(
-      audioAsset: widget.audioAsset,
-      title: widget.title,
-      subtitle: widget.subtitle,
+      bibleDatabase: bible
     )..addListener(_listener);
 
     _viewModel.initBottomPlayer(vsync: this);
@@ -37,16 +26,15 @@ class _BottomAudioPlayerState extends State<BottomAudioPlayer>
   }
 
   void didUpdateWidget(oldWidget) {
-    if (this.widget.title != oldWidget.title) {
-      _viewModel.removeListener(_listener);
-      _viewModel = BottomAudioViewModel(
-        audioAsset: widget.audioAsset,
-        title: widget.title,
-        subtitle: widget.subtitle,
-      )..addListener(_listener);
-      _viewModel.initBottomPlayer(vsync: this);
-    }
-    super.didUpdateWidget(oldWidget);
+    // if (this.widget.title != oldWidget.title) {
+    //   _viewModel.removeListener(_listener);
+    //   _viewModel = BottomAudioViewModel(
+    //       bibleDatabase: bible,
+    //   )..addListener(_listener);
+    //
+    //   _viewModel.initBottomPlayer(vsync: this);
+    // }
+    // super.didUpdateWidget(oldWidget);
   }
 
   Widget _playButton({double? iconSize}) {
@@ -92,7 +80,7 @@ class _BottomAudioPlayerState extends State<BottomAudioPlayer>
 
   Widget _titleText() {
     return Text(
-      widget.title,
+      _viewModel.title,
       overflow: TextOverflow.ellipsis,
     );
   }

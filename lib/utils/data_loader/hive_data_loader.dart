@@ -25,17 +25,16 @@ class HiveDataLoader extends DataLoader with HiveMixin {
   }
 
   @override
-  Future<Bible?> init() async {
+  Future initialize() async {
     print("init HiveDataLoader..");
     await Hive.initFlutter();
     bibleBox = await Hive.openBox<dynamic>("Bible");
-    return bibleFromDate(DateTime.now());
   }
 
-  void pushBible(Bible bible) {
-    String _boxName =bible.dateTime;
-    bibleBox.put(_boxName, bible.toMap());
-    print("push new Box $_boxName");
+  void updateBible(Bible bible) {
+    String key =bible.dateTime;
+    bibleBox.put(key, bible.toMap());
+    print("push new Box $key");
   }
 
 }

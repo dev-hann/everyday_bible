@@ -1,26 +1,35 @@
+import 'dart:typed_data';
 import 'package:intl/intl.dart';
 
 class Bible {
   Bible({
     required this.title,
     required this.brief,
-    required this.audio,
+    required this.audioURL,
+    this.audioByteData,
     required this.gospels,
     required this.subTitle,
     required this.dateTime,
-  });
+  }) ;
 
   final String dateTime;
 
   final Map<String, String> gospels;
-
-  final String audio;
 
   final String title;
 
   final String brief;
 
   final String subTitle;
+
+  final String audioURL;
+
+  Uint8List? audioByteData;
+
+  void setAudioByteData(Uint8List data){
+    audioByteData = data;
+  }
+
 
   bool isTodayData() {
     if (this.dateTime == DateFormat('yyyy-MM-dd').format(DateTime.now())) {
@@ -35,7 +44,8 @@ class Bible {
       brief: json['Brief'],
       subTitle: json['SubTitle'],
       dateTime: json['DateTime'],
-      audio: json['Audio'],
+      audioURL: json['AudioURL'],
+      audioByteData: json['AudioByteData'],
       gospels: Map.from(json['Gospels']),
     );
   }
@@ -45,34 +55,36 @@ class Bible {
     required List<dynamic> contentsJson,
   }) {
 
-    String _getAudio(String bibleDateFormat) {
-      String _years = bibleDateFormat.split("-")[0];
-      return "https://meditation.su.or.kr/meditation_mp3/" +
-          _years+ "/" + bibleDateFormat.replaceAll('-', "")+ ".mp3";
-    }
-
-    Map<String,String> getGospels(List<dynamic> gospelsJson){
-      Map<String,String> _tmpGospels={};
+    Map<String, String> _gospels(List<dynamic> gospelsJson) {
+      Map<String, String> _tmpGospels = {};
       contentsJson.forEach((element) {
-        _tmpGospels[element['Verse'].toString()]=element['Bible_Cn'];
+        _tmpGospels[element['Verse'].toString()] = element['Bible_Cn'];
       });
       return _tmpGospels;
+    }
+
+    String _audioURL(String bibleDateFormat) {
+      String _years = bibleDateFormat.split("-")[0];
+      return "https://meditation.su.or.kr/meditation_mp3/" +
+          _years +
+          "/" +
+          bibleDateFormat.replaceAll('-', "") +
+          ".mp3";
     }
 
     return Bible(
       title: (titleJson['Qt_sj'] as String).trim(),
       brief: titleJson['Qt_Brf'],
-      subTitle: titleJson['Bible_name'] +" "+ titleJson['Bible_chapter'],
-      gospels: getGospels(contentsJson),
-      audio: _getAudio(titleJson['Base_de']),
+      subTitle: titleJson['Bible_name'] + " " + titleJson['Bible_chapter'],
+      audioURL: _audioURL(titleJson['Base_de']),
+      gospels: _gospels(contentsJson),
       dateTime: titleJson['Base_de'],
     );
   }
 
-
   @override
   String toString() {
-    return 'Bible{dateTime: $dateTime, gospels: $gospels, audio: $audio, title: $title, subTitle: $subTitle}';
+    return 'Bible{dateTime: $dateTime, gospels: $gospels, title: $title, subTitle: $subTitle}';
   }
 
   Map<String, dynamic> toMap() {
@@ -80,7 +92,8 @@ class Bible {
     return {
       'DateTime': this.dateTime,
       'Gospels': this.gospels,
-      'Audio': this.audio,
+      'AudioURL':this.audioURL,
+      'AudioByteData':this.audioByteData,
       'Title': this.title,
       'Brief': this.brief,
       'SubTitle': this.subTitle,
