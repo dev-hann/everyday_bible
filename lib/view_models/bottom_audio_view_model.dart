@@ -259,7 +259,9 @@ class _AudioPlayerTask extends BackgroundAudioTask {
         final Uint8List assetByteData = arguments!['assetByteData'];
         final String title = arguments['title'];
         final String subtitle = arguments['subtitle'];
-        await _audioPlayer.setAudioSource(_AudioByteDataSource(assetByteData));
+
+          await _audioPlayer.setAudioSource(
+              _AudioByteDataSource(assetByteData));
 
         print("AudioPlayer : Asset Load Completed!");
 
@@ -331,12 +333,11 @@ class _AudioByteDataSource extends StreamAudioSource {
   Future<StreamAudioResponse> request([int? start, int? end]) async {
     start = start ?? 0;
     end = end ?? audioByteData.length;
-
     return StreamAudioResponse(
       sourceLength: audioByteData.length,
       contentLength: audioByteData.length,
       offset: 0,
-      contentType: 'audio/raw',
+      contentType: 'audio/mp3',
       stream: Stream.value(List<int>.from(audioByteData.skip(start).take(end - start))),
     );
   }
