@@ -1,15 +1,16 @@
 part of view_model;
 
 class LoadingViewModel extends BibleViewModel {
-  LoadingViewModel(this.bibleDatabase,{
-   required TickerProvider vsync,
-  }) {
+  LoadingViewModel(this.bibleDatabase);
+
+  void animationInit(TickerProvider vsync){
     _initAnimation(vsync);
     _initDataLoad();
   }
+
  final BibleDatabase bibleDatabase;
-  bool _isLoading=true;
-  bool get loadingCompleted=>!_isLoading;
+  bool _needLoadData=true;
+  bool get loadingCompleted=>!_needLoadData;
   late AnimationController _fadeInAnimation;
 
   double get titleAnimationValue {
@@ -48,7 +49,7 @@ class LoadingViewModel extends BibleViewModel {
 
   void _initDataLoad() async{
     await bibleDatabase.initialize();
-    _isLoading=false;
+    _needLoadData=false;
     notifyListeners();
   }
 }

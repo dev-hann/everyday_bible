@@ -52,6 +52,9 @@ flutter:
   - family: Norican
     fonts:
     - asset: assets/fonts/Norican-Regular.ttf
+
+  assets:
+    - assets/bible_db/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

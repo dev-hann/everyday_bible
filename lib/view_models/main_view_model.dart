@@ -12,7 +12,7 @@ class MainViewModel extends BibleViewModel {
 
   final BibleDatabase database;
 
-  Bible? _selectedBible;
+  EverydayBible? _selectedBible;
 
   void _loadBibleFromDB() {
     _selectedBible = database.bibleNotifier.value!;

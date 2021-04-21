@@ -14,12 +14,16 @@ class _LoadingViewState extends State<LoadingView>
   void initState() {
     super.initState();
     final bible = Provider.of<BibleDatabase>(context,listen: false);
-    _viewModel = LoadingViewModel(bible, vsync: this)
-      ..addListener(() {
-        if(mounted) {
-          setState(() {});
-        }
-      });
+    _viewModel = LoadingViewModel(bible)
+      ..addListener(_listener);
+    _viewModel.animationInit(this);
+
+  }
+
+  void _listener(){
+    if(mounted) {
+      setState(() {});
+    }
   }
 
   void dispose() {

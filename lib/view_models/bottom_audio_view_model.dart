@@ -16,7 +16,7 @@ class BottomAudioViewModel extends BibleViewModel {
 
   final BibleDatabase bibleDatabase;
 
-  Bible? get _selectedBible => bibleDatabase.selectedDateBible;
+  EverydayBible? get _selectedBible => bibleDatabase.selectedDateBible;
 
   String get title => _selectedBible!.title;
 
@@ -142,7 +142,7 @@ class BottomAudioViewModel extends BibleViewModel {
 
     if (audioByteData == null) {
       final _res = (await http.get(Uri.parse(audioURL))).bodyBytes;
-      Bible? _tmpBible = _selectedBible;
+      EverydayBible? _tmpBible = _selectedBible;
       _tmpBible?.setAudioByteData(_res);
       await bibleDatabase.updateBible(_tmpBible!);
     }

@@ -1,4 +1,4 @@
-import 'package:everydaybible/models/bible.dart';
+import 'package:everydaybible/models/everyday_bible.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -8,7 +8,7 @@ class HiveDataLoader extends DataLoader with HiveMixin {
  late Box bibleBox;
 
   @override
-  Future<Bible?> bibleFromDate(DateTime dateTime) async {
+  Future<EverydayBible?> bibleFromDate(DateTime dateTime) async {
     String _boxName = bibleFormat(dateTime);
     final _tmpBible = bibleBox.get(_boxName);
     if (_tmpBible == null) {
@@ -16,7 +16,7 @@ class HiveDataLoader extends DataLoader with HiveMixin {
       return null;
     }
     print("loading completed $_boxName's Bible from Hive");
-    return Bible.fromHive(Map.from(_tmpBible));
+    return EverydayBible.fromHive(Map.from(_tmpBible));
   }
 
   @override
@@ -31,7 +31,7 @@ class HiveDataLoader extends DataLoader with HiveMixin {
     bibleBox = await Hive.openBox<dynamic>("Bible");
   }
 
-  void updateBible(Bible bible) {
+  void updateBible(EverydayBible bible) {
     String key =bible.dateTime;
     bibleBox.put(key, bible.toMap());
     print("push new Box $key");

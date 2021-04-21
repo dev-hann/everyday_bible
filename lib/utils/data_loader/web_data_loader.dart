@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:everydaybible/models/bible.dart';
+import 'package:everydaybible/models/everyday_bible.dart';
 import 'package:everydaybible/utils/data_loader/data_loader.dart';
 import 'package:http/http.dart' as http;
 
@@ -34,11 +34,11 @@ class WebDataLoader extends DataLoader {
 
 
   @override
-  Future<Bible?> bibleFromDate(DateTime dateTime) async {
+  Future<EverydayBible?> bibleFromDate(DateTime dateTime) async {
     _selectedDateTime = dateTime;
     final titleJson = await _biblePost(titleURI);
     final contentsJson = await _biblePost(contentsURI);
-    return Bible.fromAPI(
+    return EverydayBible.fromAPI(
       titleJson: jsonDecode(titleJson.body),
       contentsJson: jsonDecode(contentsJson.body),
     );
