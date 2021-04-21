@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:typed_data';
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:everydaybible/models/bible.dart';
+import 'package:everydaybible/models/everyday_bible.dart';
 import 'package:everydaybible/utils/bible_database.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/foundation.dart';
