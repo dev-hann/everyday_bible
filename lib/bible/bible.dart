@@ -1,5 +1,3 @@
-import 'dart:developer';
-import 'dart:io';
 
 import 'package:everydaybible/models/bible.dart';
 import 'package:flutter/material.dart';
@@ -85,9 +83,7 @@ class BibleTest extends StatelessWidget {
       Bible _tmpBible = Bible(type: _type,title: "",chapterList: []);
       _tmpBible = _writeBible(_tmpBible, _loadData);
       _bibleList.add(_tmpBible);
-      print(_tmpBible.toMap());
     }
-
 
   }
 
