@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-// import 'package:firebase_core/firebase_core.dart'
 import 'views/view_lib.dart';
 
 void main() async {
@@ -38,7 +37,7 @@ class MyApp extends StatelessWidget {
               headline2: TextStyle(fontWeight: FontWeight.bold)),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: BibleTest(),
+        home: LoadingView(),
       ),
     );
   }
