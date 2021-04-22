@@ -8,15 +8,15 @@ class BottomAudioPlayer extends StatefulWidget {
 class _BottomAudioPlayerState extends State<BottomAudioPlayer>
     with TickerProviderStateMixin {
   late BottomAudioViewModel _viewModel;
-  final bible  = Provider.of<BibleDatabase>(Get.context!);
+  late BibleDatabase _bible;
 
   void initState() {
     super.initState();
-    _viewModel = BottomAudioViewModel(
-      bibleDatabase: bible
-    )..addListener(_listener);
+    _bible = Provider.of<BibleDatabase>(context, listen: false);
+    _viewModel = BottomAudioViewModel(bibleDatabase: _bible)
+      ..addListener(_listener);
 
-    _viewModel.initBottomPlayer(vsync: this);
+    _initAudio();
   }
 
   void _listener() {
@@ -26,24 +26,26 @@ class _BottomAudioPlayerState extends State<BottomAudioPlayer>
   }
 
   void didUpdateWidget(oldWidget) {
-    // if (this.widget.title != oldWidget.title) {
-    //   _viewModel.removeListener(_listener);
-    //   _viewModel = BottomAudioViewModel(
-    //       bibleDatabase: bible,
-    //   )..addListener(_listener);
-    //
-    //   _viewModel.initBottomPlayer(vsync: this);
-    // }
-    // super.didUpdateWidget(oldWidget);
+    _initAudio();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void _initAudio() {
+    _viewModel.removeListener(_listener);
+    _viewModel = BottomAudioViewModel(bibleDatabase: _bible)
+      ..addListener(_listener);
+
+    _viewModel.initBottomPlayer(vsync: this);
   }
 
   Widget _playButton({double? iconSize}) {
     Widget _loading() {
       return SizedBox(
-          height: kToolbarHeight/2,
-          width: kToolbarHeight/2,
+          height: kToolbarHeight / 2,
+          width: kToolbarHeight / 2,
           child: const CircularProgressIndicator());
     }
+
     Widget _button() {
       return AnimatedIcon(
         icon: AnimatedIcons.play_pause,
@@ -52,7 +54,7 @@ class _BottomAudioPlayerState extends State<BottomAudioPlayer>
       );
     }
 
-    if(_viewModel.isLoading) return _loading() ;
+    if (_viewModel.isLoading) return _loading();
     return GestureDetector(
       onTap: _viewModel.onTapPlayButton,
       child: Container(
