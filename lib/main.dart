@@ -1,3 +1,4 @@
+import 'package:everydaybible/bible/bible.dart';
 import 'package:everydaybible/utils/bible_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
               headline2: TextStyle(fontWeight: FontWeight.bold)),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: LoadingView(),
+        home: BibleTest(),
       ),
     );
   }
