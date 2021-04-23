@@ -59,14 +59,11 @@ class _EveryDayBibleState extends State<EveryDayBible>
             Widget _sectionLine(String index) {
               return Row(
                 children: [
-                  Flexible(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: Text(index),
-                      )),
+                  Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Text(index),
+                  ),
                   Expanded(
-                      flex: 9,
                       child: Divider(
                         color: Colors.white70,
                       ))
