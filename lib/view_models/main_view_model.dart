@@ -1,21 +1,20 @@
 part of view_model;
 
 class MainViewModel extends BibleViewModel {
-  MainViewModel(this.database) {
+  MainViewModel() {
     _loadBibleFromDB();
-    this.database.bibleNotifier.addListener(() {
-      _loadBibleFromDB();
-      _loadingCompleted();
-      gospelScrollController.jumpTo(0.0);
-    });
+    // this.database.bibleNotifier.addListener(() {
+    //   _loadBibleFromDB();
+    //   _loadingCompleted();
+    //   gospelScrollController.jumpTo(0.0);
+    // });
   }
 
-  final BibleDatabase database;
 
-  EverydayBible? _selectedBible;
+  QuiteTime? _selectedBible;
 
   void _loadBibleFromDB() {
-    _selectedBible = database.bibleNotifier.value!;
+    // _selectedBible = database.bibleNotifier.value!;
   }
 
   String get title => _selectedBible!.title;
@@ -51,11 +50,9 @@ class MainViewModel extends BibleViewModel {
   void onTapYesterday() async {
     _loadingMode();
     notifyListeners();
-    await database.loadData(_dateTime.add(Duration(days: -1)));
   }
 
   void onTapTomorrow() async {
     _loadingMode();
-    await database.loadData(_dateTime.add(Duration(days: 1)));
   }
 }

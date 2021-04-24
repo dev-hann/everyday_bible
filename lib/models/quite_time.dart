@@ -1,8 +1,9 @@
 import 'dart:typed_data';
+import 'package:everydaybible/models/hive_model.dart';
 import 'package:intl/intl.dart';
 
-class EverydayBible {
-  EverydayBible({
+class QuiteTime extends HiveModel {
+  QuiteTime({
     required this.title,
     required this.brief,
     required this.audioURL,
@@ -10,7 +11,7 @@ class EverydayBible {
     required this.gospels,
     required this.subTitle,
     required this.dateTime,
-  }) ;
+  });
 
   final String dateTime;
 
@@ -26,10 +27,9 @@ class EverydayBible {
 
   Uint8List? audioByteData;
 
-  void setAudioByteData(Uint8List data){
+  void setAudioByteData(Uint8List data) {
     audioByteData = data;
   }
-
 
   bool isTodayData() {
     if (this.dateTime == DateFormat('yyyy-MM-dd').format(DateTime.now())) {
@@ -38,8 +38,9 @@ class EverydayBible {
     return false;
   }
 
-  factory EverydayBible.fromHive(Map<String, dynamic> json) {
-    return EverydayBible(
+  factory QuiteTime.fromHive(Map<String, dynamic> json) {
+
+    return QuiteTime(
       title: json['Title'],
       brief: json['Brief'],
       subTitle: json['SubTitle'],
@@ -50,11 +51,10 @@ class EverydayBible {
     );
   }
 
-  factory EverydayBible.fromAPI({
+  factory QuiteTime.fromAPI({
     required Map<String, dynamic> titleJson,
     required List<dynamic> contentsJson,
   }) {
-
     Map<String, String> _gospels(List<dynamic> gospelsJson) {
       Map<String, String> _tmpGospels = {};
       contentsJson.forEach((element) {
@@ -72,7 +72,7 @@ class EverydayBible {
           ".mp3";
     }
 
-    return EverydayBible(
+    return QuiteTime(
       title: (titleJson['Qt_sj'] as String).trim(),
       brief: titleJson['Qt_Brf'],
       subTitle: titleJson['Bible_name'] + " " + titleJson['Bible_chapter'],
@@ -92,11 +92,14 @@ class EverydayBible {
     return {
       'DateTime': this.dateTime,
       'Gospels': this.gospels,
-      'AudioURL':this.audioURL,
-      'AudioByteData':this.audioByteData,
+      'AudioURL': this.audioURL,
+      'AudioByteData': this.audioByteData,
       'Title': this.title,
       'Brief': this.brief,
       'SubTitle': this.subTitle,
     } as Map<String, dynamic>;
   }
+
+  static String dateTimeFormat(DateTime dateTime) =>
+      DateFormat("yyyy-MM-dd").format(dateTime);
 }

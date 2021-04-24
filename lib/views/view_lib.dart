@@ -1,9 +1,8 @@
 library views;
 
 import 'package:audio_service/audio_service.dart';
-import 'package:everydaybible/utils/bible_database.dart';
+import 'package:everydaybible/controllers/qt_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:everydaybible/view_models/view_model_lib.dart';
 

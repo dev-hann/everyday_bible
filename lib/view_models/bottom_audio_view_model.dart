@@ -14,9 +14,9 @@ class BottomAudioViewModel extends BibleViewModel {
     required this.bibleDatabase,
   });
 
-  final BibleDatabase bibleDatabase;
+  final String bibleDatabase;
 
-  EverydayBible? get _selectedBible => bibleDatabase.selectedDateBible;
+  QuiteTime? get _selectedBible => null;
 
   String get title => _selectedBible!.title;
 
@@ -142,9 +142,9 @@ class BottomAudioViewModel extends BibleViewModel {
 
     if (audioByteData == null) {
       final _res = (await http.get(Uri.parse(audioURL))).bodyBytes;
-      EverydayBible? _tmpBible = _selectedBible;
+      QuiteTime? _tmpBible = _selectedBible;
       _tmpBible?.setAudioByteData(_res);
-      await bibleDatabase.updateBible(_tmpBible!);
+      // await bibleDatabase.updateBible(_tmpBible!);
     }
     await AudioService.customAction('set',
         {"assetByteData": audioByteData, "title": title, "subtitle": subtitle});
