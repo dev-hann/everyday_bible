@@ -13,8 +13,8 @@ class _LoadingViewState extends State<LoadingView>
 
   void initState() {
     super.initState();
-    final bible = Provider.of<BibleDatabase>(context,listen: false);
-    _viewModel = LoadingViewModel(bible)
+    final QTController _controller = Get.put(QTController());
+    _viewModel = LoadingViewModel("")
       ..addListener(_listener);
     _viewModel.animationInit(this);
 

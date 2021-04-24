@@ -12,8 +12,7 @@ class _EveryDayBibleState extends State<EveryDayBible>
   late MainViewModel _viewModel;
   void initState() {
     super.initState();
-    final bible = Provider.of<BibleDatabase>(context, listen: false);
-    _viewModel = MainViewModel(bible)
+    _viewModel = MainViewModel()
       ..addListener(() {
         setState(() {});
       });

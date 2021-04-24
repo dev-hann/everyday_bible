@@ -8,12 +8,11 @@ class BottomAudioPlayer extends StatefulWidget {
 class _BottomAudioPlayerState extends State<BottomAudioPlayer>
     with TickerProviderStateMixin {
   late BottomAudioViewModel _viewModel;
-  late BibleDatabase _bible;
+  // late BibleDatabase _bible;
 
   void initState() {
     super.initState();
-    _bible = Provider.of<BibleDatabase>(context, listen: false);
-    _viewModel = BottomAudioViewModel(bibleDatabase: _bible)
+    _viewModel = BottomAudioViewModel(bibleDatabase: "")
       ..addListener(_listener);
 
     _initAudio();
@@ -32,7 +31,7 @@ class _BottomAudioPlayerState extends State<BottomAudioPlayer>
 
   void _initAudio() {
     _viewModel.removeListener(_listener);
-    _viewModel = BottomAudioViewModel(bibleDatabase: _bible)
+    _viewModel = BottomAudioViewModel(bibleDatabase: "")
       ..addListener(_listener);
 
     _viewModel.initBottomPlayer(vsync: this);

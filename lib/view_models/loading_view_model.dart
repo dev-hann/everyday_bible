@@ -8,7 +8,7 @@ class LoadingViewModel extends BibleViewModel {
     _initDataLoad();
   }
 
- final BibleDatabase bibleDatabase;
+ final String bibleDatabase;
   bool _needLoadData=true;
   bool get loadingCompleted=>!_needLoadData;
   late AnimationController _fadeInAnimation;
@@ -48,7 +48,7 @@ class LoadingViewModel extends BibleViewModel {
   }
 
   void _initDataLoad() async{
-    await bibleDatabase.initialize();
+    // await bibleDatabase.initialize();
     _needLoadData=false;
     notifyListeners();
   }
