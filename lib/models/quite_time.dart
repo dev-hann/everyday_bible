@@ -63,7 +63,7 @@ class QuiteTime extends HiveModel {
           bibleDateFormat.replaceAll('-', "") +
           ".mp3";
     }
-
+    print(titleJson);
     return QuiteTime(
       title: (titleJson['Qt_sj'] as String).trim(),
       brief: titleJson['Qt_Brf'],
