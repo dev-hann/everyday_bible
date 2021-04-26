@@ -1,5 +1,5 @@
 import 'package:everydaybible/controllers/qt_controller.dart';
-import 'package:everydaybible/views/view_lib.dart';
+import 'package:everydaybible/views/qt_views/qt_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,7 +11,7 @@ class IntroButtonView extends StatelessWidget {
   Widget _amenButton() {
     return GestureDetector(
         onTap: () {
-          Get.to(() => EveryDayBible(),
+          Get.to(() => QTView(),
               transition: Transition.fadeIn, duration: Duration(seconds: 1));
         },
         child: Text("Amen"));

@@ -31,15 +31,7 @@ class QuiteTime extends HiveModel {
     audioByteData = data;
   }
 
-  bool isTodayData() {
-    if (this.dateTime == DateFormat('yyyy-MM-dd').format(DateTime.now())) {
-      return true;
-    }
-    return false;
-  }
-
   factory QuiteTime.fromHive(Map<String, dynamic> json) {
-
     return QuiteTime(
       title: json['Title'],
       brief: json['Brief'],
