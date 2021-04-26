@@ -16,11 +16,6 @@ class BottomAudioViewModel extends BibleViewModel {
 
   final String bibleDatabase;
 
-  QuiteTime? get _selectedBible => null;
-
-  String get title => _selectedBible!.title;
-
-  String get subtitle => _selectedBible!.subTitle;
 
   String get audioURL => _selectedBible!.audioURL;
 

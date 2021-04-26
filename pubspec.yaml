@@ -18,10 +18,9 @@ dependencies:
   just_audio: ^0.7.3
 
   cupertino_icons: ^1.0.2
-  provider:
   get: ^4.1.3
   intl:
-
+  font_awesome_flutter:
   hive: ^2.0.0
   hive_flutter: ^1.0.0
 dev_dependencies:
