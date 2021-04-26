@@ -55,11 +55,6 @@ class _QTAudioViewState extends State<QTAudioView>
     }
   }
 
-  @override
-  void didUpdateWidget(covariant QTAudioView oldWidget) {
-    // _viewModel.initAudio();
-    super.didUpdateWidget(oldWidget);
-  }
 
   @override
   Future<bool> didPopRoute() async {

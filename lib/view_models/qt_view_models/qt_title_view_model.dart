@@ -19,7 +19,7 @@ class QTTitleViewModel{
     return DateTime(dateList[0], dateList[1], dateList[2]);
   }
 
-  bool get hasTomorrow => !(_dateTime.difference(DateTime.now()).inDays > 5);
+  bool get hasTomorrow => !(_dateTime.difference(DateTime.now()).inDays > 3);
 
   void onTapPreButton(){
     controller.loadData(_dateTime.add(Duration(days: -1)));
@@ -28,7 +28,7 @@ class QTTitleViewModel{
     if(!hasTomorrow){
      Get.dialog(QTAlert());
     }else {
-      controller.loadData(_dateTime.add(Duration(days: 1)));
+        controller.loadData(_dateTime.add(Duration(days: 1)));
     }
   }
 }

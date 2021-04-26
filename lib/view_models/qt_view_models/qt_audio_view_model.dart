@@ -48,6 +48,7 @@ class QTAudioViewModel extends ChangeNotifier {
   void addListener(listener) {
     playButtonController.addListener(listener);
     expandedButtonController.addListener(listener);
+    controller.addListener(initAudio);
     super.addListener(listener);
   }
 
@@ -55,6 +56,7 @@ class QTAudioViewModel extends ChangeNotifier {
   void dispose() {
     playButtonController.dispose();
     expandedButtonController.dispose();
+    controller.removeListener(initAudio);
     _disposeAudio();
     super.dispose();
   }
@@ -101,8 +103,8 @@ class QTAudioViewModel extends ChangeNotifier {
 
   String get _audioSubtitle => controller.selectedQT!.subTitle;
 
+  /// how can i manage interrupt
   void initAudio() async {
-
     _stateUpdate(AudioState.Loading);
     _disposeAudio();
 
