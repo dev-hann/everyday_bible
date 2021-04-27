@@ -1,12 +1,26 @@
 import 'package:everydaybible/controllers/qt_controller.dart';
 import 'package:everydaybible/views/qt_views/qt_audio_views/qt_audio_view.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:everydaybible/widgets/bible_scaffold.dart';
 
+import 'package:get/get.dart';
 import 'qt_list_view.dart';
 import 'qt_title_view.dart';
 
+
+/// [todo] calender && hide title(title space too big)
 class QTView extends StatelessWidget {
+  AppBar _appBar(){
+      return AppBar(
+        leading: IconButton(icon: FaIcon(FontAwesomeIcons.pagelines), onPressed: Get.back),
+        actions: [
+          IconButton(icon: FaIcon(FontAwesomeIcons.calendar), onPressed: (){}),
+          IconButton(icon: FaIcon(FontAwesomeIcons.cog), onPressed: (){})
+        ],
+      );
+  }
+
   Widget _titleWidget() {
     return const QTTitleView();
   }
@@ -26,10 +40,7 @@ class QTView extends StatelessWidget {
         bottomNavigationBar: _audioWidget(),
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: kToolbarHeight * 0.8),
-              child: _titleWidget(),
-            ),
+            _titleWidget(),
             Expanded(child: _gospelListView())
           ],
         ),
@@ -56,27 +67,13 @@ class QTView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: Colors.white,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: <Color>[
-              Get.theme.primaryColorLight.withOpacity(0.6),
-              Get.theme.primaryColorDark.withOpacity(0.5),
-              Get.theme.primaryColorDark,
-            ],
-            stops: [0.1, 0.35, 0.9],
-            begin: Alignment.topRight,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Stack(
-          children: [
-            _body(),
-            _loadingWidget(),
-          ],
-        ),
+    return BibleScaffold(
+      appBar: _appBar(),
+      body: Stack(
+        children: [
+          _body(),
+          _loadingWidget(),
+        ],
       ),
     );
   }
