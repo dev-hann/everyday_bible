@@ -19,6 +19,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.brown,
         cardColor: Colors.brown[900],
         scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
         iconTheme: IconThemeData(color: Colors.white),
         textTheme: TextTheme(
             bodyText2: TextStyle(

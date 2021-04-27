@@ -19,6 +19,7 @@ class QTTitleViewModel{
     return DateTime(dateList[0], dateList[1], dateList[2]);
   }
 
+  /// [todo] need to check!
   bool get hasTomorrow => !(_dateTime.difference(DateTime.now()).inDays > 3);
 
   void onTapPreButton(){
