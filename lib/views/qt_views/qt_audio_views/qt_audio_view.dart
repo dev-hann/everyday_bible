@@ -55,7 +55,6 @@ class _QTAudioViewState extends State<QTAudioView>
     }
   }
 
-
   @override
   Future<bool> didPopRoute() async {
     AudioService.disconnect();
@@ -123,24 +122,27 @@ class _QTAudioViewState extends State<QTAudioView>
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _playButton(),
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: _titleWidget(),
+    return GestureDetector(
+      onTap: _viewModel.onTapExpandedButton,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _playButton(),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: _titleWidget(),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: _durationText(),
-          ),
-          _expandedButton(),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: _durationText(),
+            ),
+            _expandedButton(),
+          ],
+        ),
       ),
     );
   }
@@ -156,7 +158,8 @@ class _QTAudioViewState extends State<QTAudioView>
       );
     }
 
-    Widget _slider() {
+    Widget _slider()  {
+
       return Slider(
         max: _viewModel.totalSliderValue,
         value: _viewModel.currentSliderValue,
@@ -168,30 +171,34 @@ class _QTAudioViewState extends State<QTAudioView>
 
     Widget _buttons() {
       Widget _stepBackButton() {
-        return IconButton(
-          icon: FaIcon(FontAwesomeIcons.stepBackward),
-          onPressed: () {},
+        return GestureDetector(
+          child: FaIcon(FontAwesomeIcons.volumeUp),
+          onTap: _viewModel.onTapVolumeControl,
         );
       }
 
       Widget _forwardButton() {
-        return IconButton(
-          icon: Icon(FontAwesomeIcons.forward),
-          onPressed: _viewModel.onTapAudioForward,
+        return GestureDetector(
+          child: Icon(FontAwesomeIcons.forward),
+          onTap: _viewModel.onTapAudioForward,
         );
       }
 
       Widget _rewindButton() {
-        return IconButton(
-          icon: Icon(FontAwesomeIcons.backward),
-          onPressed: _viewModel.onTapAudioRewind,
-        );
+        return GestureDetector(
+            onTap: _viewModel.onTapAudioRewind,
+            child: Icon(FontAwesomeIcons.backward));
       }
 
-      Widget _stepForwardButton() {
-        return IconButton(
-          icon: FaIcon(FontAwesomeIcons.stepForward),
-          onPressed: () {},
+      Widget _repeatButton() {
+        Color? _iconColor = _viewModel.isRepeatMode ? null : Colors.grey;
+        return GestureDetector(
+          onTap: _viewModel.onTapRepeat,
+          child: Icon(
+            Icons.repeat_one_outlined,
+            size: 40,
+            color: _iconColor,
+          ),
         );
       }
 
@@ -202,7 +209,7 @@ class _QTAudioViewState extends State<QTAudioView>
           _rewindButton(),
           _playButton(iconSize: 50),
           _forwardButton(),
-          _stepForwardButton()
+          _repeatButton()
         ],
       );
     }
