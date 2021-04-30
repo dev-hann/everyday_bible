@@ -1,5 +1,3 @@
-
-
 import 'dart:typed_data';
 
 import 'package:audio_service/audio_service.dart';
@@ -9,7 +7,6 @@ import 'package:just_audio/just_audio.dart';
 void audioPlayerTaskEntryPoint() async {
   AudioServiceBackground.run(() => _AudioPlayerTask());
 }
-
 
 class _AudioPlayerTask extends BackgroundAudioTask {
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -38,11 +35,8 @@ class _AudioPlayerTask extends BackgroundAudioTask {
     }
   }
 
-
-
   @override
   Future onCustomAction(String name, arguments) async {
-
     switch (name) {
       case 'setURL':
         final String url = arguments['url'];
@@ -51,14 +45,12 @@ class _AudioPlayerTask extends BackgroundAudioTask {
 
       case 'setByteData':
         final Uint8List assetByteData = arguments!['assetByteData'];
-        await _audioPlayer.setAudioSource(
-            _AudioByteDataSource(assetByteData));
+        await _audioPlayer.setAudioSource(_AudioByteDataSource(assetByteData));
         break;
 
       case 'ready':
         final String title = arguments['title'];
         final String subtitle = arguments['subtitle'];
-
 
         final MediaItem _mediaItem = MediaItem(
           id: title,
@@ -77,9 +69,9 @@ class _AudioPlayerTask extends BackgroundAudioTask {
             bufferedPosition: _audioPlayer.bufferedPosition,
             speed: _audioPlayer.speed,
             controls: [
-              MediaControl.skipToPrevious,
+              MediaControl.rewind,
               playerState.playing ? MediaControl.pause : MediaControl.play,
-              MediaControl.skipToNext,
+              MediaControl.fastForward,
             ],
           );
         });
@@ -87,12 +79,12 @@ class _AudioPlayerTask extends BackgroundAudioTask {
         _audioPlayer.processingStateStream.listen((state) {
           switch (state) {
             case ProcessingState.completed:
-            // In this example, the service stops when reaching the end.
-              onStop();
+              // In this example, the service stops when reaching the end.
+              //   onStop();
+              onPause();
+              onSeekTo(Duration.zero);
               break;
             case ProcessingState.ready:
-            // If we just came from skipping between tracks, clear the skip
-            // state now that we're ready to play.
               _skipState = null;
               break;
             default:
@@ -105,18 +97,40 @@ class _AudioPlayerTask extends BackgroundAudioTask {
   }
 
   @override
+  Future<void> onSetRepeatMode(AudioServiceRepeatMode repeatMode) {
+    LoopMode _mode =
+        repeatMode == AudioServiceRepeatMode.one ? LoopMode.one : LoopMode.off;
+    _audioPlayer.setLoopMode(_mode);
+    return super.onSetRepeatMode(repeatMode);
+  }
+
+  @override
   Future<void> onPlay() async {
-    await _audioPlayer.play();
+     _audioPlayer.play();
   }
 
   @override
   Future<void> onPause() async {
-    await _audioPlayer.pause();
+    _audioPlayer.pause();
   }
 
   @override
   Future<void> onSeekTo(Duration position) async {
     await _audioPlayer.seek(position);
+  }
+
+  @override
+  Future<void> onRewind()async {
+    await _audioPlayer.seek(_audioPlayer.position-Duration(seconds: 5));
+
+    return super.onRewind();
+  }
+
+  @override
+  Future<void> onFastForward() async{
+    await _audioPlayer.seek(_audioPlayer.position+Duration(seconds: 5));
+
+    return super.onFastForward();
   }
 }
 
@@ -134,7 +148,8 @@ class _AudioByteDataSource extends StreamAudioSource {
       contentLength: audioByteData.length,
       offset: 0,
       contentType: 'audio/mp3',
-      stream: Stream.value(List<int>.from(audioByteData.skip(start).take(end - start))),
+      stream: Stream.value(
+          List<int>.from(audioByteData.skip(start).take(end - start))),
     );
   }
 }

@@ -7,7 +7,7 @@ class QTListView extends StatelessWidget {
 
   Widget _listView(Map<String, String> map) {
     return ListView.builder(
-      padding: EdgeInsets.symmetric(vertical: kToolbarHeight, horizontal: 8),
+      padding: EdgeInsets.symmetric(vertical: kToolbarHeight*0.8,),
       itemCount: map.length,
       itemBuilder: (_, index) {
         Widget _gospelBox(MapEntry<String, String> gospel) {
@@ -55,7 +55,7 @@ class QTListView extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [Colors.white, Colors.transparent],
-            stops: [0, 0.05],
+            stops: [0, 0.1],
           ).createShader(rect);
         },
         blendMode: BlendMode.dstOut,

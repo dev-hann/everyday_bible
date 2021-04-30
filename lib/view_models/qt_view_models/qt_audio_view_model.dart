@@ -20,7 +20,6 @@ enum AudioState {
   Pause,
 }
 
-
 class QTAudioViewModel extends ChangeNotifier {
   QTAudioViewModel(this.controller);
 
@@ -67,8 +66,7 @@ class QTAudioViewModel extends ChangeNotifier {
     _audioTotalSub?.cancel();
   }
 
-
-/// [todo] can delete type argument
+  /// [todo] can delete type argument
   void _toggleMode() {
     if (type == AudioType.Mini) {
       type = AudioType.Expanded;
@@ -79,7 +77,8 @@ class QTAudioViewModel extends ChangeNotifier {
 
   AudioState _audioState = AudioState.Loading;
 
-  bool get isLoading =>_audioState==AudioState.Loading;
+  bool get isLoading => _audioState == AudioState.Loading;
+
   bool get isPlaying => _audioState == AudioState.Playing;
 
   void _stateUpdate(AudioState _state) {
@@ -87,7 +86,6 @@ class QTAudioViewModel extends ChangeNotifier {
     _audioState = _state;
     notifyListeners();
   }
-
 
   StreamSubscription? _audioCurrentSub;
 
@@ -113,7 +111,7 @@ class QTAudioViewModel extends ChangeNotifier {
     );
 
     if (_audioByteData != null) {
-     await AudioService.customAction(
+      await AudioService.customAction(
           "setByteData", {'assetByteData': _audioByteData});
     } else {
       await AudioService.customAction("setURL", {'url': _audioURL});
@@ -124,6 +122,10 @@ class QTAudioViewModel extends ChangeNotifier {
         "ready", {'title': _audioTitle, 'subtitle': _audioSubtitle});
 
     _audioCurrentSub = AudioService.positionStream.listen((event) {
+      if(audioTotalDuration==null || event>audioTotalDuration!){
+        if(_repeatMode)_seekAudio(Duration.zero);
+        return;
+        }
       if (!_sliderIsOnTapping) {
         _audioCurrentDuration = event;
       }
@@ -131,19 +133,19 @@ class QTAudioViewModel extends ChangeNotifier {
     });
 
     _audioTotalSub = AudioService.currentMediaItemStream.listen((event) {
-      if (audioTotalDuration != event?.duration) {
-        audioTotalDuration = event?.duration;
+
+      if (audioTotalDuration != event!.duration) {
+        audioTotalDuration = event.duration;
         notifyListeners();
       }
     });
 
-
     _stateUpdate(AudioState.Ready);
-
     _audioStateSub = AudioService.playbackStateStream.listen(_stateListener);
-
-
+    await AudioService.play();
+    await AudioService.pause();
   }
+
   void _stateListener(PlaybackState _state) {
     if (_state.playing) {
       _stateUpdate(AudioState.Playing);
@@ -162,10 +164,13 @@ class QTAudioViewModel extends ChangeNotifier {
     playButtonController.forward();
   }
 
-  void onTapPlayButton(){
+  void onTapPlayButton() {
     if (isPlaying) {
       AudioService.pause();
     } else {
+      if(currentSliderValue==totalSliderValue){
+        onTapVolumeControl();
+      }
       AudioService.play();
     }
   }
@@ -180,18 +185,36 @@ class QTAudioViewModel extends ChangeNotifier {
   }
 
   void onTapAudioForward() {
-    _seekAudio(_audioCurrentDuration! + Duration(seconds: 5));
+    if(audioTotalDuration==null)return;
+    Duration _duration =_audioCurrentDuration! + Duration(seconds: 5) ;
+    if(_duration>audioTotalDuration!)_duration=audioTotalDuration!;
+    _seekAudio(_duration);
   }
 
   void onTapAudioRewind() {
-    _seekAudio(_audioCurrentDuration! - Duration(seconds: 5));
+    Duration _duration =_audioCurrentDuration! - Duration(seconds: 5);
+    if(_duration.isNegative)_duration = Duration.zero;
+    _seekAudio(_duration);
+  }
+
+  void onTapVolumeControl() {
+  }
+
+  bool _repeatMode = false;
+
+  bool get isRepeatMode => _repeatMode;
+
+  void onTapRepeat() {
+    _repeatMode = !_repeatMode;
+    AudioServiceRepeatMode _mode =
+        _repeatMode ? AudioServiceRepeatMode.one : AudioServiceRepeatMode.none;
+    AudioService.setRepeatMode(_mode);
+    notifyListeners();
   }
 
   Future _seekAudio(Duration position) async {
     AudioService.seekTo(position);
   }
-
-
 
   /// Duration
   String get currentDurationText => _dateTimeFrom(_audioCurrentDuration);
@@ -211,9 +234,6 @@ class QTAudioViewModel extends ChangeNotifier {
   Duration? audioTotalDuration;
 
   Duration? _audioCurrentDuration;
-
-
-
 
   /// slider
   bool _sliderIsOnTapping = false;
@@ -241,5 +261,4 @@ class QTAudioViewModel extends ChangeNotifier {
     _audioCurrentDuration = Duration(milliseconds: value.toInt());
     notifyListeners();
   }
-
 }

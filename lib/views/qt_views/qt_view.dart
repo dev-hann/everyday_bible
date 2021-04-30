@@ -8,17 +8,17 @@ import 'package:get/get.dart';
 import 'qt_list_view.dart';
 import 'qt_title_view.dart';
 
-
 /// [todo] calender && hide title(title space too big)
 class QTView extends StatelessWidget {
-  AppBar _appBar(){
-      return AppBar(
-        leading: IconButton(icon: FaIcon(FontAwesomeIcons.pagelines), onPressed: Get.back),
-        actions: [
-          IconButton(icon: FaIcon(FontAwesomeIcons.calendar), onPressed: (){}),
-          IconButton(icon: FaIcon(FontAwesomeIcons.cog), onPressed: (){})
-        ],
-      );
+  AppBar _appBar() {
+    return AppBar(
+      leading: IconButton(
+          icon: FaIcon(FontAwesomeIcons.pagelines), onPressed: Get.back),
+      actions: [
+        IconButton(icon: FaIcon(FontAwesomeIcons.calendar), onPressed: () {}),
+        IconButton(icon: FaIcon(FontAwesomeIcons.cog), onPressed: () {})
+      ],
+    );
   }
 
   Widget _titleWidget() {
@@ -41,7 +41,12 @@ class QTView extends StatelessWidget {
         body: Column(
           children: [
             _titleWidget(),
-            Expanded(child: _gospelListView())
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: _gospelListView(),
+              ),
+            )
           ],
         ),
       ),
