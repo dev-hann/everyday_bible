@@ -23,9 +23,13 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
+        /// where is used?
+        textSelectionTheme: TextSelectionThemeData(
+          selectionColor: Colors.white.withOpacity(0.2),
+        ),
         iconTheme: IconThemeData(color: Colors.white),
         textTheme: TextTheme(
-            bodyText2: TextStyle(
+             bodyText2: TextStyle(
                 color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
             headline2: TextStyle(fontWeight: FontWeight.bold)),
         visualDensity: VisualDensity.adaptivePlatformDensity,
