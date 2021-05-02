@@ -1,3 +1,4 @@
+import 'package:everydaybible/controllers/bible_controller.dart';
 import 'package:everydaybible/controllers/qt_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,9 @@ class IntroButtonView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(QTController());
+    Get.put(BibleController());
+    BibleController _c = Get.find();
+    _c.init();
     return GetBuilder<QTController>(
       builder: (_controller) {
         _controller.init();

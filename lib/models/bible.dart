@@ -1,9 +1,25 @@
+import 'package:everydaybible/models/hive_model.dart';
+
 enum BibleType {
   Old,
   New,
 }
 
-class Bible {
+extension BibleTypeString on String{
+  BibleType? toBibleType(){
+    switch(this){
+      case 'BibleType.Old':
+        return BibleType.Old;
+      case 'BibleType.New':
+        return BibleType.New;
+      default:
+        print("there's no such case $this (bible.dart)");
+        return null;
+    }
+  }
+}
+
+class Bible extends HiveModel{
   Bible({
     required this.type,
     required this.title,
@@ -13,10 +29,18 @@ class Bible {
   BibleType type;
   String title;
   List<Chapter> chapterList;
+  int get chapterListLength => chapterList.length;
+  static List<Bible> fromListMap(List<dynamic> list){
+    List<Bible> _res=[];
+    for(final bible in list ){
+      _res.add(Bible.fromMap(Map<String,dynamic>.from(bible)));
+    }
+    return _res;
+  }
 
   factory Bible.fromMap(Map<String, dynamic> map) {
     return new Bible(
-      type: map['type'] as BibleType,
+      type: (map['type'] as String).toBibleType()!,
       title: map['title'] as String,
       chapterList:Chapter.toListChapter(map['chapterList']),
     );
@@ -25,7 +49,7 @@ class Bible {
   Map<String, dynamic> toMap() {
     // ignore: unnecessary_cast
     return {
-      'type': this.type,
+      'type': this.type.toString(),
       'title': this.title,
       'chapterList': Chapter.toListMap(this.chapterList),
     } as Map<String, dynamic>;
@@ -67,7 +91,7 @@ class Chapter {
 
 
   }
-  static List<Chapter> toListChapter(List<Map<String,dynamic>> list){
+  static List<Chapter> toListChapter(List<dynamic> list){
     List<Chapter> _res=[];
 
     for(final item in list){
@@ -106,7 +130,7 @@ class Verse {
     return _res;
   }
 
-  static List<Verse> toListVerse(List<Map<String,dynamic>> list){
+  static List<Verse> toListVerse(List<dynamic> list){
     List<Verse> _res=[];
     for(final item in list){
       _res.add(Verse.fromMap(Map<String,dynamic>.from(item)));

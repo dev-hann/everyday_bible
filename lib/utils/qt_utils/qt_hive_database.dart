@@ -13,7 +13,7 @@ class QTHiveDatabase extends HiveDatabase<QuiteTime>{
 
   @override
   Future addData(QuiteTime data) async{
-    print("Hive : newData ${data.dateTime}");
+    print("QTHive : newData ${data.dateTime}");
     await box.put(data.dateTime, data.toMap());
   }
 
@@ -22,7 +22,7 @@ class QTHiveDatabase extends HiveDatabase<QuiteTime>{
    String _tmpKey = QuiteTime.dateTimeFormat(key);
    final _res = box.get(_tmpKey);
    if(_res==null) {
-     print("Hive : there's no $_tmpKey Data!");
+     print("QTHive : there's no $_tmpKey Data!");
      return null;
    }
      return QuiteTime.fromHive(Map<String,dynamic>.from(_res));

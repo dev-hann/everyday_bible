@@ -66,7 +66,7 @@ class QTAudioViewModel extends ChangeNotifier {
     _audioTotalSub?.cancel();
   }
 
-  /// [todo] can delete type argument
+  /// [todo] can delete [type] argument
   void _toggleMode() {
     if (type == AudioType.Mini) {
       type = AudioType.Expanded;
@@ -197,6 +197,7 @@ class QTAudioViewModel extends ChangeNotifier {
     _seekAudio(_duration);
   }
 
+  ///[todo] add view and function
   void onTapVolumeControl() {
   }
 

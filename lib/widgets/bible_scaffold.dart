@@ -5,12 +5,14 @@ class BibleScaffold extends StatelessWidget {
   const BibleScaffold({
     this.appBar,
     this.body,
+    this.drawer,
     this.bottomNavigationBar,
     this.extendBodyBehindAppBar=true,
   });
 
   final AppBar? appBar;
   final Widget? body;
+  final Widget? drawer;
   final Widget? bottomNavigationBar;
   final bool extendBodyBehindAppBar;
   @override
@@ -18,6 +20,7 @@ class BibleScaffold extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: extendBodyBehindAppBar,
       appBar: appBar,
+      drawer: drawer,
       body: DecoratedBox(
         decoration: BoxDecoration(
           gradient: LinearGradient(
