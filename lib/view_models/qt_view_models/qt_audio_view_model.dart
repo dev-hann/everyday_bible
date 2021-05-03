@@ -27,6 +27,8 @@ class QTAudioViewModel extends ChangeNotifier {
 
   AudioType type = AudioType.Mini;
 
+  String get title => controller.selectedQT!.title;
+
   bool get isMiniMode => type == AudioType.Mini;
 
   bool get isExpandedMode => !isMiniMode;
@@ -122,10 +124,6 @@ class QTAudioViewModel extends ChangeNotifier {
         "ready", {'title': _audioTitle, 'subtitle': _audioSubtitle});
 
     _audioCurrentSub = AudioService.positionStream.listen((event) {
-      if(audioTotalDuration==null || event>audioTotalDuration!){
-        if(_repeatMode)_seekAudio(Duration.zero);
-        return;
-        }
       if (!_sliderIsOnTapping) {
         _audioCurrentDuration = event;
       }
@@ -142,8 +140,6 @@ class QTAudioViewModel extends ChangeNotifier {
 
     _stateUpdate(AudioState.Ready);
     _audioStateSub = AudioService.playbackStateStream.listen(_stateListener);
-    await AudioService.play();
-    await AudioService.pause();
   }
 
   void _stateListener(PlaybackState _state) {

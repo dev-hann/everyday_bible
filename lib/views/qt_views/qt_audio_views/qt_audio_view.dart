@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import 'qt_audio_title_view.dart';
-
 class QTAudioView extends StatefulWidget {
   @override
   _QTAudioViewState createState() => _QTAudioViewState();
@@ -62,7 +60,11 @@ class _QTAudioViewState extends State<QTAudioView>
   }
 
   Widget _titleWidget() {
-    return const QTAudioTitle();
+    return Text(
+      _viewModel.title,
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+    );
   }
 
   Widget _expandedButton() {
