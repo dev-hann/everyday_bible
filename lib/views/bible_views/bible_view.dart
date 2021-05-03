@@ -37,7 +37,7 @@ class _BibleView extends StatefulWidget {
   __BibleViewState createState() => __BibleViewState();
 }
 
-class __BibleViewState extends State<_BibleView> with AutomaticKeepAliveClientMixin {
+class __BibleViewState extends State<_BibleView>  {
   late BibleViewModel _viewModel;
 
   void initState() {
@@ -69,7 +69,6 @@ class __BibleViewState extends State<_BibleView> with AutomaticKeepAliveClientMi
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     _viewModel.drawerInit(context);
     return GestureDetector(
       onTap: _viewModel.closeDrawer,
@@ -84,7 +83,4 @@ class __BibleViewState extends State<_BibleView> with AutomaticKeepAliveClientMi
     );
   }
 
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
 }
