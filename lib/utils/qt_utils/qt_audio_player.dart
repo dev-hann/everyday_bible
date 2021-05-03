@@ -11,7 +11,7 @@ void audioPlayerTaskEntryPoint() async {
 class _AudioPlayerTask extends BackgroundAudioTask {
   final AudioPlayer _audioPlayer = AudioPlayer();
   AudioProcessingState? _skipState;
-
+  bool _repeatMode=false;
   @override
   Future<void> onStart(Map<String, dynamic>? params) async {
     return super.onStart(params);
@@ -83,6 +83,7 @@ class _AudioPlayerTask extends BackgroundAudioTask {
               //   onStop();
               onPause();
               onSeekTo(Duration.zero);
+              if(_repeatMode)onPlay();
               break;
             case ProcessingState.ready:
               _skipState = null;
@@ -98,9 +99,9 @@ class _AudioPlayerTask extends BackgroundAudioTask {
 
   @override
   Future<void> onSetRepeatMode(AudioServiceRepeatMode repeatMode) {
-    LoopMode _mode =
-        repeatMode == AudioServiceRepeatMode.one ? LoopMode.one : LoopMode.off;
-    _audioPlayer.setLoopMode(_mode);
+     _repeatMode=
+        repeatMode == AudioServiceRepeatMode.one;
+
     return super.onSetRepeatMode(repeatMode);
   }
 
