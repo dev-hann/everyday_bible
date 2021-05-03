@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
-
 ///[Todo] scroll to index has bug..
 class BibleChapterListView extends StatefulWidget {
   const BibleChapterListView({
@@ -19,17 +18,13 @@ class BibleChapterListView extends StatefulWidget {
   _BibleChapterListViewState createState() => _BibleChapterListViewState();
 }
 
-class _BibleChapterListViewState extends State<BibleChapterListView> {
-  late AutoScrollController _controller;
+class _BibleChapterListViewState extends State<BibleChapterListView>  {
+  final AutoScrollController _controller=AutoScrollController(
+    viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, 0),
+  );
 
-  void initState() {
-    super.initState();
-    _controller = AutoScrollController(
-      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, 0),
-    );
-  }
 
-  ///[todo] refactoring!
+  ///[todo] refactoring!!
   void didUpdateWidget(covariant BibleChapterListView oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.initIndex != widget.initIndex) {
@@ -88,11 +83,16 @@ class _BibleChapterListViewState extends State<BibleChapterListView> {
           itemCount: widget.chapterList.length,
           itemBuilder: (_, index) {
             return AutoScrollTag(
-                key: ValueKey(index),
-                controller: _controller,
-                index: index,
-                child: chapterCard(widget.chapterList[index]));
-          }),
+              index: index,
+              key: ValueKey(index),
+              controller: _controller,
+              child: chapterCard(
+                widget.chapterList[index],
+              ),
+            );
+          },
+      ),
     );
   }
+
 }
