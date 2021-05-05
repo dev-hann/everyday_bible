@@ -1,9 +1,5 @@
-import 'package:audio_service/audio_service.dart';
-import 'package:everydaybible/controllers/qt_controller.dart';
-import 'package:everydaybible/view_models/qt_view_models/qt_audio_view_model.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
+
+part of qt_lib;
 
 class QTAudioView extends StatefulWidget {
   @override
@@ -13,7 +9,7 @@ class QTAudioView extends StatefulWidget {
 class _QTAudioViewState extends State<QTAudioView>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   late QTAudioViewModel _viewModel;
-
+  final GlobalKey _expandedKey=GlobalKey();
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
@@ -24,6 +20,7 @@ class _QTAudioViewState extends State<QTAudioView>
     _viewModel.initAnimation(this);
     _viewModel.addListener(_listener);
     _viewModel.initAudio();
+
   }
 
   void _listener() {
@@ -68,6 +65,8 @@ class _QTAudioViewState extends State<QTAudioView>
   }
 
   Widget _expandedButton() {
+
+    IconData _icon = _viewModel.isMiniMode?Icons.menu:Icons.close;
     return GestureDetector(
       onTap: _viewModel.onTapExpandedButton,
       child: Container(
@@ -75,10 +74,7 @@ class _QTAudioViewState extends State<QTAudioView>
             color: Get.theme.primaryColorDark,
             borderRadius: BorderRadius.all(Radius.circular(100))),
         padding: EdgeInsets.all(5),
-        child: AnimatedIcon(
-          icon: AnimatedIcons.menu_close,
-          progress: _viewModel.expandedButtonController,
-        ),
+        child: Icon(_icon,color: Colors.white,),
       ),
     );
   }
@@ -100,6 +96,7 @@ class _QTAudioViewState extends State<QTAudioView>
           icon: AnimatedIcons.play_pause,
           progress: _viewModel.playButtonController,
           size: iconSize,
+          color: Colors.white,
         ),
       ),
     );
@@ -149,7 +146,17 @@ class _QTAudioViewState extends State<QTAudioView>
     );
   }
 
+  ///[todo] get height animatedContainer
   Widget _expandPlayer() {
+    //
+    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+    //   print(_expandedKey.currentContext!.size);
+    //   playerHeight=_expandedKey.currentContext!.size!.height;
+    //   setState(() {
+    //
+    //   });
+    // });
+
     Widget _durationText() {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -160,9 +167,10 @@ class _QTAudioViewState extends State<QTAudioView>
       );
     }
 
-    Widget _slider()  {
-
+    Widget _slider() {
       return Slider(
+        activeColor: Get.theme.primaryColorDark,
+        inactiveColor: Get.theme.primaryColor.withOpacity(0.7),
         max: _viewModel.totalSliderValue,
         value: _viewModel.currentSliderValue,
         onChangeStart: _viewModel.sliderOnChangeStart,
@@ -172,7 +180,7 @@ class _QTAudioViewState extends State<QTAudioView>
     }
 
     Widget _buttons() {
-      Widget _stepBackButton() {
+      Widget _soundControlButton() {
         return GestureDetector(
           child: FaIcon(FontAwesomeIcons.volumeUp),
           onTap: _viewModel.onTapVolumeControl,
@@ -193,7 +201,7 @@ class _QTAudioViewState extends State<QTAudioView>
       }
 
       Widget _repeatButton() {
-        Color? _iconColor = _viewModel.isRepeatMode ? null : Colors.grey;
+        Color? _iconColor = _viewModel.isRepeatMode ? null : Colors.black26;
         return GestureDetector(
           onTap: _viewModel.onTapRepeat,
           child: Icon(
@@ -207,7 +215,7 @@ class _QTAudioViewState extends State<QTAudioView>
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _stepBackButton(),
+          _soundControlButton(),
           _rewindButton(),
           _playButton(iconSize: 50),
           _forwardButton(),
@@ -225,10 +233,12 @@ class _QTAudioViewState extends State<QTAudioView>
       );
     }
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.all(15),
+    return Padding(
+      // key: _expandedKey,
+      padding: const EdgeInsets.all(10.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.min,
         children: [
           _appBar(),
           _slider(),
@@ -244,13 +254,23 @@ class _QTAudioViewState extends State<QTAudioView>
       ),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
       ignoring: _viewModel.isLoading,
-      child: Card(
-        child: _viewModel.isMiniMode ? _miniPlayer() : _expandPlayer(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: IconTheme(
+          data: IconThemeData(color: Get.theme.primaryColor),
+          child: DefaultTextStyle(
+            style: Get.textTheme.bodyText2!.copyWith(
+                color: Get.theme.primaryColorDark, fontWeight: FontWeight.w900),
+            child: GlassContainer(
+              opacity: 0.4,
+              child: _viewModel.isMiniMode ? _miniPlayer() : _expandPlayer(),
+            ),
+          ),
+        ),
       ),
     );
   }

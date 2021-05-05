@@ -1,6 +1,5 @@
-import 'package:everydaybible/controllers/qt_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
+part of qt_lib;
 
 class QTListView extends StatelessWidget {
   const QTListView();

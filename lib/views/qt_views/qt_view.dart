@@ -1,12 +1,6 @@
-import 'package:everydaybible/controllers/qt_controller.dart';
-import 'package:everydaybible/views/qt_views/qt_audio_views/qt_audio_view.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:everydaybible/widgets/bible_scaffold.dart';
 
-import 'package:get/get.dart';
-import 'qt_list_view.dart';
-import 'qt_title_view.dart';
+
+part of qt_lib;
 
 /// [todo] calender && hide title(title space too big)
 class QTView extends StatelessWidget {
@@ -37,7 +31,7 @@ class QTView extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        bottomNavigationBar: _audioWidget(),
+        bottomSheet: _audioWidget(),
         body: Column(
           children: [
             _titleWidget(),

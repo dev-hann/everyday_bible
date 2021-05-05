@@ -35,20 +35,17 @@ class QTAudioViewModel extends ChangeNotifier {
 
   late final AnimationController playButtonController;
 
-  late final AnimationController expandedButtonController;
 
   AnimationController _animationController(TickerProvider vsync) =>
       AnimationController(vsync: vsync, duration: Duration(milliseconds: 300));
 
   void initAnimation(TickerProvider vsync) {
     playButtonController = _animationController(vsync);
-    expandedButtonController = _animationController(vsync);
   }
 
   @override
   void addListener(listener) {
     playButtonController.addListener(listener);
-    expandedButtonController.addListener(listener);
     controller.addListener(initAudio);
     super.addListener(listener);
   }
@@ -56,7 +53,6 @@ class QTAudioViewModel extends ChangeNotifier {
   @override
   void dispose() {
     playButtonController.dispose();
-    expandedButtonController.dispose();
     controller.removeListener(initAudio);
     _disposeAudio();
     super.dispose();
@@ -75,6 +71,7 @@ class QTAudioViewModel extends ChangeNotifier {
     } else {
       type = AudioType.Mini;
     }
+    notifyListeners();
   }
 
   AudioState _audioState = AudioState.Loading;
@@ -173,11 +170,6 @@ class QTAudioViewModel extends ChangeNotifier {
 
   void onTapExpandedButton() {
     _toggleMode();
-    if (isMiniMode) {
-      expandedButtonController.reverse();
-    } else {
-      expandedButtonController.forward();
-    }
   }
 
   void onTapAudioForward() {
@@ -195,6 +187,7 @@ class QTAudioViewModel extends ChangeNotifier {
 
   ///[todo] add view and function
   void onTapVolumeControl() {
+
   }
 
   bool _repeatMode = false;

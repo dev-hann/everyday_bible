@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class BibleTreeView extends StatefulWidget {
+part of dash_board_lib;
+
+class DashBoardTreeView extends StatefulWidget {
   @override
   _TreeViewState createState() => _TreeViewState();
 }
 
-class _TreeViewState extends State<BibleTreeView> {
+class _TreeViewState extends State<DashBoardTreeView> {
   @override
   Widget build(BuildContext context) {
     return Container(
