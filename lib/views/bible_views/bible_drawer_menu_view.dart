@@ -1,13 +1,5 @@
-import 'package:everydaybible/controllers/bible_controller.dart';
-import 'package:everydaybible/view_models/bible_view_models/bible_drawer_menu_view_model.dart';
-import 'package:everydaybible/widgets/bible_scaffold.dart';
-import 'package:everydaybible/widgets/glasses_container.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
-import 'package:scroll_to_index/scroll_to_index.dart';
+
+part of bible_lib;
 
 class BibleDrawerMenuView extends StatefulWidget {
   @override

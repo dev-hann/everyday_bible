@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
+part of intro_lib;
 
 class IntroTitleView extends StatefulWidget {
   @override
