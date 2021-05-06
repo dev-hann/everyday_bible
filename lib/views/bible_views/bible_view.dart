@@ -1,11 +1,6 @@
-import 'package:everydaybible/controllers/bible_controller.dart';
-import 'package:everydaybible/view_models/bible_view_models/bible_view_model.dart';
-import 'package:everydaybible/views/bible_views/bible_chapter_list_view.dart';
-import 'package:everydaybible/views/bible_views/bible_drawer_menu_view.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
+
+
+part of bible_lib;
 
 /// [todo] deciding View of ui && ux
 

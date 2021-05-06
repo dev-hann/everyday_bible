@@ -1,9 +1,4 @@
-import 'package:everydaybible/views/intro_views/intro_button_view.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import 'intro_title_view.dart';
-import 'package:everydaybible/widgets/bible_scaffold.dart';
+part of intro_lib;
 
 class IntroView extends StatelessWidget {
   Widget _titleWidget() {

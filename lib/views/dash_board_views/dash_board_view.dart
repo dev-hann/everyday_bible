@@ -1,13 +1,6 @@
-import 'dart:ui';
 
-import 'package:everydaybible/views/bible_views/bible_view.dart';
-import 'package:everydaybible/views/qt_views/qt_view.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
-import 'bible_tree_view.dart';
-import 'package:everydaybible/widgets/bible_scaffold.dart';
-import 'package:everydaybible/widgets/glasses_container.dart';
+
+part of dash_board_lib;
 
 class DashBoardView extends StatelessWidget {
   Widget _bibleTreeView() {
@@ -15,7 +8,7 @@ class DashBoardView extends StatelessWidget {
       child: SizedBox(
         width: Get.width * 0.7,
         height: Get.width * 0.7,
-        child: BibleTreeView(),
+        child: DashBoardTreeView(),
       ),
     );
   }
@@ -51,10 +44,10 @@ class DashBoardView extends StatelessWidget {
                     onTap: () {
                       Get.to(()=>QTView());
                     }),
-                _menuItem(
-                    icon: FaIcon(FontAwesomeIcons.chartBar),
-                    label: "Chart",
-                    onTap: () {}),
+                // _menuItem(
+                //     icon: FaIcon(FontAwesomeIcons.chartBar),
+                //     label: "Chart",
+                //     onTap: () {}),
 
               ],
             ),
