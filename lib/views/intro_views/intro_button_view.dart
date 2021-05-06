@@ -1,8 +1,5 @@
-import 'package:everydaybible/controllers/bible_controller.dart';
-import 'package:everydaybible/controllers/qt_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:everydaybible/views/dash_board_views/dash_board_view.dart';
+part of intro_lib;
+
 class IntroButtonView extends StatelessWidget {
   Widget _loadingWidget() {
     return SizedBox(width: 20, height: 20, child: CircularProgressIndicator());

@@ -1,5 +1,5 @@
 import 'package:everydaybible/controllers/qt_controller.dart';
-import 'package:everydaybible/utils/alerts/qt_alert.dart';
+import 'package:everydaybible/views/qt_views/qt_alert.dart';
 import 'package:get/get.dart';
 
 class QTTitleViewModel{
@@ -33,3 +33,4 @@ class QTTitleViewModel{
     }
   }
 }
+

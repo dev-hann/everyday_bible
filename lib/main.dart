@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'views/intro_views/intro_view.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
+
+import 'views/intro_views/intro_lib.dart';
 void main() async{
   await Hive.initFlutter();
   runApp(MyApp());
@@ -22,6 +23,9 @@ class MyApp extends StatelessWidget {
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.transparent,
           elevation: 0,
+        ),
+        bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: Colors.transparent
         ),
         /// where is used?
         textSelectionTheme: TextSelectionThemeData(

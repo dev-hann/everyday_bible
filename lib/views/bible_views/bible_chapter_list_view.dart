@@ -1,8 +1,5 @@
-import 'package:everydaybible/models/bible.dart';
-import 'package:everydaybible/views/bible_views/bible_text_selection_controls.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:scroll_to_index/scroll_to_index.dart';
+
+part of bible_lib;
 
 ///[Todo] scroll to index has bug..
 class BibleChapterListView extends StatefulWidget {

@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/rendering/editable.dart';
-import 'dart:math' as math;
+
+
+part of bible_lib;
+
 
 const double _kHandleSize = 22.0;
 

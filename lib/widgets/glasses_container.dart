@@ -1,7 +1,5 @@
-import 'dart:ui';
 
-import 'package:flutter/material.dart';
-
+part of widgets;
 class GlassContainer extends StatelessWidget {
   ///[opacity] is used to control the glass frosted effect\n
   ///[opacity] should be between 0 and 1\n
