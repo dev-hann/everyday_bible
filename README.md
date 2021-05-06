@@ -2,18 +2,14 @@
 
 ## Screen shot
 
-<img src="ezgif-7-9ae2c5aaf0dd](https://user-images.githubusercontent.com/54878755/117224581-e3ed8200-ae42-11eb-854b-5ced811905b9.gif" width="35%">
-<img src="ezgif-7-de04ac53c1ce](https://user-images.githubusercontent.com/54878755/117224583-e64fdc00-ae42-11eb-99ca-d64178329e9f.gif" width="35%">
+<img src="https://user-images.githubusercontent.com/54878755/117224581-e3ed8200-ae42-11eb-854b-5ced811905b9.gif" width="35%"> <img src="https://user-images.githubusercontent.com/54878755/117224583-e64fdc00-ae42-11eb-99ca-d64178329e9f.gif" width="35%">
 
 
-<img src="https://user-images.githubusercontent.com/54878755/117223900-4f365480-ae41-11eb-999e-ac93039b7939.png" width="35%">
-<img src="https://user-images.githubusercontent.com/54878755/117224027-902e6900-ae41-11eb-9a80-92edbecdd596.png" width="35%">
+<img src="https://user-images.githubusercontent.com/54878755/117223900-4f365480-ae41-11eb-999e-ac93039b7939.png" width="35%"> <img src="https://user-images.githubusercontent.com/54878755/117224027-902e6900-ae41-11eb-9a80-92edbecdd596.png" width="35%">
 
-<img src="https://user-images.githubusercontent.com/54878755/117224102-be13ad80-ae41-11eb-874a-b726348224d6.png" width="35%">
-<img src="https://user-images.githubusercontent.com/54878755/117224106-bfdd7100-ae41-11eb-960d-4674e1e575da.png" width="35%">
+<img src="https://user-images.githubusercontent.com/54878755/117224102-be13ad80-ae41-11eb-874a-b726348224d6.png" width="35%"> <img src="https://user-images.githubusercontent.com/54878755/117224106-bfdd7100-ae41-11eb-960d-4674e1e575da.png" width="35%">
 
-<img src="https://user-images.githubusercontent.com/54878755/117224187-de436c80-ae41-11eb-9793-efd9cd1686ad.png" width="35%">
-<img src="https://user-images.githubusercontent.com/54878755/117224190-e00d3000-ae41-11eb-888c-68d595861845.png" width="35%">
+<img src="https://user-images.githubusercontent.com/54878755/117224187-de436c80-ae41-11eb-9793-efd9cd1686ad.png" width="35%"> <img src="https://user-images.githubusercontent.com/54878755/117224190-e00d3000-ae41-11eb-888c-68d595861845.png" width="35%">
 
 
 ## Design Pattern
