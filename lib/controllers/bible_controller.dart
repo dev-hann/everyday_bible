@@ -1,6 +1,6 @@
 import 'dart:isolate';
 
-import 'package:everydaybible/bible_const.dart';
+import 'package:everydaybible/constants/bible_const.dart';
 import 'package:everydaybible/models/bible.dart';
 import 'package:everydaybible/utils/bible_hive_database.dart';
 import 'package:flutter/services.dart';
