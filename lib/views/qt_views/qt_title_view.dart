@@ -55,7 +55,6 @@ class QTTitleView extends StatelessWidget {
     return GetBuilder<QTController>(
       builder: (_controller) {
         final QTTitleViewModel _viewModel = QTTitleViewModel(_controller);
-
         return Column(
           children: [
             Row(
