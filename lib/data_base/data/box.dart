@@ -1,6 +1,10 @@
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class LocalBox {
+  static Future init() {
+    return Hive.initFlutter();
+  }
+
   String get name;
   late Box box;
   Future<bool> openBox() async {
@@ -12,8 +16,7 @@ abstract class LocalBox {
     }
   }
 
-  Future clearBox()async{
+  Future clearBox() async {
     await box.clear();
   }
-
 }

@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:everydaybible/models/hive_model.dart';
 import 'package:intl/intl.dart';
 
-class QuiteTime extends HiveModel {
+class QuiteTime extends Box {
   QuiteTime({
     required this.title,
     required this.brief,

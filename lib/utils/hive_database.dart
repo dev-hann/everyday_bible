@@ -1,6 +1,6 @@
 import 'package:everydaybible/models/hive_model.dart';
 
-abstract class HiveDatabase<T extends HiveModel>{
+abstract class HiveDatabase<T extends Box>{
 
 
   Future<void> openBox(String boxName);

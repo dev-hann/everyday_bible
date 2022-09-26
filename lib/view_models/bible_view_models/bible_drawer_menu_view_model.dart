@@ -13,9 +13,9 @@ class BibleDrawerMenuViewModel extends ChangeNotifier {
 
   final BibleController controller;
 
-  List<Bible> _bibleList = [];
+  List<BibleOld> _bibleList = [];
 
-  List<Bible> get bibleList => _bibleList;
+  List<BibleOld> get bibleList => _bibleList;
 
   int get bibleListLength => _bibleList.length;
 
