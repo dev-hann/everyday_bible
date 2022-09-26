@@ -9,13 +9,13 @@ import 'package:get/get.dart';
 class BibleController extends GetxController {
   BibleHiveDatabase _bibleHiveDatabase = BibleHiveDatabase();
 
-  List<Bible> _bibleList = [];
+  List<BibleOld> _bibleList = [];
 
-  List<Bible> get bibleList => _bibleList;
+  List<BibleOld> get bibleList => _bibleList;
 
-  late Bible _selectedBible;
-  Bible get selectedBible =>_selectedBible;
-  set selectedBible(Bible bible) {
+  late BibleOld _selectedBible;
+  BibleOld get selectedBible =>_selectedBible;
+  set selectedBible(BibleOld bible) {
     if (_selectedBible == bible) return;
     _selectedBible = bible;
     _selectedChapter = 0;
@@ -32,7 +32,7 @@ class BibleController extends GetxController {
 
   void init() async {
     await _bibleHiveDatabase.openBox("Bible");
-    List<Bible>? _tmpBibleList = _bibleHiveDatabase.readData(null);
+    List<BibleOld>? _tmpBibleList = _bibleHiveDatabase.readData(null);
     if (_tmpBibleList == null) {
       _tmpBibleList = await _loadBibleData();
       _bibleHiveDatabase.addDataList(_tmpBibleList);
@@ -41,9 +41,9 @@ class BibleController extends GetxController {
     _selectedBible = _bibleList[0];
   }
 
-  Bible _writeBible(Bible _defaultBible, String originData) {
+  BibleOld _writeBible(BibleOld _defaultBible, String originData) {
     List<String> splitData = originData.split("\n");
-    Bible _tmpBible = _defaultBible;
+    BibleOld _tmpBible = _defaultBible;
 
     Chapter _tmpChapter = Chapter(index: 1, verseList: []);
     Verse _tmpVerse = Verse(verse: "");
@@ -88,8 +88,8 @@ class BibleController extends GetxController {
   }
 
   /// [todo] use isolate
-  Future<List<Bible>> _loadBibleData() async {
-    List<Bible> _res = [];
+  Future<List<BibleOld>> _loadBibleData() async {
+    List<BibleOld> _res = [];
 
     String _prefix = BibleAssetPathPrefix;
     List<String>_assetList=BibleAssetPath;
@@ -97,8 +97,8 @@ class BibleController extends GetxController {
     for (int index =0; index<_assetList.length;index++) {
       print(_titleList[index]);
       String _loadData = await rootBundle.loadString(_prefix + _assetList[index]);
-      BibleType _type = _assetList[index][0] == "1" ? BibleType.Old : BibleType.New;
-      Bible _tmpBible = Bible(type: _type, title: _titleList[index], chapterList: []);
+      BibleType _type = _assetList[index][0] == "1" ? BibleType.bc : BibleType.New;
+      BibleOld _tmpBible = BibleOld(type: _type, title: _titleList[index], chapterList: []);
       _tmpBible = _writeBible(_tmpBible, _loadData);
       _res.add(_tmpBible);
     }

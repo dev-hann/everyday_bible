@@ -1,0 +1,4 @@
+enum BibleType {
+  bc,
+  ac,
+}

@@ -1,3 +1,3 @@
-abstract class HiveModel {
+abstract class Box {
   Map<String,dynamic> toMap();
 }

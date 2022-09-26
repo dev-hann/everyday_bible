@@ -2,17 +2,17 @@ import 'package:everydaybible/models/bible.dart';
 import 'package:everydaybible/utils/hive_database.dart';
 import 'package:hive/hive.dart';
 
-class BibleHiveDatabase extends HiveDatabase<Bible>{
+class BibleHiveDatabase extends HiveDatabase<BibleOld>{
   late Box box;
 
 
-  Future addDataList (List<Bible> list)async{
+  Future addDataList (List<BibleOld> list)async{
     for(final bible in list){
       await addData(bible);
     }
   }
   @override
-  Future addData(Bible data) async{
+  Future addData(BibleOld data) async{
     print("BibleHive : newData ${data.title}");
     await box.add(data.toMap());
   }
@@ -23,17 +23,17 @@ class BibleHiveDatabase extends HiveDatabase<Bible>{
   }
 
   @override
-  List<Bible>? readData(_) {
+  List<BibleOld>? readData(_) {
     final _res = box.values.toList();
     if(_res.length==0) {
       print("BibleHive : there's no Bible Data!");
       return null;
     }
-     return Bible.fromListMap(_res);
+     return BibleOld.fromListMap(_res);
   }
 
   @override
-  Future updateData(Bible data) {
+  Future updateData(BibleOld data) {
     // TODO: implement updateData
     throw UnimplementedError();
   }

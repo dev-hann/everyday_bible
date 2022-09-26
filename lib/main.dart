@@ -1,11 +1,11 @@
+import 'package:everydaybible/data_base/data/box.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:hive/hive.dart';
 
 import 'views/intro_views/intro_lib.dart';
-void main() async{
-  await Hive.initFlutter();
+
+void main() async {
+  await LocalBox.init();
   runApp(MyApp());
 }
 
@@ -25,17 +25,24 @@ class MyApp extends StatelessWidget {
           elevation: 0,
         ),
         bottomSheetTheme: BottomSheetThemeData(
-          backgroundColor: Colors.transparent
+          backgroundColor: Colors.transparent,
         ),
+
         /// where is used?
         textSelectionTheme: TextSelectionThemeData(
           selectionColor: Colors.white.withOpacity(0.2),
         ),
         iconTheme: IconThemeData(color: Colors.white),
         textTheme: TextTheme(
-             bodyText2: TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-            headline2: TextStyle(fontWeight: FontWeight.bold)),
+          bodyText2: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+          headline2: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: IntroView(),

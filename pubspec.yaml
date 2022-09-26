@@ -31,8 +31,11 @@ dependencies:
   # StateManage
   flutter_bloc: 
 
-  # network
+  # Network
   dio: 
+
+  # Utils
+  equatable: 
 
 dev_dependencies:
   flutter_launcher_icons: ^0.10.0
