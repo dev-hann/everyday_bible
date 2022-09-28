@@ -2,6 +2,12 @@ part of bible_repo;
 
 class BibleImpl extends BibleRepo {
   final BibleBox bibleBox = BibleBox();
+
+  @override
+  bool isExistDB() {
+    return !bibleBox.isEmpty;
+  }
+
   @override
   Future init() async {
     await bibleBox.openBox();
@@ -16,12 +22,6 @@ class BibleImpl extends BibleRepo {
   @override
   Future createDB() {
     // TODO: implement createDB
-    throw UnimplementedError();
-  }
-
-  @override
-  bool isExistDB() {
-    // TODO: implement isExistDB
     throw UnimplementedError();
   }
 
