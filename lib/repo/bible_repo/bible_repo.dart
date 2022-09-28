@@ -5,8 +5,12 @@ import 'package:everydaybible/repo/repo.dart';
 part 'bible_impl.dart';
 
 abstract class BibleRepo extends Repo {
+
   bool isExistDB();
   Future createDB();
   Future clearDB();
   dynamic loadBible();
+
+
+
 }

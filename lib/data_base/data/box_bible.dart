@@ -4,5 +4,5 @@ class BibleBox extends LocalBox {
   @override
   String get name => "BibleBox";
 
-
+  bool get isEmpty => box.isEmpty;
 }

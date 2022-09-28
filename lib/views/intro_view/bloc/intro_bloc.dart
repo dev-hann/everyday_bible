@@ -1,26 +1,17 @@
-library home_bloc;
-
-import 'dart:async';
+library intro_bloc;
 
 import 'package:equatable/equatable.dart';
 import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
 import 'package:everydaybible/use_case/bible_use_case/bible_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-part 'home_event.dart';
-part 'home_state.dart';
+part 'intro_event.dart';
+part 'intro_state.dart';
 
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc(
+class IntroBloc extends Bloc<IntroEvent, IntroState> {
+  IntroBloc(
     BibleRepo bibleRepo,
   )   : bibleUseCase = BibleUseCase(bibleRepo),
-        super(const HomeState()) {
-    on<HomeInited>(_onInit);
-  }
-
+        super(IntroState());
   final BibleUseCase bibleUseCase;
-
-  FutureOr<void> _onInit(HomeInited event, Emitter<HomeState> emit) {
-    print(bibleUseCase.isExistBible());
-  }
 }

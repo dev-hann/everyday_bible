@@ -36,6 +36,7 @@ dependencies:
 
   # Utils
   equatable: 
+  dartz:
 
 dev_dependencies:
   flutter_launcher_icons: ^0.10.0
