@@ -15,19 +15,16 @@ class BibleImpl extends BibleRepo {
 
   @override
   Future clearDB() {
-    // TODO: implement clearDB
-    throw UnimplementedError();
+    return bibleBox.clearBox();
   }
 
   @override
   Future createDB() {
-    // TODO: implement createDB
-    throw UnimplementedError();
+
   }
 
   @override
   dynamic loadBible() {
-    // TODO: implement loadBible
-    throw UnimplementedError();
+    return bibleBox.loadBible();
   }
 }

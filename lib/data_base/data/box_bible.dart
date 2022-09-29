@@ -5,4 +5,12 @@ class BibleBox extends LocalBox {
   String get name => "BibleBox";
 
   bool get isEmpty => box.isEmpty;
+
+  dynamic loadBible() {
+    return box.get(name);
+  }
+
+  Future updateBible(Map<String, dynamic> data) {
+    return box.put(name, data);
+  }
 }
