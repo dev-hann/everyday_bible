@@ -7,8 +7,12 @@ import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
 class BibleUseCase extends UseCase<BibleRepo> {
   BibleUseCase(super.repo);
 
-  bool isExistBible() {
+  bool isExistBibleDB() {
     return repo.isExistDB();
+  }
+
+  Future createBibleDB(){
+    return repo.createDB(); 
   }
 
   Future<Either<Failure, Bible>> loadBible() async {
