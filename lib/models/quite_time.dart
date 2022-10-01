@@ -1,9 +1,50 @@
 import 'dart:typed_data';
 import 'package:everydaybible/models/hive_model.dart';
+import 'package:everydaybible/models/quite_time_format.dart';
 import 'package:intl/intl.dart';
 
-class QuiteTime extends Box {
+class QuiteTime {
   QuiteTime({
+    required this.dateTime,
+    required this.title,
+    required this.brief,
+    required this.subTitle,
+    required this.gospelList,
+  });
+  final QuiteTimeFormat dateTime;
+  final String title;
+  final String brief;
+  final String subTitle;
+  final Map<String, String> gospelList;
+
+  String get audioURL {
+    return "https://meditation.su.or.kr/meditation_mp3/${dateTime.year}/${dateTime.toString("")}.mp3";
+  }
+
+  factory QuiteTime.fromMap({
+    required Map<String, dynamic> titleJson,
+    required List<dynamic> contentsJson,
+  }) {
+    Map<String, String> _gospels(List<dynamic> gospelsJson) {
+      Map<String, String> _tmpGospels = {};
+      contentsJson.forEach((element) {
+        _tmpGospels[element['Verse'].toString()] = element['Bible_Cn'];
+      });
+      return _tmpGospels;
+    }
+
+    return QuiteTime(
+      dateTime: QuiteTimeFormat.parse(titleJson['Base_de']),
+      title: (titleJson['Qt_sj'] as String).trim(),
+      brief: titleJson['Qt_Brf'],
+      subTitle: titleJson['Bible_name'] + " " + titleJson['Bible_chapter'],
+      gospelList: _gospels(contentsJson),
+    );
+  }
+}
+
+class QuiteTimeOld extends Box {
+  QuiteTimeOld({
     required this.title,
     required this.brief,
     required this.audioURL,
@@ -31,8 +72,8 @@ class QuiteTime extends Box {
     audioByteData = data;
   }
 
-  factory QuiteTime.fromHive(Map<String, dynamic> json) {
-    return QuiteTime(
+  factory QuiteTimeOld.fromHive(Map<String, dynamic> json) {
+    return QuiteTimeOld(
       title: json['Title'],
       brief: json['Brief'],
       subTitle: json['SubTitle'],
@@ -43,7 +84,7 @@ class QuiteTime extends Box {
     );
   }
 
-  factory QuiteTime.fromAPI({
+  factory QuiteTimeOld.fromAPI({
     required Map<String, dynamic> titleJson,
     required List<dynamic> contentsJson,
   }) {
@@ -63,7 +104,8 @@ class QuiteTime extends Box {
           bibleDateFormat.replaceAll('-', "") +
           ".mp3";
     }
-    return QuiteTime(
+
+    return QuiteTimeOld(
       title: (titleJson['Qt_sj'] as String).trim(),
       brief: titleJson['Qt_Brf'],
       subTitle: titleJson['Bible_name'] + " " + titleJson['Bible_chapter'],
