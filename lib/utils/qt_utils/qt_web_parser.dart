@@ -28,12 +28,12 @@ class QTWebParser {
     return await http.post(uri, headers: header);
   }
 
-  Future<QuiteTime> readData(DateTime dateTime) async {
-    this._dateTime = QuiteTime.dateTimeFormat(dateTime);
+  Future<QuiteTimeOld> readData(DateTime dateTime) async {
+    this._dateTime = QuiteTimeOld.dateTimeFormat(dateTime);
     print("Web Parser : loading $_dateTime Data...");
     final titleJson = await _biblePost(titleURI);
     final contentsJson = await _biblePost(contentsURI);
-    return QuiteTime.fromAPI(
+    return QuiteTimeOld.fromAPI(
       titleJson: jsonDecode(titleJson.body),
       contentsJson: jsonDecode(contentsJson.body),
     );

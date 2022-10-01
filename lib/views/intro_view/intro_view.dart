@@ -1,4 +1,5 @@
 import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
+import 'package:everydaybible/repo/qt_repo/qt_repo.dart';
 import 'package:everydaybible/repo/repo.dart';
 import 'package:everydaybible/views/home_view/home_view.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class _IntroViewState extends State<IntroView> {
   Future loadRepoList() async {
     await Future.wait([
       Repo.of<BibleRepo>(context).init(),
+      Repo.of<QTRepo>(context).init(),
     ]).then((value) {
       Navigator.of(context).pushReplacement(HomeView.route());
     });

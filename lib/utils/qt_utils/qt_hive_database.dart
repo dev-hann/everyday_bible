@@ -2,7 +2,7 @@ import 'package:everydaybible/models/quite_time.dart';
 import 'package:everydaybible/utils/hive_database.dart';
 import 'package:hive/hive.dart';
 
-class QTHiveDatabase extends HiveDatabase<QuiteTime>{
+class QTHiveDatabase extends HiveDatabase<QuiteTimeOld>{
 
   late Box box;
 
@@ -12,25 +12,25 @@ class QTHiveDatabase extends HiveDatabase<QuiteTime>{
   }
 
   @override
-  Future addData(QuiteTime data) async{
+  Future addData(QuiteTimeOld data) async{
     print("QTHive : newData ${data.dateTime}");
     await box.put(data.dateTime, data.toMap());
   }
 
   @override
-  QuiteTime? readData(key) {
-   String _tmpKey = QuiteTime.dateTimeFormat(key);
+  QuiteTimeOld? readData(key) {
+   String _tmpKey = QuiteTimeOld.dateTimeFormat(key);
    final _res = box.get(_tmpKey);
    if(_res==null) {
      print("QTHive : there's no $_tmpKey Data!");
      return null;
    }
-     return QuiteTime.fromHive(Map<String,dynamic>.from(_res));
+     return QuiteTimeOld.fromHive(Map<String,dynamic>.from(_res));
    }
 
 
   @override
-  Future updateData(QuiteTime data) {
+  Future updateData(QuiteTimeOld data) {
     // TODO: implement updateData
     throw UnimplementedError();
   }

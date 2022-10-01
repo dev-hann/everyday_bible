@@ -20,7 +20,5 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   final BibleUseCase bibleUseCase;
 
-  FutureOr<void> _onInit(HomeInited event, Emitter<HomeState> emit) {
-    print(bibleUseCase.isExistBibleDB());
-  }
+  FutureOr<void> _onInit(HomeInited event, Emitter<HomeState> emit) {}
 }
