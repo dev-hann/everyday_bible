@@ -4,6 +4,7 @@ import 'package:everydaybible/repo/repo.dart';
 import 'package:everydaybible/views/home_view/bloc/home_bloc.dart';
 import 'package:everydaybible/views/qt_view/bloc/qt_bloc.dart';
 import 'package:everydaybible/views/qt_view/qt_view.dart';
+import 'package:everydaybible/widgets/bible_logo.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,17 +42,16 @@ class HomeView extends StatelessWidget {
   }
 
   NavigationAppBar appBar() {
-    return NavigationAppBar(
-      title: Text("Title"),
-      leading: FlutterLogo(),
-      actions: Icon(FluentIcons.sort),
+    return const NavigationAppBar(
+      title: Text("Everyday Bible"),
+      leading: BibleLogo(),
     );
   }
 
   PaneItem qtPaneItem() {
     return PaneItem(
       icon: const Icon(FluentIcons.shop),
-      title: Text("QuiteTime"),
+      title: const Text("QuiteTime"),
       body: const QTView(),
     );
   }
@@ -67,15 +67,6 @@ class HomeView extends StatelessWidget {
             selected: 0,
             items: [
               qtPaneItem(),
-              PaneItem(
-                icon: Icon(FluentIcons.go),
-                title: Text("Title"),
-                body: ScaffoldPage.scrollable(
-                  children: [
-                    FlutterLogo(),
-                  ],
-                ),
-              ),
             ],
           ),
         );

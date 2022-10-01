@@ -64,4 +64,5 @@ flutter:
     - asset: assets/fonts/Norican-Regular.ttf
 
   assets:
+    - assets/
     - assets/bible_db/
