@@ -33,45 +33,34 @@ class QTPlayer extends StatelessWidget {
     return Text(title);
   }
 
-  Widget progressBar() {
-    return ValueListenableBuilder(
-      valueListenable: progressNotifier,
-      builder: (context, value, _) {
-        return Slider(
-          value: value,
-          max: totalDuration.inMilliseconds.toDouble(),
-          onChangeStart: (_) {
-            durationTextNotifier.value = true;
-          },
-          onChanged: (value) {
-            progressNotifier.value = value;
-          },
-          onChangeEnd: (value) {
-            onChangedDuration(value);
-            durationTextNotifier.value = false;
-          },
-        );
-      },
+  Widget progressBar({
+    required double value,
+    required double maxValue,
+    required Function(double value) onChangeStart,
+    required Function(double value) onChangeEnd,
+    required Function(double value) onChange,
+  }) {
+    return Slider(
+      value: value,
+      max: maxValue,
+      onChangeStart: onChangeStart,
+      onChanged: onChange,
+      onChangeEnd: onChangeEnd,
     );
   }
 
-  // TODO: Combine with [progressWidget], make one Widget.
-  Widget durationText() {
-    return ValueListenableBuilder<double>(
-        valueListenable: progressNotifier,
-        builder: (context, value, _) {
-          final current =
-              QuiteTimeFormat.duration(Duration(milliseconds: value.toInt()));
-          final total = QuiteTimeFormat.duration(totalDuration);
-          return AnimatedDefaultTextStyle(
-            duration: Duration(milliseconds: 300),
-            style: TextStyle(
-              fontSize: durationTextNotifier.value ? 15 : 13,
-              color: Colors.black,
-            ),
-            child: Text("$current / $total"),
-          );
-        });
+  Widget durationText({required double progressValue}) {
+    final current =
+        QuiteTimeFormat.duration(Duration(milliseconds: progressValue.toInt()));
+    final total = QuiteTimeFormat.duration(totalDuration);
+    return AnimatedDefaultTextStyle(
+      duration: const Duration(milliseconds: 300),
+      style: TextStyle(
+        fontSize: durationTextNotifier.value ? 15 : 14,
+        color: Colors.black,
+      ),
+      child: Text("$current / $total"),
+    );
   }
 
   @override
@@ -86,9 +75,34 @@ class QTPlayer extends StatelessWidget {
             const SizedBox(width: 16.0),
             titleText(),
             const SizedBox(width: 16.0),
-            Expanded(child: progressBar()),
-            const SizedBox(width: 16.0),
-            durationText(),
+            ValueListenableBuilder<double>(
+                valueListenable: progressNotifier,
+                builder: (context, value, _) {
+                  return Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: progressBar(
+                            value: 0,
+                            maxValue: totalDuration.inMilliseconds.toDouble(),
+                            onChangeStart: (_) {
+                              durationTextNotifier.value = true;
+                            },
+                            onChange: (value) {
+                              progressNotifier.value = value;
+                            },
+                            onChangeEnd: (value) {
+                              onChangedDuration(value);
+                              durationTextNotifier.value = false;
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 16.0),
+                        durationText(progressValue: value),
+                      ],
+                    ),
+                  );
+                }),
           ],
         ),
       ),

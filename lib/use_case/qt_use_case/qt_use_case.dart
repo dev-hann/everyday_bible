@@ -13,4 +13,20 @@ class QTUseCase extends UseCase<QTRepo> {
       contentsJson: await repo.requestQT(formatDateTime),
     );
   }
+
+  Future<Duration?> loadAudio(String audioURL) async {
+    return repo.loadAudio(audioURL);
+  }
+
+  Future playAudio() {
+    return repo.playAudio();
+  }
+
+  Future pauseAudio() {
+    return repo.pauseAudio();
+  }
+
+  Future seekAudio(Duration duration) {
+    return repo.seekAudio(duration);
+  }
 }
