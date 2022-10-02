@@ -19,6 +19,8 @@ class QTBloc extends Bloc<QTEvent, QTState> {
   )   : qtUseCase = QTUseCase(qtRepo),
         super(const QTState()) {
     on<QTOnInited>(_onInit);
+    on<QTOnTapPlay>(_onTapPlay);
+    on<QTOnChangedDuration>(_onChangedDuration);
   }
 
   final QTUseCase qtUseCase;
@@ -27,10 +29,41 @@ class QTBloc extends Bloc<QTEvent, QTState> {
     final now = QuiteTimeFormat(DateTime.now());
     final qt = await qtUseCase.requestQT(now);
     emit(
-      state.copy(
+      state.copyWith(
         status: QTViewStatus.success,
         dateTime: now,
         qtDataMap: {now.toString(): qt},
+        audio: QuiteTimeAudio(
+          title: qt.title,
+          totalDuration: Duration(
+            minutes: 1,
+            seconds: 30,
+          ),
+        ),
+      ),
+    );
+  }
+
+  FutureOr<void> _onTapPlay(QTOnTapPlay event, Emitter<QTState> emit) {
+    final audio = state.audio;
+    emit(
+      state.copyWith(
+        audio: audio.copyWith(
+          isPlaying: !audio.isPlaying,
+        ),
+      ),
+    );
+  }
+
+  FutureOr<void> _onChangedDuration(
+      QTOnChangedDuration event, Emitter<QTState> emit) {
+    final value = event.value;
+    final audio = state.audio;
+    emit(
+      state.copyWith(
+        audio: audio.copyWith(
+          currentDuration: Duration(milliseconds: value.toInt()),
+        ),
       ),
     );
   }

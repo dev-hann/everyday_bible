@@ -8,6 +8,14 @@ class QuiteTimeFormat {
   int get month => dateTime.month;
   int get day => dateTime.day;
 
+  static String duration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    // TODO: handle Hour
+    return "$twoDigitMinutes:$twoDigitSeconds";
+  }
+
   factory QuiteTimeFormat.parse(String value) {
     return QuiteTimeFormat(DateTime.parse(value));
   }

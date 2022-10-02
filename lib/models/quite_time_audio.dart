@@ -19,4 +19,18 @@ class QuiteTimeAudio extends Equatable {
         currentDuration,
         totalDuration,
       ];
+
+  QuiteTimeAudio copyWith({
+    bool? isPlaying,
+    String? title,
+    Duration? currentDuration,
+    Duration? totalDuration,
+  }) {
+    return QuiteTimeAudio(
+      isPlaying: isPlaying ?? this.isPlaying,
+      title: title ?? this.title,
+      currentDuration: currentDuration ?? this.currentDuration,
+      totalDuration: totalDuration ?? this.totalDuration,
+    );
+  }
 }
