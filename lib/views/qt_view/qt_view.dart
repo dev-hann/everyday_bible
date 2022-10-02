@@ -60,12 +60,18 @@ class QTView extends StatelessWidget {
     );
   }
 
-  Widget mediaPlayer(QuiteTimeAudio audio) {
+  Widget mediaPlayer(
+    QuiteTimeAudio audio, {
+    required Function(double value) onChangedDuration,
+    required VoidCallback onTapPlay,
+  }) {
     return QTPlayer(
       isPlaying: audio.isPlaying,
       title: audio.title,
+      onTapPlay: onTapPlay,
       currentDuration: audio.currentDuration,
       totalDuration: audio.totalDuration,
+      onChangedDuration: onChangedDuration,
     );
   }
 
@@ -83,6 +89,7 @@ class QTView extends StatelessWidget {
             );
           case QTViewStatus.success:
         }
+        final bloc = BlocProvider.of<QTBloc>(context);
         final qt = state.qtData!;
         return ScaffoldPage.scrollable(
           header: Padding(
@@ -94,13 +101,18 @@ class QTView extends StatelessWidget {
           ),
           bottomBar: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: mediaPlayer(state.audio),
+            child: mediaPlayer(
+              state.audio,
+              onChangedDuration: (double value) {
+                bloc.add(QTOnChangedDuration(value));
+              },
+              onTapPlay: () {
+                bloc.add(QTOnTapPlay());
+              },
+            ),
           ),
           children: qt.gospelList.entries.map((e) {
-            return GospelText(
-              index: e.key,
-              text: e.value,
-            );
+            return GospelText(index: e.key, text: e.value);
           }).toList(),
         );
       },

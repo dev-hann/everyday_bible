@@ -27,7 +27,7 @@ class QTState extends Equatable {
         audio,
       ];
 
-  QTState copy({
+  QTState copyWith({
     QTViewStatus? status,
     QuiteTimeFormat? dateTime,
     Map<String, QuiteTime>? qtDataMap,
