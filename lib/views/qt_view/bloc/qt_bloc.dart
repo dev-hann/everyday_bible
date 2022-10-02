@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:everydaybible/models/quite_time.dart';
+import 'package:everydaybible/models/quite_time_audio.dart';
 import 'package:everydaybible/models/quite_time_format.dart';
 import 'package:everydaybible/repo/qt_repo/qt_repo.dart';
 import 'package:everydaybible/use_case/qt_use_case/qt_use_case.dart';
