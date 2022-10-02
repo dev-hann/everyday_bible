@@ -1,5 +1,7 @@
+import 'package:everydaybible/models/quite_time_audio.dart';
 import 'package:everydaybible/views/qt_view/bloc/qt_bloc.dart';
 import 'package:everydaybible/widgets/gospel_text.dart';
+import 'package:everydaybible/widgets/qt_player.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,9 +9,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class QTView extends StatelessWidget {
   const QTView({super.key});
 
-  Widget header(String title) {
+  Widget header({
+    required String title,
+    required String subTitle,
+  }) {
     Widget titleText() {
       return Row(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           IconButton(
@@ -28,7 +34,14 @@ class QTView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Expanded(child: titleText()),
+        Expanded(
+          child: Column(
+            children: [
+              titleText(),
+              Text(subTitle),
+            ],
+          ),
+        ),
         IconButton(
           onPressed: () {},
           icon: const Icon(
@@ -47,19 +60,13 @@ class QTView extends StatelessWidget {
     );
   }
 
-  Widget gospelList(Map<String, String> gospelData) {
-    return Column(
-      children: gospelData.entries.map((e) {
-        return GospelText(
-          index: e.key,
-          text: e.value,
-        );
-      }).toList(),
+  Widget mediaPlayer(QuiteTimeAudio audio) {
+    return QTPlayer(
+      isPlaying: audio.isPlaying,
+      title: audio.title,
+      currentDuration: audio.currentDuration,
+      totalDuration: audio.totalDuration,
     );
-  }
-
-  Widget mediaPlayer(String url) {
-    return SelectableText(url);
   }
 
   @override
@@ -80,12 +87,21 @@ class QTView extends StatelessWidget {
         return ScaffoldPage.scrollable(
           header: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: header(qt.title),
+            child: header(
+              title: qt.title,
+              subTitle: qt.subTitle,
+            ),
           ),
-          bottomBar: mediaPlayer(qt.audioURL),
-          children: [
-            gospelList(qt.gospelList),
-          ],
+          bottomBar: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: mediaPlayer(state.audio),
+          ),
+          children: qt.gospelList.entries.map((e) {
+            return GospelText(
+              index: e.key,
+              text: e.value,
+            );
+          }).toList(),
         );
       },
     );
