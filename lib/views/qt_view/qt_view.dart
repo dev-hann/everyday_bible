@@ -60,7 +60,7 @@ class QTView extends StatelessWidget {
     );
   }
 
-  Widget mediaPlayer(
+  Widget audioPlayer(
     QuiteTimeAudio audio, {
     required Function(double value) onChangedDuration,
     required VoidCallback onTapPlay,
@@ -101,7 +101,7 @@ class QTView extends StatelessWidget {
           ),
           bottomBar: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: mediaPlayer(
+            child: audioPlayer(
               state.audio,
               onChangedDuration: (double value) {
                 bloc.add(QTOnChangedDuration(value));

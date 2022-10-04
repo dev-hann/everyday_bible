@@ -2,7 +2,7 @@ part of qt_repo;
 
 class QTImpl extends QTRepo {
   final QTService service = QTService();
-  final AudioPlayer player = AudioPlayer();
+  final AudioService audioService = AudioService();
   @override
   Future init() async {}
 
@@ -18,25 +18,33 @@ class QTImpl extends QTRepo {
     return res.data;
   }
 
-  // TODO: get duration.
   @override
-  Future<Duration?> loadAudio(String audioURL) async {
-    await player.setSourceUrl(audioURL);
-    return await player.getDuration();
+  Future loadAudio(String audioURL) async {
+    return audioService.loadAudio(audioURL);
   }
 
   @override
   Future pauseAudio() {
-    return player.pause();
+    return audioService.pause();
   }
 
   @override
   Future playAudio() {
-    return player.resume();
+    return audioService.resume();
   }
 
   @override
   Future seekAudio(Duration duration) {
-    return player.seek(duration);
+    return audioService.seek(duration);
+  }
+
+  @override
+  Stream<Duration> durationStream() {
+    return audioService.durationStream();
+  }
+
+  @override
+  Stream<Duration> positionStream() {
+    return audioService.positionStream();
   }
 }
