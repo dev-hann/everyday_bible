@@ -1,26 +1,30 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'dart:async';
+
+import 'package:just_audio/just_audio.dart';
+
+// import 'package:audioplayers/audioplayers.dart';
 
 class AudioService {
   final AudioPlayer player = AudioPlayer();
-
-  Stream<Duration> durationStream() {
-    return player.onDurationChanged;
+  final StreamController streamController = StreamController.broadcast();
+  Stream<Duration?> durationStream() {
+    return player.durationStream;
   }
 
   Stream<Duration> positionStream() {
-    return player.onPositionChanged;
+    return player.positionStream;
   }
 
-  Future loadAudio(String audioURL) {
-    return player.setSourceUrl(audioURL);
+  Future loadAudio(String audioURL) async {
+    await player.setUrl(audioURL, preload: false);
   }
 
   Future pause() {
     return player.pause();
   }
 
-  Future resume() {
-    return player.resume();
+  Future play() {
+    return player.play();
   }
 
   Future seek(Duration duration) {

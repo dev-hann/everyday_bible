@@ -10,9 +10,8 @@ abstract class QTRepo extends Repo {
   Future<dynamic> requestQT(String dateTime);
 
 
-
   // Audio
-  Stream<Duration> durationStream();
+  Stream<Duration?> durationStream();
   Stream<Duration> positionStream();
 
   Future loadAudio(String audioURL);

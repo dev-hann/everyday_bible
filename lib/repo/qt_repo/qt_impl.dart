@@ -19,7 +19,7 @@ class QTImpl extends QTRepo {
   }
 
   @override
-  Future loadAudio(String audioURL) async {
+  Future loadAudio(String audioURL) {
     return audioService.loadAudio(audioURL);
   }
 
@@ -30,7 +30,7 @@ class QTImpl extends QTRepo {
 
   @override
   Future playAudio() {
-    return audioService.resume();
+    return audioService.play();
   }
 
   @override
@@ -39,7 +39,7 @@ class QTImpl extends QTRepo {
   }
 
   @override
-  Stream<Duration> durationStream() {
+  Stream<Duration?> durationStream() {
     return audioService.durationStream();
   }
 
