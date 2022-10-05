@@ -14,7 +14,7 @@ class QTUseCase extends UseCase<QTRepo> {
     );
   }
 
-  Stream<Duration> durationStream() {
+  Stream<Duration?> durationStream() {
     return repo.durationStream();
   }
 
@@ -22,7 +22,7 @@ class QTUseCase extends UseCase<QTRepo> {
     return repo.positionStream();
   }
 
-  Future loadAudio(String audioURL) async {
+  Future loadAudio(String audioURL) {
     return repo.loadAudio(audioURL);
   }
 

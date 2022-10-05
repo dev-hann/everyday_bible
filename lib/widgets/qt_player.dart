@@ -83,7 +83,7 @@ class QTPlayer extends StatelessWidget {
                       children: [
                         Expanded(
                           child: progressBar(
-                            value: 0,
+                            value: value,
                             maxValue: totalDuration.inMilliseconds.toDouble(),
                             onChangeStart: (_) {
                               durationTextNotifier.value = true;

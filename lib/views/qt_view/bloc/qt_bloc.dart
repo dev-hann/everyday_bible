@@ -29,6 +29,28 @@ class QTBloc extends Bloc<QTEvent, QTState> {
     final now = QuiteTimeFormat(DateTime.now());
     final qt = await qtUseCase.requestQT(now);
     await qtUseCase.loadAudio(qt.audioURL);
+    // TODO: Handle stream emit
+    qtUseCase.durationStream().listen((event) {
+      if (event == null) {
+        return;
+      }
+      emit(
+        state.copyWith(
+          audio: state.audio.copyWith(
+            totalDuration: event,
+          ),
+        ),
+      );
+    });
+    qtUseCase.positionStream().listen((event) {
+      emit(
+        state.copyWith(
+          audio: state.audio.copyWith(
+            currentDuration: event,
+          ),
+        ),
+      );
+    });
 
     emit(
       state.copyWith(
@@ -40,27 +62,6 @@ class QTBloc extends Bloc<QTEvent, QTState> {
         ),
       ),
     );
-    await emit.forEach<Duration>(
-      qtUseCase.positionStream(),
-      onData: (value) {
-        return state.copyWith(
-          audio: state.audio.copyWith(
-            currentDuration: value,
-          ),
-        );
-      },
-    );
-    await emit.forEach<Duration>(
-      qtUseCase.durationStream(),
-      onData: (value) {
-        return state.copyWith(
-          audio: state.audio.copyWith(
-            totalDuration: value,
-          ),
-        );
-      },
-    );
-
   }
 
   FutureOr<void> _onTapPlay(QTOnTapPlay event, Emitter<QTState> emit) {

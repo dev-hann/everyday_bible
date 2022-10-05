@@ -42,7 +42,9 @@ dependencies:
   # Utils
   equatable: 
   dartz:
-  audioplayers: ^1.1.0
+  # audioplayers: ^1.1.0
+  just_audio: ^0.9.29
+  just_audio_mpv: any
 
 dev_dependencies:
   flutter_launcher_icons: ^0.10.0
