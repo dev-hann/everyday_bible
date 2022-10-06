@@ -3,6 +3,7 @@ library qt_bloc;
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:everydaybible/models/qt_duration.dart';
 import 'package:everydaybible/models/quite_time.dart';
 import 'package:everydaybible/models/quite_time_audio.dart';
 import 'package:everydaybible/models/quite_time_format.dart';
@@ -29,28 +30,6 @@ class QTBloc extends Bloc<QTEvent, QTState> {
     final now = QuiteTimeFormat(DateTime.now());
     final qt = await qtUseCase.requestQT(now);
     await qtUseCase.loadAudio(qt.audioURL);
-    // TODO: Handle stream emit
-    qtUseCase.durationStream().listen((event) {
-      if (event == null) {
-        return;
-      }
-      emit(
-        state.copyWith(
-          audio: state.audio.copyWith(
-            totalDuration: event,
-          ),
-        ),
-      );
-    });
-    qtUseCase.positionStream().listen((event) {
-      emit(
-        state.copyWith(
-          audio: state.audio.copyWith(
-            currentDuration: event,
-          ),
-        ),
-      );
-    });
 
     emit(
       state.copyWith(
@@ -61,6 +40,16 @@ class QTBloc extends Bloc<QTEvent, QTState> {
           title: qt.title,
         ),
       ),
+    );
+    await emit.forEach<QTDuration>(
+      qtUseCase.durationStream(),
+      onData: (data) {
+        return state.copyWith(
+            audio: state.audio.copyWith(
+          position: data.position,
+          duration: data.duration,
+        ));
+      },
     );
   }
 
@@ -90,7 +79,7 @@ class QTBloc extends Bloc<QTEvent, QTState> {
     emit(
       state.copyWith(
         audio: audio.copyWith(
-          currentDuration: duration,
+          position: duration,
         ),
       ),
     );
