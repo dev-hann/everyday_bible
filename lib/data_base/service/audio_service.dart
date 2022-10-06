@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:just_audio/just_audio.dart';
 
-// import 'package:audioplayers/audioplayers.dart';
-
 class AudioService {
   final AudioPlayer player = AudioPlayer();
   final StreamController streamController = StreamController.broadcast();
@@ -29,5 +27,9 @@ class AudioService {
 
   Future seek(Duration duration) {
     return player.seek(duration);
+  }
+
+  Future dispose() {
+    return player.dispose();
   }
 }

@@ -9,57 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class QTView extends StatelessWidget {
   const QTView({super.key});
 
-  Widget header({
-    required String title,
-    required String subTitle,
-  }) {
-    Widget titleText() {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          IconButton(
-            icon: const Icon(FluentIcons.page_left),
-            onPressed: () {},
-          ),
-          Text(title),
-          IconButton(
-            icon: const Icon(FluentIcons.page_right),
-            onPressed: () {},
-          ),
-        ],
-      );
-    }
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        Expanded(
-          child: Column(
-            children: [
-              titleText(),
-              Text(subTitle),
-            ],
-          ),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            CupertinoIcons.calendar,
-            size: 24,
-          ),
-        ),
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            CupertinoIcons.bookmark,
-            size: 24,
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget audioPlayer(
     QuiteTimeAudio audio, {
     required Function(double value) onChangedDuration,
@@ -72,6 +21,60 @@ class QTView extends StatelessWidget {
       currentDuration: audio.currentDuration,
       totalDuration: audio.totalDuration,
       onChangedDuration: onChangedDuration,
+    );
+  }
+
+  Widget headerWidget() {
+    return BlocBuilder<QTBloc, QTState>(
+      builder: (context, state) {
+        final data = state.qtData!;
+        final title = data.title;
+        final subTitle = data.subTitle;
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(FluentIcons.page_left),
+                          onPressed: () {},
+                        ),
+                        Text(title),
+                        IconButton(
+                          icon: const Icon(FluentIcons.page_right),
+                          onPressed: () {},
+                        ),
+                      ],
+                    ),
+                    Text(subTitle),
+                  ],
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  CupertinoIcons.calendar,
+                  size: 24,
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  CupertinoIcons.bookmark,
+                  size: 24,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -92,13 +95,7 @@ class QTView extends StatelessWidget {
         final bloc = BlocProvider.of<QTBloc>(context);
         final qt = state.qtData!;
         return ScaffoldPage.scrollable(
-          header: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: header(
-              title: qt.title,
-              subTitle: qt.subTitle,
-            ),
-          ),
+          header: headerWidget(),
           bottomBar: Padding(
             padding: const EdgeInsets.all(16.0),
             child: audioPlayer(

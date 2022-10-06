@@ -3,8 +3,27 @@ part of qt_repo;
 class QTImpl extends QTRepo {
   final QTService service = QTService();
   final AudioService audioService = AudioService();
+  final StreamController<QTDuration> _durationStream =
+      StreamController.broadcast();
+  Duration position = Duration.zero;
+  Duration duration = Duration.zero;
   @override
-  Future init() async {}
+  Future init() async {
+    audioService.durationStream().listen((event) {
+      if (event != null) {
+        duration = event;
+        _durationStream.add(
+          QTDuration(position: position, duration: duration),
+        );
+      }
+    });
+    audioService.positionStream().listen((event) {
+      position = event;
+      _durationStream.add(
+        QTDuration(position: position, duration: duration),
+      );
+    });
+  }
 
   @override
   Future requestTitle(String dateTime) async {
@@ -39,12 +58,7 @@ class QTImpl extends QTRepo {
   }
 
   @override
-  Stream<Duration?> durationStream() {
-    return audioService.durationStream();
-  }
-
-  @override
-  Stream<Duration> positionStream() {
-    return audioService.positionStream();
+  Stream<QTDuration> durationStream() {
+    return _durationStream.stream;
   }
 }
