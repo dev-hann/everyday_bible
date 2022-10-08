@@ -1,3 +1,4 @@
+import 'package:everydaybible/enum/audio_state.dart';
 import 'package:everydaybible/models/quite_time_format.dart';
 import 'package:everydaybible/views/qt_player_view/bloc/qt_player_bloc.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
@@ -10,7 +11,16 @@ class QTPlayerView extends StatelessWidget {
   Widget stateIcon({
     required VoidCallback onTapPlay,
     required bool isPlaying,
+    required AudioState state,
   }) {
+    switch(state){
+      case AudioState.loading:
+      case AudioState.buffering:
+        return const BibleLoading();
+      case AudioState.idle:
+      case AudioState.ready:
+      case AudioState.completed:
+    }
     return IconButton(
       onPressed: onTapPlay,
       icon: Icon(!isPlaying ? FluentIcons.play : FluentIcons.pause),
@@ -87,6 +97,7 @@ class QTPlayerView extends StatelessWidget {
                     bloc.add(QTPlayerOnTapPlay());
                   },
                   isPlaying: audio.isPlaying,
+                  state: audio.state,
                 ),
                 const SizedBox(width: 16.0),
                 titleText(audio.title),

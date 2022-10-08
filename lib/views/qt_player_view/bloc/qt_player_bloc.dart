@@ -40,12 +40,13 @@ class QTPlayerBloc extends Bloc<QTPlayerEvent, QTPlayerState> {
     await emit.forEach<QTDuration>(
       audioUseCase.durationStream(),
       onData: (data) {
-        print(data);
         if (state.isChangingDuration) {
           return state;
         }
         return state.copyWith(
             audio: state.audio.copyWith(
+          isPlaying: data.isPlaying,
+          state: data.state,
           position: data.position,
           duration: data.duration,
         ));
@@ -62,13 +63,6 @@ class QTPlayerBloc extends Bloc<QTPlayerEvent, QTPlayerState> {
     } else {
       audioUseCase.playAudio();
     }
-    emit(
-      state.copyWith(
-        audio: audio.copyWith(
-          isPlaying: !isPlaying,
-        ),
-      ),
-    );
   }
 
   FutureOr<void> _onChangedDurationStart(
