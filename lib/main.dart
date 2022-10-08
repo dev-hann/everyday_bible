@@ -1,4 +1,5 @@
 import 'package:everydaybible/data_base/data/box.dart';
+import 'package:everydaybible/repo/audio_repo/repo_audio.dart';
 import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
 import 'package:everydaybible/repo/qt_repo/qt_repo.dart';
 import 'package:everydaybible/views/intro_view/intro_view.dart';
@@ -12,6 +13,7 @@ void main() async {
       providers: [
         RepositoryProvider<BibleRepo>(create: (_) => BibleImpl()),
         RepositoryProvider<QTRepo>(create: (_) => QTImpl()),
+        RepositoryProvider<AudioRepo>(create: (_) => AudioImpl()),
       ],
       child: const MyApp(),
     ),

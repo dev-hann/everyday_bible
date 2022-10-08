@@ -1,4 +1,3 @@
-import 'package:everydaybible/models/qt_duration.dart';
 import 'package:everydaybible/models/quite_time.dart';
 import 'package:everydaybible/models/quite_time_format.dart';
 import 'package:everydaybible/repo/qt_repo/qt_repo.dart';
@@ -13,25 +12,5 @@ class QTUseCase extends UseCase<QTRepo> {
       titleJson: await repo.requestTitle(formatDateTime),
       contentsJson: await repo.requestQT(formatDateTime),
     );
-  }
-
-  Stream<QTDuration> durationStream() {
-    return repo.durationStream();
-  }
-
-  Future loadAudio(String audioURL) {
-    return repo.loadAudio(audioURL);
-  }
-
-  Future playAudio() {
-    return repo.playAudio();
-  }
-
-  Future pauseAudio() {
-    return repo.pauseAudio();
-  }
-
-  Future seekAudio(Duration duration) {
-    return repo.seekAudio(duration);
   }
 }

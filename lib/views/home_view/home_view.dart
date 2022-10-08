@@ -1,7 +1,9 @@
+import 'package:everydaybible/repo/audio_repo/repo_audio.dart';
 import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
 import 'package:everydaybible/repo/qt_repo/qt_repo.dart';
 import 'package:everydaybible/repo/repo.dart';
 import 'package:everydaybible/views/home_view/bloc/home_bloc.dart';
+import 'package:everydaybible/views/qt_player_view/bloc/qt_player_bloc.dart';
 import 'package:everydaybible/views/qt_view/bloc/qt_bloc.dart';
 import 'package:everydaybible/views/qt_view/qt_view.dart';
 import 'package:everydaybible/widgets/bible_logo.dart';
@@ -33,6 +35,11 @@ class HomeView extends StatelessWidget {
               create: (_) => QTBloc(
                 Repo.of<QTRepo>(context),
               )..add(QTOnInited()),
+            ),
+            BlocProvider(
+              create: (_) => QTPlayerBloc(
+                Repo.of<AudioRepo>(context),
+              ),
             )
           ],
           child: const HomeView(),
@@ -60,7 +67,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
-        final bloc = BlocProvider.of<HomeBloc>(context);
+        // final bloc = BlocProvider.of<HomeBloc>(context);
         return NavigationView(
           appBar: appBar(),
           pane: NavigationPane(
