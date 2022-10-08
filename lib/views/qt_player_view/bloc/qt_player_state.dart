@@ -20,6 +20,7 @@ class QTPlayerState extends Equatable {
   List<Object?> get props => [
         status,
         audio,
+        isChangingDuration,
       ];
   QTPlayerState copyWith({
     QTPlayerViewStatus? status,

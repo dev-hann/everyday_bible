@@ -6,24 +6,48 @@ class AudioImpl extends AudioRepo {
       StreamController.broadcast();
   Duration position = Duration.zero;
   Duration duration = Duration.zero;
+  AudioState state = AudioState.idle;
+  bool isPlaying = false;
   @override
   Future init() async {}
 
   @override
   Future loadAudio(String audioURL) async {
     await audioService.loadAudio(audioURL);
+    audioService.stateStream().listen((event) {
+      state = AudioState.values[event.processingState.index];
+      isPlaying = event.playing;
+      _durationStream.add(
+        QTDuration(
+          isPlaying: isPlaying,
+          state: state,
+          position: position,
+          duration: duration,
+        ),
+      );
+    });
     audioService.durationStream().listen((event) {
       if (event != null) {
         duration = event;
         _durationStream.add(
-          QTDuration(position: position, duration: duration),
+          QTDuration(
+            isPlaying: isPlaying,
+            state: state,
+            position: position,
+            duration: duration,
+          ),
         );
       }
     });
     audioService.positionStream().listen((event) {
       position = event;
       _durationStream.add(
-        QTDuration(position: position, duration: duration),
+        QTDuration(
+          isPlaying: isPlaying,
+          state: state,
+          position: position,
+          duration: duration,
+        ),
       );
     });
   }

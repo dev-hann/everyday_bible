@@ -5,6 +5,11 @@ import 'package:just_audio/just_audio.dart';
 class AudioService {
   final AudioPlayer player = AudioPlayer();
   final StreamController streamController = StreamController.broadcast();
+
+  Stream<PlayerState> stateStream() {
+    return player.playerStateStream;
+  }
+
   Stream<Duration?> durationStream() {
     return player.durationStream;
   }
@@ -25,8 +30,13 @@ class AudioService {
     return player.play();
   }
 
-  Future seek(Duration duration) {
-    return player.seek(duration);
+  Future seek(Duration duration) async {
+    try {
+      await player.seek(duration);
+    } catch (e) {
+      print("@#@#@");
+      print(e);
+    }
   }
 
   Future dispose() {
