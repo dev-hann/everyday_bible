@@ -1,28 +1,14 @@
-import 'package:everydaybible/models/quite_time_audio.dart';
+import 'package:everydaybible/views/qt_player_view/bloc/qt_player_bloc.dart';
+import 'package:everydaybible/views/qt_player_view/qt_player_viwe.dart';
 import 'package:everydaybible/views/qt_view/bloc/qt_bloc.dart';
+import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:everydaybible/widgets/gospel_text.dart';
-import 'package:everydaybible/widgets/qt_player.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QTView extends StatelessWidget {
   const QTView({super.key});
-
-  Widget audioPlayer(
-    QuiteTimeAudio audio, {
-    required Function(double value) onChangedDuration,
-    required VoidCallback onTapPlay,
-  }) {
-    return QTPlayer(
-      isPlaying: audio.isPlaying,
-      title: audio.title,
-      onTapPlay: onTapPlay,
-      currentDuration: audio.currentDuration,
-      totalDuration: audio.totalDuration,
-      onChangedDuration: onChangedDuration,
-    );
-  }
 
   Widget headerWidget() {
     return BlocBuilder<QTBloc, QTState>(
@@ -78,41 +64,52 @@ class QTView extends StatelessWidget {
     );
   }
 
+  Widget player() {
+    return const Padding(
+      padding: EdgeInsets.all(16.0),
+      child: QTPlayerView(),
+    );
+  }
+
+  List<Widget> body(Map<String, dynamic> gospelList) {
+    return gospelList.entries.map((e) {
+      return GospelText(index: e.key, text: e.value);
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<QTBloc, QTState>(
-      builder: (context, state) {
-        final status = state.status;
-        switch (status) {
-          case QTViewStatus.init:
-          case QTViewStatus.loading:
-          case QTViewStatus.fail:
-            return const Center(
-              child: NavigationIndicator(),
-            );
-          case QTViewStatus.success:
-        }
-        final bloc = BlocProvider.of<QTBloc>(context);
+    return BlocListener<QTBloc, QTState>(
+      listenWhen: (pre, curr) {
+        return pre.status == QTViewStatus.init &&
+            curr.status == QTViewStatus.success;
+      },
+      listener: (BuildContext context, state) {
         final qt = state.qtData!;
-        return ScaffoldPage.scrollable(
-          header: headerWidget(),
-          bottomBar: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: audioPlayer(
-              state.audio,
-              onChangedDuration: (double value) {
-                bloc.add(QTOnChangedDuration(value));
-              },
-              onTapPlay: () {
-                bloc.add(QTOnTapPlay());
-              },
-            ),
-          ),
-          children: qt.gospelList.entries.map((e) {
-            return GospelText(index: e.key, text: e.value);
-          }).toList(),
+        final audioBloc = BlocProvider.of<QTPlayerBloc>(context);
+        audioBloc.add(
+          QTPlayerInited(title: qt.title, audioURL: qt.audioURL),
         );
       },
+      child: BlocBuilder<QTBloc, QTState>(
+        builder: (context, state) {
+          final status = state.status;
+          switch (status) {
+            case QTViewStatus.init:
+            case QTViewStatus.loading:
+            case QTViewStatus.fail:
+              return const BibleLoading();
+            case QTViewStatus.success:
+          }
+          // final bloc = BlocProvider.of<QTBloc>(context);
+          final qt = state.qtData!;
+          return ScaffoldPage.scrollable(
+            header: headerWidget(),
+            bottomBar: player(),
+            children: body(qt.gospelList),
+          );
+        },
+      ),
     );
   }
 }

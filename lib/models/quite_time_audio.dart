@@ -4,33 +4,38 @@ class QuiteTimeAudio extends Equatable {
   const QuiteTimeAudio({
     this.title = "",
     this.isPlaying = false,
-    this.currentDuration = Duration.zero,
-    this.totalDuration = Duration.zero,
+    this.url = "",
+    this.position = Duration.zero,
+    this.duration = Duration.zero,
   });
   final bool isPlaying;
   final String title;
-  final Duration currentDuration;
-  final Duration totalDuration;
+  final String url;
+  final Duration position;
+  final Duration duration;
 
   @override
   List<Object?> get props => [
         title,
         isPlaying,
-        currentDuration,
-        totalDuration,
+        position,
+        duration,
+        url,
       ];
 
   QuiteTimeAudio copyWith({
     bool? isPlaying,
     String? title,
+    String? url,
     Duration? position,
     Duration? duration,
   }) {
     return QuiteTimeAudio(
       isPlaying: isPlaying ?? this.isPlaying,
       title: title ?? this.title,
-      currentDuration: position ?? this.currentDuration,
-      totalDuration: duration ?? this.totalDuration,
+      url: url ?? this.url,
+      position: position ?? this.position,
+      duration: duration ?? this.duration,
     );
   }
 }
