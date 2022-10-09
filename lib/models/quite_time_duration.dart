@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:everydaybible/enum/audio_state.dart';
 
-class QTDuration extends Equatable {
-  const QTDuration({
+class QuiteTimeDuration extends Equatable {
+  const QuiteTimeDuration({
     required this.state,
     required this.isPlaying,
     required this.position,

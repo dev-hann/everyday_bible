@@ -7,7 +7,7 @@ class AudioService {
   final StreamController streamController = StreamController.broadcast();
 
   Stream<PlayerState> stateStream() {
-    return player.playerStateStream;
+      return player.playerStateStream;
   }
 
   Stream<Duration?> durationStream() {
@@ -18,8 +18,13 @@ class AudioService {
     return player.positionStream;
   }
 
+  Future setLoopMode(int index) {
+    return player.setLoopMode(LoopMode.values[index]);
+  }
+
   Future loadAudio(String audioURL) async {
     await player.setUrl(audioURL, preload: false);
+    await player.setLoopMode(LoopMode.off);
   }
 
   Future pause() {
@@ -31,12 +36,7 @@ class AudioService {
   }
 
   Future seek(Duration duration) async {
-    try {
-      await player.seek(duration);
-    } catch (e) {
-      print("@#@#@");
-      print(e);
-    }
+    await player.seek(duration);
   }
 
   Future dispose() {

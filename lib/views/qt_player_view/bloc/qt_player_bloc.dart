@@ -3,7 +3,7 @@ library qt_player_bloc;
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
-import 'package:everydaybible/models/qt_duration.dart';
+import 'package:everydaybible/models/quite_time_duration.dart';
 import 'package:everydaybible/models/quite_time_audio.dart';
 import 'package:everydaybible/repo/audio_repo/repo_audio.dart';
 import 'package:everydaybible/use_case/audio_use_case/audio_use_case.dart';
@@ -37,7 +37,7 @@ class QTPlayerBloc extends Bloc<QTPlayerEvent, QTPlayerState> {
         ),
       ),
     );
-    await emit.forEach<QTDuration>(
+    await emit.forEach<QuiteTimeDuration>(
       audioUseCase.durationStream(),
       onData: (data) {
         if (state.isChangingDuration) {

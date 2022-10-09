@@ -2,7 +2,7 @@ part of audio_repo;
 
 class AudioImpl extends AudioRepo {
   final AudioService audioService = AudioService();
-  final StreamController<QTDuration> _durationStream =
+  final StreamController<QuiteTimeDuration> _durationStream =
       StreamController.broadcast();
   Duration position = Duration.zero;
   Duration duration = Duration.zero;
@@ -18,7 +18,7 @@ class AudioImpl extends AudioRepo {
       state = AudioState.values[event.processingState.index];
       isPlaying = event.playing;
       _durationStream.add(
-        QTDuration(
+        QuiteTimeDuration(
           isPlaying: isPlaying,
           state: state,
           position: position,
@@ -30,7 +30,7 @@ class AudioImpl extends AudioRepo {
       if (event != null) {
         duration = event;
         _durationStream.add(
-          QTDuration(
+          QuiteTimeDuration(
             isPlaying: isPlaying,
             state: state,
             position: position,
@@ -42,7 +42,7 @@ class AudioImpl extends AudioRepo {
     audioService.positionStream().listen((event) {
       position = event;
       _durationStream.add(
-        QTDuration(
+        QuiteTimeDuration(
           isPlaying: isPlaying,
           state: state,
           position: position,
@@ -68,7 +68,12 @@ class AudioImpl extends AudioRepo {
   }
 
   @override
-  Stream<QTDuration> durationStream() {
+  Stream<QuiteTimeDuration> durationStream() {
     return _durationStream.stream;
+  }
+
+  @override
+  Future setLoopMode(int index) {
+    return audioService.setLoopMode(index);
   }
 }
