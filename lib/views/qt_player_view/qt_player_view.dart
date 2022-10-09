@@ -13,7 +13,7 @@ class QTPlayerView extends StatelessWidget {
     required bool isPlaying,
     required AudioState state,
   }) {
-    switch(state){
+    switch (state) {
       case AudioState.loading:
       case AudioState.buffering:
         return const BibleLoading();
@@ -32,10 +32,61 @@ class QTPlayerView extends StatelessWidget {
   }
 
   Widget soundController() {
-    return IconButton(
-      onPressed: () {},
-      icon: const Icon(FluentIcons.volume_disabled),
-    );
+    void showSlider(BuildContext context) {
+      final box = context.findRenderObject() as RenderBox;
+      final offset = box.localToGlobal(Offset.zero);
+      const w = 50.0;
+      const h = 200.0;
+      showDialog(
+        context: context,
+        barrierColor: Colors.transparent,
+        barrierDismissible: true,
+        builder: (context) {
+          return Stack(
+            children: [
+              Positioned.fromRect(
+                rect: Rect.fromLTWH(
+                  offset.dx + (w / 4),
+                  offset.dy - h,
+                  w,
+                  h,
+                ),
+                child: Card(
+                  child: Column(
+                    children: [
+                      Icon(FluentIcons.volume3),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                          ),
+                          child: Slider(
+                            onChanged: (value) {},
+                            value: 0.5,
+                            max: 1,
+                            vertical: true,
+                          ),
+                        ),
+                      ),
+                      Icon(FluentIcons.volume0),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    return Builder(builder: (context) {
+      return IconButton(
+        onPressed: () {
+          showSlider(context);
+        },
+        icon: const Icon(FluentIcons.volume_disabled),
+      );
+    });
   }
 
   Widget progressBar({
