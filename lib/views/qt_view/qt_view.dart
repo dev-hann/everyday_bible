@@ -1,5 +1,5 @@
 import 'package:everydaybible/views/qt_player_view/bloc/qt_player_bloc.dart';
-import 'package:everydaybible/views/qt_player_view/qt_player_viwe.dart';
+import 'package:everydaybible/views/qt_player_view/qt_player_view.dart';
 import 'package:everydaybible/views/qt_view/bloc/qt_bloc.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:everydaybible/widgets/gospel_text.dart';
