@@ -11,12 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-
-
-  # audio_service: ^0.18.7
-  # just_audio: ^0.9.29
   font_awesome_flutter:
-
   flutter_zoom_drawer:
   scroll_to_index: any
 
@@ -32,6 +27,9 @@ dependencies:
   # Database
   hive: ^2.0.0
   hive_flutter: ^1.0.0
+  sqflite: ^2.1.0+1
+  sqflite_common_ffi:
+  path_provider:
 
   # StateManage
   flutter_bloc: 
@@ -42,6 +40,7 @@ dependencies:
   # Utils
   equatable: 
   dartz:
+
   # audioplayers: ^1.1.0
   just_audio: ^0.9.29
   just_audio_mpv: any
