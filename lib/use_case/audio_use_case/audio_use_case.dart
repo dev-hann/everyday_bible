@@ -29,4 +29,12 @@ class AudioUseCase extends UseCase<AudioRepo> {
   Future seekAudio(Duration duration) {
     return repo.seekAudio(duration);
   }
+
+  double getVolume() {
+    return repo.getVolume();
+  }
+
+  Future setVolume(double value) {
+    return repo.setVolume(value);
+  }
 }

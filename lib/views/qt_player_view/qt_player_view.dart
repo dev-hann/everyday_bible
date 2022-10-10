@@ -32,16 +32,21 @@ class QTPlayerView extends StatelessWidget {
   }
 
   Widget soundController() {
-    void showSlider(BuildContext context) {
+    void showSlider(
+      BuildContext context, {
+      required double initValue,
+      required Function(double volume) onChanged,
+    }) {
       final box = context.findRenderObject() as RenderBox;
       final offset = box.localToGlobal(Offset.zero);
       const w = 50.0;
       const h = 200.0;
+      final ValueNotifier<double> volumeNotifier = ValueNotifier(initValue);
       showDialog(
         context: context,
         barrierColor: Colors.transparent,
         barrierDismissible: true,
-        builder: (context) {
+        builder: (_) {
           return Stack(
             children: [
               Positioned.fromRect(
@@ -54,21 +59,29 @@ class QTPlayerView extends StatelessWidget {
                 child: Card(
                   child: Column(
                     children: [
-                      Icon(FluentIcons.volume3),
+                      const Icon(FluentIcons.volume3),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                             vertical: 8,
                           ),
-                          child: Slider(
-                            onChanged: (value) {},
-                            value: 0.5,
-                            max: 1,
-                            vertical: true,
+                          child: ValueListenableBuilder(
+                            valueListenable: volumeNotifier,
+                            builder: (context, volume, _) {
+                              return Slider(
+                                onChanged: (value) {
+                                  volumeNotifier.value = value;
+                                  onChanged(value);
+                                },
+                                value: volume,
+                                max: 1,
+                                vertical: true,
+                              );
+                            },
                           ),
                         ),
                       ),
-                      Icon(FluentIcons.volume0),
+                      const Icon(FluentIcons.volume_disabled),
                     ],
                   ),
                 ),
@@ -79,14 +92,36 @@ class QTPlayerView extends StatelessWidget {
       );
     }
 
-    return Builder(builder: (context) {
-      return IconButton(
-        onPressed: () {
-          showSlider(context);
-        },
-        icon: const Icon(FluentIcons.volume_disabled),
-      );
-    });
+    return BlocBuilder<QTPlayerBloc, QTPlayerState>(
+      builder: (context, state) {
+        final bloc = BlocProvider.of<QTPlayerBloc>(context);
+        final volume = state.audio.volume;
+        final volumeIcon = Icon(() {
+          if (volume == 0) {
+            return FluentIcons.volume_disabled;
+          }
+          if (volume < 0.3) {
+            return FluentIcons.volume1;
+          }
+          if (volume < 0.6) {
+            return FluentIcons.volume2;
+          }
+          return FluentIcons.volume3;
+        }());
+        return IconButton(
+          onPressed: () {
+            showSlider(
+              context,
+              initValue: volume,
+              onChanged: (volume) {
+                bloc.add(QTPlayerOnChangedVolume(volume));
+              },
+            );
+          },
+          icon: volumeIcon,
+        );
+      },
+    );
   }
 
   Widget progressBar({
@@ -111,13 +146,17 @@ class QTPlayerView extends StatelessWidget {
   }) {
     final current = QuiteTimeFormat.duration(position);
     final total = QuiteTimeFormat.duration(duration);
-    return AnimatedDefaultTextStyle(
-      duration: const Duration(milliseconds: 300),
-      style: TextStyle(
-        // fontSize: durationTextNotifier.value ? 15 : 14,
-        color: Colors.black,
-      ),
-      child: Text("$current / $total"),
+    return BlocBuilder<QTPlayerBloc, QTPlayerState>(
+      builder: (context, state) {
+        return AnimatedDefaultTextStyle(
+          duration: const Duration(milliseconds: 300),
+          style: TextStyle(
+            fontSize: state.isChangingDuration ? 15 : 14,
+            color: Colors.black,
+          ),
+          child: Text("$current / $total"),
+        );
+      },
     );
   }
 

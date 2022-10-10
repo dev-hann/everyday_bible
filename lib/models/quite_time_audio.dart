@@ -9,6 +9,7 @@ class QuiteTimeAudio extends Equatable {
     this.url = "",
     this.position = Duration.zero,
     this.duration = Duration.zero,
+    this.volume = 0.0,
   });
   final AudioState state;
   final bool isPlaying;
@@ -16,7 +17,7 @@ class QuiteTimeAudio extends Equatable {
   final String url;
   final Duration position;
   final Duration duration;
-
+  final double volume;
   @override
   List<Object?> get props => [
         title,
@@ -25,6 +26,7 @@ class QuiteTimeAudio extends Equatable {
         position,
         duration,
         url,
+        volume,
       ];
 
   QuiteTimeAudio copyWith({
@@ -34,6 +36,7 @@ class QuiteTimeAudio extends Equatable {
     String? url,
     Duration? position,
     Duration? duration,
+    double? volume,
   }) {
     return QuiteTimeAudio(
       state: state ?? this.state,
@@ -42,6 +45,7 @@ class QuiteTimeAudio extends Equatable {
       url: url ?? this.url,
       position: position ?? this.position,
       duration: duration ?? this.duration,
+      volume: volume ?? this.volume,
     );
   }
 }

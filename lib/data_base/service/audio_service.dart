@@ -7,7 +7,7 @@ class AudioService {
   final StreamController streamController = StreamController.broadcast();
 
   Stream<PlayerState> stateStream() {
-      return player.playerStateStream;
+    return player.playerStateStream;
   }
 
   Stream<Duration?> durationStream() {
@@ -41,5 +41,13 @@ class AudioService {
 
   Future dispose() {
     return player.dispose();
+  }
+
+  double getVolume() {
+    return player.volume;
+  }
+
+  Future setVolume(double value) {
+    return player.setVolume(value);
   }
 }

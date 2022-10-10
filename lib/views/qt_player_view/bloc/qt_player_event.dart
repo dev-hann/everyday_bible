@@ -45,3 +45,11 @@ class QTPlayerOnChangeDurationEnd extends QTPlayerEvent {
   @override
   List<Object?> get props => [value];
 }
+
+class QTPlayerOnChangedVolume extends QTPlayerEvent {
+  QTPlayerOnChangedVolume(this.volume);
+  final double volume;
+
+  @override
+  List<Object?> get props => [volume];
+}
