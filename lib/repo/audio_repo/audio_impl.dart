@@ -9,10 +9,15 @@ class AudioImpl extends AudioRepo {
   AudioState state = AudioState.idle;
   bool isPlaying = false;
   @override
-  Future init() async {}
+  Future init() async {
+  }
 
   @override
   Future loadAudio(String audioURL) async {
+    final bible = BibleDatabase();
+    await bible.init();
+    await bible.loadBible();
+
     await audioService.loadAudio(audioURL);
     audioService.stateStream().listen((event) {
       state = AudioState.values[event.processingState.index];
