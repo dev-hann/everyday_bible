@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class QTView extends StatelessWidget {
   const QTView({super.key});
 
-  Widget headerWidget() {
+  Widget header() {
     return BlocBuilder<QTBloc, QTState>(
       builder: (context, state) {
         final data = state.qtData!;
@@ -104,7 +104,7 @@ class QTView extends StatelessWidget {
           // final bloc = BlocProvider.of<QTBloc>(context);
           final qt = state.qtData!;
           return ScaffoldPage.scrollable(
-            header: headerWidget(),
+            header: header(),
             bottomBar: player(),
             children: body(qt.gospelList),
           );

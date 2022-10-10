@@ -1,30 +1,30 @@
 part of bible_repo;
 
 class BibleImpl extends BibleRepo {
-  final BibleBox bibleBox = BibleBox();
+  final BibleDatabase bibleDB = BibleDatabase();
 
   @override
   bool isExistDB() {
-    return !bibleBox.isEmpty;
+    return !bibleDB.isEmpty;
   }
 
   @override
   Future init() async {
-    await bibleBox.openBox();
+    await bibleDB.init();
   }
 
   @override
   Future clearDB() {
-    return bibleBox.clearBox();
+    return bibleDB.deleteDB();
   }
 
   @override
-  Future createDB()async {
-    
+  Future createDB() async {
+
   }
 
   @override
   dynamic loadBible() {
-    return bibleBox.loadBible();
+    return bibleDB.createDB();
   }
 }
