@@ -16,9 +16,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   )   : bibleUseCase = BibleUseCase(bibleRepo),
         super(const HomeState()) {
     on<HomeInited>(_onInit);
+    on<HomeOnTapPane>(_onTapPane);
   }
 
   final BibleUseCase bibleUseCase;
 
   FutureOr<void> _onInit(HomeInited event, Emitter<HomeState> emit) {}
+
+  FutureOr<void> _onTapPane(HomeOnTapPane event, Emitter<HomeState> emit) {
+    emit(
+      state.copyWith(paneIndex: event.paneIndex),
+    );
+  }
 }

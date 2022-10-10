@@ -2,6 +2,8 @@ import 'package:everydaybible/repo/audio_repo/repo_audio.dart';
 import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
 import 'package:everydaybible/repo/qt_repo/qt_repo.dart';
 import 'package:everydaybible/repo/repo.dart';
+import 'package:everydaybible/views/bible_view/bible_view.dart';
+import 'package:everydaybible/views/bible_view/bloc/bible_bloc.dart';
 import 'package:everydaybible/views/home_view/bloc/home_bloc.dart';
 import 'package:everydaybible/views/qt_player_view/bloc/qt_player_bloc.dart';
 import 'package:everydaybible/views/qt_view/bloc/qt_bloc.dart';
@@ -40,6 +42,11 @@ class HomeView extends StatelessWidget {
               create: (_) => QTPlayerBloc(
                 Repo.of<AudioRepo>(context),
               ),
+            ),
+            BlocProvider(
+              create: (_) => BibleBloc(
+                Repo.of<BibleRepo>(context),
+              )..add(BibleInited()),
             )
           ],
           child: const HomeView(),
@@ -57,9 +64,17 @@ class HomeView extends StatelessWidget {
 
   PaneItem qtPaneItem() {
     return PaneItem(
-      icon: const Icon(FluentIcons.shop),
+      icon: const Icon(FluentIcons.storyboard),
       title: const Text("QuiteTime"),
       body: const QTView(),
+    );
+  }
+
+  PaneItem biblePaneItem() {
+    return PaneItem(
+      icon: const Icon(FluentIcons.read),
+      title: const Text("Bible"),
+      body: const BibleView(),
     );
   }
 
@@ -67,13 +82,17 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
-        // final bloc = BlocProvider.of<HomeBloc>(context);
+        final bloc = BlocProvider.of<HomeBloc>(context);
         return NavigationView(
           appBar: appBar(),
           pane: NavigationPane(
-            selected: 0,
+            selected: state.paneIndex,
+            onChanged: (index) {
+              bloc.add(HomeOnTapPane(index));
+            },
             items: [
               qtPaneItem(),
+              biblePaneItem(),
             ],
           ),
         );
