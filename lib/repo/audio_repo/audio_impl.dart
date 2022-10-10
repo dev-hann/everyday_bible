@@ -76,4 +76,14 @@ class AudioImpl extends AudioRepo {
   Future setLoopMode(int index) {
     return audioService.setLoopMode(index);
   }
+
+  @override
+  double getVolume() {
+    return audioService.getVolume();
+  }
+
+  @override
+  Future setVolume(double value) {
+    return audioService.setVolume(value);
+  }
 }

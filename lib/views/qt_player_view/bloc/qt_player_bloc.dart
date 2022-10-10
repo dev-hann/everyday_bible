@@ -22,6 +22,7 @@ class QTPlayerBloc extends Bloc<QTPlayerEvent, QTPlayerState> {
     on<QTPlayerOnChangeDurationStart>(_onChangedDurationStart);
     on<QTPlayerOnChangeDuration>(_onChangedDuration);
     on<QTPlayerOnChangeDurationEnd>(_onChangedDurationEnd);
+    on<QTPlayerOnChangedVolume>(_onChangedVolume);
   }
 
   final AudioUseCase audioUseCase;
@@ -34,6 +35,7 @@ class QTPlayerBloc extends Bloc<QTPlayerEvent, QTPlayerState> {
         audio: QuiteTimeAudio(
           title: event.title,
           url: event.audioURL,
+          volume: audioUseCase.getVolume(),
         ),
       ),
     );
@@ -96,6 +98,18 @@ class QTPlayerBloc extends Bloc<QTPlayerEvent, QTPlayerState> {
     emit(
       state.copyWith(
         isChangingDuration: false,
+      ),
+    );
+  }
+
+  FutureOr<void> _onChangedVolume(
+      QTPlayerOnChangedVolume event, Emitter<QTPlayerState> emit) async {
+    await audioUseCase.setVolume(event.volume);
+    emit(
+      state.copyWith(
+        audio: state.audio.copyWith(
+          volume: audioUseCase.getVolume(),
+        ),
       ),
     );
   }

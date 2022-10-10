@@ -14,6 +14,9 @@ abstract class AudioRepo extends Repo {
 
   Future setLoopMode(int index);
 
+  double getVolume();
+  Future setVolume(double value);
+
   Future loadAudio(String audioURL);
   Future playAudio();
   Future pauseAudio();
