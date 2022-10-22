@@ -1,5 +1,4 @@
 import 'package:everydaybible/data_base/data/box.dart';
-import 'package:everydaybible/enum/text_scale_factor.dart';
 import 'package:everydaybible/repo/audio_repo/repo_audio.dart';
 import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
 import 'package:everydaybible/repo/qt_repo/qt_repo.dart';

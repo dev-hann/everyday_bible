@@ -21,7 +21,9 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
   }
   final SettingUseCase settingUseCase;
 
-  FutureOr<void> _onInit(SettingInited event, Emitter<SettingState> emit) {
+  FutureOr<void> _onInit(
+      SettingInited event, Emitter<SettingState> emit) async {
+    await settingUseCase.init();
     final setting = settingUseCase.loadSetting();
     emit(
       state.copyWith(
@@ -32,10 +34,12 @@ class SettingBloc extends Bloc<SettingEvent, SettingState> {
   }
 
   FutureOr<void> _onChangedSetting(
-      SettingOnChanged event, Emitter<SettingState> emit) {
+      SettingOnChanged event, Emitter<SettingState> emit) async {
+    final setting = event.setting;
+    await settingUseCase.updateSetting(setting);
     emit(
       state.copyWith(
-        setting: event.setting,
+        setting: setting,
       ),
     );
   }
