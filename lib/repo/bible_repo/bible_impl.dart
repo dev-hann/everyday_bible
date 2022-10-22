@@ -10,7 +10,7 @@ class BibleImpl extends BibleRepo {
 
   @override
   Future init() async {
-    await bibleDB.init();
+    // await bibleDB.init();
   }
 
   @override

@@ -8,6 +8,7 @@ import 'package:everydaybible/views/home_view/bloc/home_bloc.dart';
 import 'package:everydaybible/views/qt_player_view/bloc/qt_player_bloc.dart';
 import 'package:everydaybible/views/qt_view/bloc/qt_bloc.dart';
 import 'package:everydaybible/views/qt_view/qt_view.dart';
+import 'package:everydaybible/views/setting_view/setting_view.dart';
 import 'package:everydaybible/widgets/bible_logo.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
@@ -77,6 +78,13 @@ class HomeView extends StatelessWidget {
       body: const BibleView(),
     );
   }
+  PaneItem settingPaneItem() {
+    return PaneItem(
+      icon: const Icon(FluentIcons.settings),
+      title: const Text("Setting"),
+      body: const SettingView(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +101,7 @@ class HomeView extends StatelessWidget {
             items: [
               qtPaneItem(),
               biblePaneItem(),
+              settingPaneItem(),
             ],
           ),
         );
