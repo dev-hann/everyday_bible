@@ -152,7 +152,6 @@ class QTPlayerView extends StatelessWidget {
           duration: const Duration(milliseconds: 300),
           style: TextStyle(
             fontSize: state.isChangingDuration ? 15 : 14,
-            color: Colors.black,
           ),
           child: Text("$current / $total"),
         );
