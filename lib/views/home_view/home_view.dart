@@ -92,6 +92,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingBloc, SettingState>(builder: (context, state) {
+      
       return MediaQuery(
         data: MediaQuery.of(context).copyWith(
           textScaleFactor: state.setting.textScaleFactor.toScaleFactor(),

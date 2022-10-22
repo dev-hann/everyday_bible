@@ -11,4 +11,9 @@ class SettingImpl extends SettingRepo {
   dynamic loadSetting() {
     return settingBox.loadSetting();
   }
+
+  @override
+  Future updateSetting(Map<String, dynamic> data) {
+    return settingBox.updateSetting(data);
+  }
 }

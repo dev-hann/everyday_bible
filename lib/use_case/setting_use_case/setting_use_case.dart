@@ -13,4 +13,8 @@ class SettingUseCase extends UseCase<SettingRepo> {
       return const Setting();
     }
   }
+
+  Future updateSetting(Setting setting) {
+    return repo.updateSetting(setting.toMap());
+  }
 }
