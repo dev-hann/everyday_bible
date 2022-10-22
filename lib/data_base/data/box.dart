@@ -1,8 +1,17 @@
+import 'dart:io';
+
 import 'package:hive_flutter/hive_flutter.dart';
 
+final user = Platform.environment["USER"];
+final configDir = "/home/$user/.config/everyday_bible";
+
 abstract class LocalBox {
-  static Future init() {
-    return Hive.initFlutter();
+  static Future init() async {
+    final dir = Directory(configDir);
+    if (!await dir.exists()) {
+      await dir.create();
+    }
+    return Hive.initFlutter(configDir);
   }
 
   String get name;
@@ -20,6 +29,3 @@ abstract class LocalBox {
     await box.clear();
   }
 }
-
-
-
