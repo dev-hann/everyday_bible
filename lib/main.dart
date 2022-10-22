@@ -1,4 +1,5 @@
 import 'package:everydaybible/data_base/data/box.dart';
+import 'package:everydaybible/enum/text_scale_factor.dart';
 import 'package:everydaybible/repo/audio_repo/repo_audio.dart';
 import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
 import 'package:everydaybible/repo/qt_repo/qt_repo.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
     return BlocBuilder<SettingBloc, SettingState>(
       builder: (context, state) {
         final status = state.status;
+        final setting = state.setting;
         switch (status) {
           case SettingViewStatus.init:
             return const BibleLoading();
@@ -46,7 +48,7 @@ class MyApp extends StatelessWidget {
         return FluentApp(
           title: "Everyday Bible",
           debugShowCheckedModeBanner: false,
-          themeMode: state.setting.themeMode,
+          themeMode: setting.themeMode,
           darkTheme: ThemeData.dark(),
           home: const IntroView(),
         );

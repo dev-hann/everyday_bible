@@ -1,3 +1,4 @@
+import 'package:everydaybible/enum/text_scale_factor.dart';
 import 'package:everydaybible/repo/audio_repo/repo_audio.dart';
 import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
 import 'package:everydaybible/repo/qt_repo/qt_repo.dart';
@@ -8,6 +9,7 @@ import 'package:everydaybible/views/home_view/bloc/home_bloc.dart';
 import 'package:everydaybible/views/qt_player_view/bloc/qt_player_bloc.dart';
 import 'package:everydaybible/views/qt_view/bloc/qt_bloc.dart';
 import 'package:everydaybible/views/qt_view/qt_view.dart';
+import 'package:everydaybible/views/setting_view/bloc/setting_bloc.dart';
 import 'package:everydaybible/views/setting_view/setting_view.dart';
 import 'package:everydaybible/widgets/bible_logo.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -78,6 +80,7 @@ class HomeView extends StatelessWidget {
       body: const BibleView(),
     );
   }
+
   PaneItem settingPaneItem() {
     return PaneItem(
       icon: const Icon(FluentIcons.settings),
@@ -88,24 +91,31 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
-      builder: (context, state) {
-        final bloc = BlocProvider.of<HomeBloc>(context);
-        return NavigationView(
-          appBar: appBar(),
-          pane: NavigationPane(
-            selected: state.paneIndex,
-            onChanged: (index) {
-              bloc.add(HomeOnTapPane(index));
-            },
-            items: [
-              qtPaneItem(),
-              biblePaneItem(),
-              settingPaneItem(),
-            ],
-          ),
-        );
-      },
-    );
+    return BlocBuilder<SettingBloc, SettingState>(builder: (context, state) {
+      return MediaQuery(
+        data: MediaQuery.of(context).copyWith(
+          textScaleFactor: state.setting.textScaleFactor.toScaleFactor(),
+        ),
+        child: BlocBuilder<HomeBloc, HomeState>(
+          builder: (context, state) {
+            final bloc = BlocProvider.of<HomeBloc>(context);
+            return NavigationView(
+              appBar: appBar(),
+              pane: NavigationPane(
+                selected: state.paneIndex,
+                onChanged: (index) {
+                  bloc.add(HomeOnTapPane(index));
+                },
+                items: [
+                  qtPaneItem(),
+                  biblePaneItem(),
+                  settingPaneItem(),
+                ],
+              ),
+            );
+          },
+        ),
+      );
+    });
   }
 }
