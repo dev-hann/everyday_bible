@@ -7,4 +7,8 @@ class SettingImpl extends SettingRepo {
     return settingBox.openBox();
   }
 
+  @override
+  dynamic loadSetting() {
+    return settingBox.loadSetting();
+  }
 }

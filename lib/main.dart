@@ -4,13 +4,14 @@ import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
 import 'package:everydaybible/repo/qt_repo/qt_repo.dart';
 import 'package:everydaybible/repo/setting_repo/repo_setting.dart';
 import 'package:everydaybible/views/intro_view/intro_view.dart';
+import 'package:everydaybible/views/setting_view/bloc/setting_bloc.dart';
+import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   await LocalBox.init();
   final settingRepo = SettingImpl();
-  await settingRepo.init();
   runApp(
     MultiRepositoryProvider(
       providers: [
@@ -19,7 +20,10 @@ void main() async {
         RepositoryProvider<AudioRepo>(create: (_) => AudioImpl()),
         RepositoryProvider<SettingRepo>(create: (_) => settingRepo),
       ],
-      child: const MyApp(),
+      child: BlocProvider(
+        create: (_) => SettingBloc(settingRepo)..add(SettingInited()),
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -29,10 +33,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const FluentApp(
-      title: "Everyday Bible",
-      debugShowCheckedModeBanner: false,
-      home: IntroView(),
+    return BlocBuilder<SettingBloc, SettingState>(
+      builder: (context, state) {
+        final status = state.status;
+        switch (status) {
+          case SettingViewStatus.init:
+            return const BibleLoading();
+          case SettingViewStatus.loading:
+          case SettingViewStatus.fail:
+          case SettingViewStatus.success:
+        }
+        return FluentApp(
+          title: "Everyday Bible",
+          debugShowCheckedModeBanner: false,
+          themeMode: state.setting.themeMode,
+          darkTheme: ThemeData.dark(),
+          home: const IntroView(),
+        );
+      },
     );
   }
 }
