@@ -5,6 +5,7 @@ import 'package:everydaybible/repo/qt_repo/qt_repo.dart';
 import 'package:everydaybible/repo/repo.dart';
 import 'package:everydaybible/views/bible_view/bible_view.dart';
 import 'package:everydaybible/views/bible_view/bloc/bible_bloc.dart';
+import 'package:everydaybible/views/favorite_view/favorite_view.dart';
 import 'package:everydaybible/views/home_view/bloc/home_bloc.dart';
 import 'package:everydaybible/views/qt_player_view/bloc/qt_player_bloc.dart';
 import 'package:everydaybible/views/qt_view/bloc/qt_bloc.dart';
@@ -81,6 +82,13 @@ class HomeView extends StatelessWidget {
     );
   }
 
+  PaneItem favoritePaneItem() {
+    return PaneItem(
+      icon: const Icon(FluentIcons.heart),
+      title: const Text("Favorite"),
+      body: const FavoriteView(),
+    );
+  }
   PaneItem settingPaneItem() {
     return PaneItem(
       icon: const Icon(FluentIcons.settings),
@@ -110,6 +118,7 @@ class HomeView extends StatelessWidget {
                 items: [
                   qtPaneItem(),
                   biblePaneItem(),
+                  favoritePaneItem(),
                   settingPaneItem(),
                 ],
               ),
