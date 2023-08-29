@@ -17,4 +17,12 @@ class BibleState extends Equatable {
   List<Object> get props => [
         status,
       ];
+
+  BibleState copyWith({
+    BibleViewStatus? status,
+  }) {
+    return BibleState(
+      status: status ?? this.status,
+    );
+  }
 }

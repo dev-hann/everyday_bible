@@ -6,3 +6,5 @@ abstract class BibleEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class BibleEventInited extends BibleEvent {}
