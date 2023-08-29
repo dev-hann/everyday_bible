@@ -4,7 +4,7 @@ description: Everyday Read Bible Amen.
 version: 2.0.0+1
 
 environment:
-  sdk: '>=2.18.1 <3.0.0'
+  sdk: ">=2.18.1 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -16,25 +16,23 @@ dependencies:
   html: ^0.15.0
   http:
   intl:
-  
+
   # UI
   fluent_ui: ^4.0.2
-    
+
   # Database
   hive: ^2.0.0
   hive_flutter: ^1.0.0
-  sqflite: ^2.1.0+1
-  sqflite_common_ffi:
-  path_provider:
 
   # StateManage
-  flutter_bloc: 
+  flutter_bloc:
+  bloc:
 
   # Network
-  dio: any 
+  dio: any
 
   # Utils
-  equatable: 
+  equatable:
   dartz:
 
   # audioplayers: ^1.1.0
@@ -42,8 +40,8 @@ dependencies:
   just_audio_mpv: any
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.10.0
-  flutter_lints: 
+  flutter_launcher_icons: ^0.13.1
+  flutter_lints:
   flutter_test:
     sdk: flutter
 
@@ -54,12 +52,12 @@ flutter_icons:
 flutter:
   uses-material-design: true
   fonts:
-  - family: Fondamento
-    fonts:
-    - asset: assets/fonts/Fondamento-Regular.ttf
-  - family: Norican
-    fonts:
-    - asset: assets/fonts/Norican-Regular.ttf
+    - family: Fondamento
+      fonts:
+        - asset: assets/fonts/Fondamento-Regular.ttf
+    - family: Norican
+      fonts:
+        - asset: assets/fonts/Norican-Regular.ttf
 
   assets:
     - assets/

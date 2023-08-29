@@ -1,11 +1,12 @@
 part of bible_repo;
 
 class BibleImpl extends BibleRepo {
-  final BibleDatabase bibleDB = BibleDatabase();
+  // final BibleDatabase bibleDB = BibleDatabase();
 
   @override
   bool isExistDB() {
-    return !bibleDB.isEmpty;
+    throw Exception();
+    // return !bibleDB.isEmpty;
   }
 
   @override
@@ -15,16 +16,16 @@ class BibleImpl extends BibleRepo {
 
   @override
   Future clearDB() {
-    return bibleDB.deleteDB();
+    throw Exception();
+    // return bibleDB.deleteDB();
   }
 
   @override
-  Future createDB() async {
-
-  }
+  Future createDB() async {}
 
   @override
   dynamic loadBible() {
-    return bibleDB.createDB();
+    throw Exception();
+    // return bibleDB.createDB();
   }
 }
