@@ -1,17 +1,17 @@
-import 'package:everydaybible/enum/loop_mode.dart';
-import 'package:everydaybible/models/quite_time_duration.dart';
+import 'package:everydaybible/models/audio/audio_state.dart';
 import 'package:everydaybible/repo/audio_repo/repo_audio.dart';
 import 'package:everydaybible/use_case/use_case.dart';
+import 'package:just_audio/just_audio.dart';
 
 class AudioUseCase extends UseCase<AudioRepo> {
   AudioUseCase(super.repo);
 
-  Stream<QuiteTimeDuration> durationStream() {
-    return repo.durationStream();
+  Stream<AudioState> stateStream() {
+    return repo.stateStream();
   }
 
   Future setLoopMode(LoopMode mode) {
-    return repo.setLoopMode(mode.index);
+    return repo.setLoopMode(mode);
   }
 
   Future loadAudio(String audioURL) {
@@ -28,10 +28,6 @@ class AudioUseCase extends UseCase<AudioRepo> {
 
   Future seekAudio(Duration duration) {
     return repo.seekAudio(duration);
-  }
-
-  double getVolume() {
-    return repo.getVolume();
   }
 
   Future setVolume(double value) {

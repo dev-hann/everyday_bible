@@ -30,7 +30,10 @@ class _BibleViewState extends State<BibleView> {
           case BibleViewStatus.failure:
           case BibleViewStatus.success:
         }
-        return const Text("Bible View");
+        return ScaffoldPage.scrollable(
+          header: Text("Title"),
+          children: [],
+        );
       },
     );
   }

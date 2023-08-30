@@ -1,7 +1,7 @@
 part of bible;
 
 class BibleChapter extends Equatable {
-  BibleChapter(this.index, this.verseList);
+  const BibleChapter(this.index, this.verseList);
 
   final int index;
   final List<String> verseList;

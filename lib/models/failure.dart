@@ -1,17 +1,20 @@
 import 'package:equatable/equatable.dart';
 
 class Failure extends Equatable {
-  const Failure({this.message});
-  final String? message;
+  const Failure(
+    this.message, {
+    this.data,
+  });
+  final String message;
+  final dynamic data;
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [
+        message,
+        data,
+      ];
 
-  factory Failure.fromException(Object e) {
-    return Failure(message: e.toString());
-  }
-
-  factory Failure.emptyData() {
-    return const Failure(message: "EmptyData");
+  factory Failure.fromException(dynamic e) {
+    return Failure(e.toString());
   }
 }

@@ -1,90 +1,71 @@
 part of audio_repo;
 
 class AudioImpl extends AudioRepo {
-  final AudioService audioService = AudioService();
-  final StreamController<QuiteTimeDuration> _durationStream =
+  final AudioPlayer player = AudioPlayer();
+  AudioState state = const AudioState();
+  void updateState(AudioState Function(AudioState newState) callback) {
+    state = callback(state);
+    _streamController.add(state);
+  }
+
+  final StreamController<AudioState> _streamController =
       StreamController.broadcast();
-  Duration position = Duration.zero;
-  Duration duration = Duration.zero;
-  AudioState state = AudioState.idle;
-  bool isPlaying = false;
+
   @override
-  Future init() async {
+  Stream<AudioState> stateStream() {
+    return _streamController.stream;
   }
 
   @override
   Future loadAudio(String audioURL) async {
-    await audioService.loadAudio(audioURL);
-    audioService.stateStream().listen((event) {
-      state = AudioState.values[event.processingState.index];
-      isPlaying = event.playing;
-      _durationStream.add(
-        QuiteTimeDuration(
-          isPlaying: isPlaying,
-          state: state,
-          position: position,
-          duration: duration,
-        ),
-      );
+    await player.dispose();
+    await player.setUrl(audioURL);
+    updateState(
+      (newState) => newState.copyWith(url: audioURL),
+    );
+    player.durationStream.listen((event) {
+      updateState((newState) => newState.copyWith(duration: event));
     });
-    audioService.durationStream().listen((event) {
-      if (event != null) {
-        duration = event;
-        _durationStream.add(
-          QuiteTimeDuration(
-            isPlaying: isPlaying,
-            state: state,
-            position: position,
-            duration: duration,
-          ),
-        );
-      }
+    player.positionStream.listen((event) {
+      updateState((newState) => newState.copyWith(position: event));
     });
-    audioService.positionStream().listen((event) {
-      position = event;
-      _durationStream.add(
-        QuiteTimeDuration(
-          isPlaying: isPlaying,
-          state: state,
-          position: position,
-          duration: duration,
-        ),
-      );
+    player.playingStream.listen((event) {
+      updateState((newState) => newState.copyWith(playing: event));
+    });
+    player.playerStateStream.listen((event) {
+      updateState(
+          (newState) => newState.copyWith(state: event.processingState));
+    });
+    player.volumeStream.listen((event) {
+      updateState((newState) => newState.copyWith(volume: event));
     });
   }
 
   @override
-  Future pauseAudio() {
-    return audioService.pause();
+  Future pauseAudio() async {
+    await player.pause();
+    updateState((newState) => newState.copyWith(playing: false));
   }
 
   @override
-  Future playAudio() {
-    return audioService.play();
+  Future playAudio() async {
+    await player.play();
+    updateState((newState) => newState.copyWith(playing: true));
   }
 
   @override
   Future seekAudio(Duration duration) {
-    return audioService.seek(duration);
+    return player.seek(duration);
   }
 
   @override
-  Stream<QuiteTimeDuration> durationStream() {
-    return _durationStream.stream;
-  }
-
-  @override
-  Future setLoopMode(int index) {
-    return audioService.setLoopMode(index);
-  }
-
-  @override
-  double getVolume() {
-    return audioService.getVolume();
+  Future setLoopMode(LoopMode loopMode) async {
+    await player.setLoopMode(loopMode);
+    updateState((newState) => newState.copyWith(loopMode: loopMode));
   }
 
   @override
   Future setVolume(double value) {
-    return audioService.setVolume(value);
+    return player.setVolume(value);
   }
 }

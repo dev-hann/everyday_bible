@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:everydaybible/models/bible/bible_data.dart';
 
 part 'bible_event.dart';
 part 'bible_state.dart';

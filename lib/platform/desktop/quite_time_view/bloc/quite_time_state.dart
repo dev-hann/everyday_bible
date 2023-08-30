@@ -8,21 +8,31 @@ enum QuiteTimeViewStatus {
 }
 
 class QuiteTimeState extends Equatable {
-  const QuiteTimeState({
+  QuiteTimeState({
     this.status = QuiteTimeViewStatus.init,
-  });
+    this.quiteTime,
+    DateTime? dateTime,
+  }) : dateTime = dateTime ?? DateTime.now();
   final QuiteTimeViewStatus status;
+  final DateTime dateTime;
+  final QuiteTime? quiteTime;
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         status,
+        dateTime,
+        quiteTime,
       ];
 
   QuiteTimeState copyWith({
     QuiteTimeViewStatus? status,
+    DateTime? dateTime,
+    QuiteTime? quiteTime,
   }) {
     return QuiteTimeState(
       status: status ?? this.status,
+      dateTime: dateTime ?? this.dateTime,
+      quiteTime: quiteTime ?? this.quiteTime,
     );
   }
 }

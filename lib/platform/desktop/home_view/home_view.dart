@@ -53,11 +53,11 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  PaneItem settingPaneItem() {
+  PaneItem settingView() {
     return PaneItem(
       icon: const Icon(FluentIcons.settings),
-      title: const Text("Option"),
-      body: const Text("Option"),
+      title: const Text("Setting"),
+      body: const Text("Setting"),
     );
   }
 
@@ -84,7 +84,7 @@ class _HomeViewState extends State<HomeView> {
               quiteTimeView(),
               bibleView(),
               favoritePaneItem(),
-              settingPaneItem(),
+              settingView(),
             ],
           ),
         );
