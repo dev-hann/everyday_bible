@@ -17,13 +17,6 @@ class _QuiteTimeViewState extends State<QuiteTimeView> {
   QuiteTimeBloc get bloc => BlocProvider.of(context);
   AudioPlayerBloc get audioBloc => BlocProvider.of(context);
 
-  @override
-  void initState() {
-    super.initState();
-    bloc.add(const QuiteTimeEventInited());
-    audioBloc.add(const AudioPlayerEventInited());
-  }
-
   Widget headerWidget({
     required String title,
     required String subTitle,
@@ -102,8 +95,8 @@ class _QuiteTimeViewState extends State<QuiteTimeView> {
           ),
           bottomBar: player(),
           children: quiteTime.gospelList.map((item) {
-            return GospelText(
-              index: item.verse.toString(),
+            return VerseText(
+              index: item.verse,
               text: item.gospel,
             );
           }).toList(),

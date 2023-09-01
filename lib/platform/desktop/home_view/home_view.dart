@@ -1,6 +1,7 @@
 import 'package:everydaybible/platform/desktop/bible_view/bible_view.dart';
 import 'package:everydaybible/platform/desktop/home_view/bloc/home_bloc.dart';
 import 'package:everydaybible/platform/desktop/quite_time_view/quite_time_view.dart';
+import 'package:everydaybible/platform/desktop/setting_view/setting_view.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:everydaybible/widgets/bible_logo.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -57,7 +58,7 @@ class _HomeViewState extends State<HomeView> {
     return PaneItem(
       icon: const Icon(FluentIcons.settings),
       title: const Text("Setting"),
-      body: const Text("Setting"),
+      body: const SettingView(),
     );
   }
 

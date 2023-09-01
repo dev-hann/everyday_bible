@@ -18,7 +18,9 @@ class AudioImpl extends AudioRepo {
 
   @override
   Future loadAudio(String audioURL) async {
-    await player.dispose();
+    if (player.audioSource != null) {
+      player.dispose();
+    }
     await player.setUrl(audioURL);
     updateState(
       (newState) => newState.copyWith(url: audioURL),

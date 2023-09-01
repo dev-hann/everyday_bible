@@ -12,7 +12,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<HomeEventUpdatedIndex>(_onUpdatedIndex);
   }
 
-  FutureOr<void> _onInited(HomeEventInited event, Emitter<HomeState> emit) {
+  FutureOr<void> _onInited(
+      HomeEventInited event, Emitter<HomeState> emit) async {
     emit(
       state.copyWith(
         status: HomeViewStatus.success,

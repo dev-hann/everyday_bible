@@ -1,4 +1,8 @@
-import 'package:everydaybible/platform/desktop/main.dart';
+import 'dart:io';
+
+import 'package:everydaybible/platform/desktop/main.dart' as desktop;
+import 'package:everydaybible/platform/mobile/main.dart' as mobile;
+
 import 'package:everydaybible/repo/audio_repo/repo_audio.dart';
 import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
 import 'package:everydaybible/repo/quite_time_repo/quite_time_repo.dart';
@@ -8,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   // await LocalBox.init();
+  final isMobile = Platform.isAndroid || Platform.isIOS;
   runApp(
     MultiRepositoryProvider(
       providers: [
@@ -16,7 +21,7 @@ void main() async {
         RepositoryProvider<AudioRepo>(create: (_) => AudioImpl()),
         RepositoryProvider<SettingRepo>(create: (_) => SettingImpl()),
       ],
-      child: const MyApp(),
+      child: isMobile ? const mobile.App() : const desktop.App(),
     ),
   );
 }

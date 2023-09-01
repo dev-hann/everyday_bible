@@ -1,4 +1,3 @@
-import 'package:everydaybible/models/quite_time_format.dart';
 import 'package:everydaybible/platform/desktop/audio_player_view/bloc/audio_player_bloc.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -133,8 +132,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
       valueListenable: valueNotifier,
       builder: (context, value, _) {
         return Slider(
-          value: position.inMilliseconds.toDouble(),
-          max: duration.inMilliseconds.toDouble(),
+          value: value,
           onChanged: (value) {
             valueNotifier.value = value;
           },
@@ -148,12 +146,19 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
     );
   }
 
+  String convertDurationText(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$twoDigitMinutes:$twoDigitSeconds";
+  }
+
   Widget durationText({
     required Duration position,
     required Duration duration,
   }) {
-    final current = QuiteTimeFormat.duration(position);
-    final total = QuiteTimeFormat.duration(duration);
+    final current = convertDurationText(position);
+    final total = convertDurationText(duration);
     return AnimatedDefaultTextStyle(
       duration: const Duration(milliseconds: 300),
       style: const TextStyle(

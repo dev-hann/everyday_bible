@@ -13,7 +13,6 @@ dependencies:
 
   font_awesome_flutter:
   cupertino_icons: ^1.0.2
-  html: ^0.15.0
   http:
   intl:
 
@@ -34,6 +33,7 @@ dependencies:
   # Utils
   equatable:
   dartz:
+  html:
 
   # audioplayers: ^1.1.0
   just_audio: ^0.9.29
@@ -45,10 +45,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-flutter_icons:
+flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
+  remove_alpha_ios: true
   image_path: "assets/logo.png"
+  macos:
+    generate: true
 flutter:
   uses-material-design: true
   fonts:
@@ -61,4 +64,3 @@ flutter:
 
   assets:
     - assets/
-    - assets/bible_db/

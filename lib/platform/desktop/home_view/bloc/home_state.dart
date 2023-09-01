@@ -10,7 +10,7 @@ enum HomeViewStatus {
 class HomeState extends Equatable {
   const HomeState({
     this.status = HomeViewStatus.init,
-    this.index = 0,
+    this.index = 1,
   });
   final HomeViewStatus status;
   final int index;

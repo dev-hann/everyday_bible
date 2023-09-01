@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class GospelText extends StatelessWidget {
-  const GospelText({
+class VerseText extends StatelessWidget {
+  const VerseText({
     super.key,
     required this.index,
     required this.text,
   });
-  final String index;
+  final int index;
   final String text;
   Widget indexView() {
     return Row(
       children: [
-        Text(index),
+        Text("$index"),
         const SizedBox(width: 8),
         const Expanded(child: Divider()),
       ],
@@ -26,7 +26,7 @@ class GospelText extends StatelessWidget {
         indexView(),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(text),
+          child: SelectableText(text),
         ),
       ],
     );

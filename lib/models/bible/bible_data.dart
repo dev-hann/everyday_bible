@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:everydaybible/models/bible/bible_chapter.dart';
 
 class BibleData extends Equatable {
   const BibleData({
@@ -24,28 +25,6 @@ class BibleData extends Equatable {
       chatperList: List.from(map["chapters"])
           .map((e) => BibleChapter.fromMap(e))
           .toList(),
-    );
-  }
-}
-
-class BibleChapter extends Equatable {
-  const BibleChapter({
-    required this.usfm,
-    required this.number,
-  });
-  final String usfm;
-  final String number;
-
-  @override
-  List<Object?> get props => [
-        usfm,
-        number,
-      ];
-
-  factory BibleChapter.fromMap(Map<String, dynamic> map) {
-    return BibleChapter(
-      usfm: map['usfm'] as String,
-      number: map['human'] as String,
     );
   }
 }
