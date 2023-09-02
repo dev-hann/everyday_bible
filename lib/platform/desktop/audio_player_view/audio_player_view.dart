@@ -126,13 +126,18 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
     required Duration duration,
     required Function(Duration value) onChanged,
   }) {
-    final ValueNotifier valueNotifier =
-        ValueNotifier(position.inMilliseconds / duration.inMilliseconds);
-    return ValueListenableBuilder(
+    double percent = (position.inMilliseconds / duration.inMilliseconds);
+    if (percent.isNaN) {
+      percent = 0;
+    }
+    final ValueNotifier<double> valueNotifier = ValueNotifier(percent);
+
+    return ValueListenableBuilder<double>(
       valueListenable: valueNotifier,
       builder: (context, value, _) {
         return Slider(
           value: value,
+          max: 1.0,
           onChanged: (value) {
             valueNotifier.value = value;
           },
@@ -192,7 +197,11 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
               children: [
                 stateIcon(
                   onTapPlay: () {
-                    // bloc.add(QTPlayerOnTapPlay());
+                    if (audioState.playing) {
+                      bloc.add(AudioPlayerEventPaused());
+                    } else {
+                      bloc.add(AudioPlayerEventPlayed());
+                    }
                   },
                   isPlaying: audioState.playing,
                   processingState: audioState.state,

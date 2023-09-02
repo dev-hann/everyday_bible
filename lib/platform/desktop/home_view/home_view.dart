@@ -24,9 +24,12 @@ class _HomeViewState extends State<HomeView> {
   }
 
   NavigationAppBar appBar() {
-    return const NavigationAppBar(
-      title: Text("Everyday Bible"),
-      leading: BibleLogo(),
+    return NavigationAppBar(
+      title: Text(
+        "Everyday Bible",
+        style: FluentTheme.of(context).typography.subtitle,
+      ),
+      leading: const BibleLogo(),
     );
   }
 

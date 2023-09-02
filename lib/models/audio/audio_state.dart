@@ -6,7 +6,7 @@ class AudioState extends Equatable {
     this.url = "",
     this.playing = false,
     this.state = ProcessingState.loading,
-    this.loopMode = LoopMode.off,
+    this.loopMode = LoopMode.all,
     this.duration = Duration.zero,
     this.position = Duration.zero,
     this.volume = 0.0,

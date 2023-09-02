@@ -3,6 +3,7 @@ import 'package:everydaybible/models/bible/bible_data.dart';
 import 'package:everydaybible/models/bible/bible_verse.dart';
 import 'package:everydaybible/platform/desktop/bible_view/bloc/bible_bloc.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
+import 'package:everydaybible/widgets/gospel_text.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,9 +56,9 @@ class _BibleViewState extends State<BibleView> {
     }
     return ListView(
       children: verseList.map((e) {
-        return Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Text("${e.index} ${e.text}"),
+        return VerseText(
+          index: e.index,
+          text: e.text,
         );
       }).toList(),
     );

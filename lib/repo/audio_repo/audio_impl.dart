@@ -18,9 +18,9 @@ class AudioImpl extends AudioRepo {
 
   @override
   Future loadAudio(String audioURL) async {
-    if (player.audioSource != null) {
-      player.dispose();
-    }
+    // if (player.audioSource != null) {
+    //   player.dispose();
+    // }
     await player.setUrl(audioURL);
     updateState(
       (newState) => newState.copyWith(url: audioURL),
@@ -29,14 +29,30 @@ class AudioImpl extends AudioRepo {
       updateState((newState) => newState.copyWith(duration: event));
     });
     player.positionStream.listen((event) {
-      updateState((newState) => newState.copyWith(position: event));
-    });
-    player.playingStream.listen((event) {
-      updateState((newState) => newState.copyWith(playing: event));
+      if (event == state.duration) {
+        switch (player.loopMode) {
+          case LoopMode.off:
+            player.pause();
+            break;
+          case LoopMode.all:
+          case LoopMode.one:
+            player.pause().then((value) {
+              player.seek(Duration.zero);
+            });
+            break;
+        }
+      }
+      updateState(
+        (newState) => newState.copyWith(position: event),
+      );
     });
     player.playerStateStream.listen((event) {
       updateState(
-          (newState) => newState.copyWith(state: event.processingState));
+        (newState) => newState.copyWith(
+          playing: event.playing,
+          state: event.processingState,
+        ),
+      );
     });
     player.volumeStream.listen((event) {
       updateState((newState) => newState.copyWith(volume: event));

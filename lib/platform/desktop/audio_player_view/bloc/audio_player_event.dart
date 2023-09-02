@@ -30,3 +30,7 @@ class AudioPlayerEventChangedVolume extends AudioPlayerEvent {
   @override
   List<Object?> get props => [volume];
 }
+
+class AudioPlayerEventPlayed extends AudioPlayerEvent {}
+
+class AudioPlayerEventPaused extends AudioPlayerEvent {}

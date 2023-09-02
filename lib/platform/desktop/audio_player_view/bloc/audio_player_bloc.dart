@@ -18,6 +18,8 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     on<AudioPlayerEventLoadedAudio>(_onLoadedAudio);
     on<AudioPlayerEventSeekPosition>(onSeekPosition);
     on<AudioPlayerEventChangedVolume>(_onChangedVolume);
+    on<AudioPlayerEventPlayed>(_onPlayed);
+    on<AudioPlayerEventPaused>(_onPaused);
   }
   final AudioUseCase useCase;
 
@@ -62,5 +64,15 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
   FutureOr<void> _onChangedVolume(
       AudioPlayerEventChangedVolume event, Emitter<AudioPlayerState> emit) {
     useCase.setVolume(event.volume);
+  }
+
+  FutureOr<void> _onPlayed(
+      AudioPlayerEventPlayed event, Emitter<AudioPlayerState> emit) {
+    useCase.playAudio();
+  }
+
+  FutureOr<void> _onPaused(
+      AudioPlayerEventPaused event, Emitter<AudioPlayerState> emit) {
+    useCase.pauseAudio();
   }
 }

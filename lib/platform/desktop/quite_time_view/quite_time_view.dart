@@ -21,46 +21,18 @@ class _QuiteTimeViewState extends State<QuiteTimeView> {
     required String title,
     required String subTitle,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+    return Center(
+      child: Column(
         children: [
-          Expanded(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: const Icon(FluentIcons.page_left),
-                      onPressed: () {},
-                    ),
-                    Text(title),
-                    IconButton(
-                      icon: const Icon(FluentIcons.page_right),
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-                Text(subTitle),
-              ],
-            ),
+          Text(
+            title,
+            style: FluentTheme.of(context).typography.title,
+            textAlign: TextAlign.center,
           ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              FluentIcons.calendar,
-              size: 24,
-            ),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              FluentIcons.bookmarks,
-              size: 24,
-            ),
+          Text(
+            subTitle,
+            style: FluentTheme.of(context).typography.bodyStrong,
+            textAlign: TextAlign.center,
           ),
         ],
       ),
@@ -91,7 +63,7 @@ class _QuiteTimeViewState extends State<QuiteTimeView> {
         return ScaffoldPage.scrollable(
           header: headerWidget(
             title: data.title,
-            subTitle: data.summary,
+            subTitle: "${data.bibleName} ${data.chapter}",
           ),
           bottomBar: player(),
           children: quiteTime.gospelList.map((item) {
