@@ -1,3 +1,4 @@
+import 'package:everydaybible/enum/text_scale_factor.dart';
 import 'package:everydaybible/platform/mobile/audio_player_view/bloc/audio_player_bloc.dart';
 import 'package:everydaybible/platform/mobile/bible_view/bloc/bible_bloc.dart';
 import 'package:everydaybible/platform/mobile/home_view/bloc/home_bloc.dart';
@@ -33,6 +34,15 @@ class App extends StatelessWidget {
             themeMode: setting.themeMode,
             darkTheme: ThemeData.dark().copyWith(
               useMaterial3: true,
+              typography: Typography.material2021(
+                colorScheme: const ColorScheme.dark(),
+                black: const TextTheme().apply(
+                  fontSizeFactor: setting.textScaleFactor.toScaleFactor(),
+                ),
+                white: const TextTheme().apply(
+                  fontSizeFactor: setting.textScaleFactor.toScaleFactor(),
+                ),
+              ),
               appBarTheme: const AppBarTheme(
                 centerTitle: true,
                 scrolledUnderElevation: 0.0,
@@ -43,6 +53,15 @@ class App extends StatelessWidget {
             ),
             theme: ThemeData(
               useMaterial3: true,
+              typography: Typography.material2021(
+                colorScheme: const ColorScheme.light(),
+                black: const TextTheme().apply(
+                  fontSizeFactor: setting.textScaleFactor.toScaleFactor(),
+                ),
+                white: const TextTheme().apply(
+                  fontSizeFactor: setting.textScaleFactor.toScaleFactor(),
+                ),
+              ),
               appBarTheme: const AppBarTheme(
                 centerTitle: true,
                 scrolledUnderElevation: 0.0,

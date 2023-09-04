@@ -1,3 +1,4 @@
+import 'package:everydaybible/enum/text_scale_factor.dart';
 import 'package:everydaybible/platform/desktop/audio_player_view/bloc/audio_player_bloc.dart';
 import 'package:everydaybible/platform/desktop/bible_view/bloc/bible_bloc.dart';
 import 'package:everydaybible/platform/desktop/home_view/bloc/home_bloc.dart';
@@ -31,8 +32,20 @@ class App extends StatelessWidget {
             title: "Everyday Bible",
             debugShowCheckedModeBanner: false,
             themeMode: setting.themeMode,
-            theme: FluentThemeData(),
-            darkTheme: FluentThemeData.dark(),
+            theme: FluentThemeData.light().copyWith(
+              typography: Typography.fromBrightness(
+                brightness: Brightness.light,
+              ).apply(
+                fontSizeFactor: setting.textScaleFactor.toScaleFactor(),
+              ),
+            ),
+            darkTheme: FluentThemeData.dark().copyWith(
+              typography: Typography.fromBrightness(
+                brightness: Brightness.dark,
+              ).apply(
+                fontSizeFactor: setting.textScaleFactor.toScaleFactor(),
+              ),
+            ),
             home: MultiBlocProvider(
               providers: [
                 BlocProvider(
