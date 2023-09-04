@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:everydaybible/models/bible/bible_chapter.dart';
+import 'package:everydaybible/model/bible/bible_chapter.dart';
 
 class BibleData extends Equatable {
   const BibleData({

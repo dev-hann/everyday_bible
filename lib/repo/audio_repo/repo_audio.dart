@@ -2,7 +2,7 @@ library audio_repo;
 
 import 'dart:async';
 
-import 'package:everydaybible/models/audio/audio_state.dart';
+import 'package:everydaybible/model/audio/audio_state.dart';
 import 'package:everydaybible/repo/repo.dart';
 import 'package:just_audio/just_audio.dart';
 

@@ -1,5 +1,5 @@
-import 'package:everydaybible/models/quite_time/quite_time_data.dart';
-import 'package:everydaybible/models/quite_time/quite_time_gospel.dart';
+import 'package:everydaybible/model/quite_time/quite_time_data.dart';
+import 'package:everydaybible/model/quite_time/quite_time_gospel.dart';
 
 class QuiteTime {
   QuiteTime({

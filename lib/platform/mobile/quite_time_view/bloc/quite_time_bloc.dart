@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:everydaybible/models/quite_time/quite_time.dart';
+import 'package:everydaybible/model/quite_time/quite_time.dart';
 import 'package:everydaybible/repo/quite_time_repo/quite_time_repo.dart';
 import 'package:everydaybible/use_case/quite_time_use_case/quite_time_use_case.dart';
 

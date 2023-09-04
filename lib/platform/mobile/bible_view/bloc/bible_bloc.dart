@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:everydaybible/models/bible/bible_chapter.dart';
-import 'package:everydaybible/models/bible/bible_data.dart';
-import 'package:everydaybible/models/bible/bible_verse.dart';
+import 'package:everydaybible/model/bible/bible_chapter.dart';
+import 'package:everydaybible/model/bible/bible_data.dart';
+import 'package:everydaybible/model/bible/bible_verse.dart';
 import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
 import 'package:everydaybible/use_case/bible_use_case/bible_use_case.dart';
 import 'package:flutter/material.dart';

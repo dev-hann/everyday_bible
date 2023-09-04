@@ -35,7 +35,6 @@ dependencies:
   dartz:
   html:
 
-  # audioplayers: ^1.1.0
   just_audio: ^0.9.29
   just_audio_mpv: any
 

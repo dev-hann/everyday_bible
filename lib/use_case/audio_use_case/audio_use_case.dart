@@ -1,4 +1,4 @@
-import 'package:everydaybible/models/audio/audio_state.dart';
+import 'package:everydaybible/model/audio/audio_state.dart';
 import 'package:everydaybible/repo/audio_repo/repo_audio.dart';
 import 'package:everydaybible/use_case/use_case.dart';
 import 'package:just_audio/just_audio.dart';

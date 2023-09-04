@@ -1,4 +1,4 @@
-import 'package:everydaybible/models/audio/audio_state.dart';
+import 'package:everydaybible/model/audio/audio_state.dart';
 import 'package:everydaybible/platform/mobile/audio_player_view/bloc/audio_player_bloc.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:flutter/material.dart';

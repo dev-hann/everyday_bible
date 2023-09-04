@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:everydaybible/models/audio/audio_state.dart';
+import 'package:everydaybible/model/audio/audio_state.dart';
 import 'package:everydaybible/repo/audio_repo/repo_audio.dart';
 import 'package:everydaybible/use_case/audio_use_case/audio_use_case.dart';
 import 'package:intl/intl.dart';

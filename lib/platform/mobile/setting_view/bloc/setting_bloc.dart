@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:everydaybible/models/setting.dart';
+import 'package:everydaybible/model/setting.dart';
 
 part 'setting_event.dart';
 part 'setting_state.dart';

@@ -3,6 +3,7 @@ import 'package:everydaybible/platform/mobile/audio_player_view/bloc/audio_playe
 import 'package:everydaybible/platform/mobile/bible_view/bloc/bible_bloc.dart';
 import 'package:everydaybible/platform/mobile/home_view/bloc/home_bloc.dart';
 import 'package:everydaybible/platform/mobile/home_view/home_view.dart';
+import 'package:everydaybible/platform/mobile/memo_view/bloc/memo_bloc.dart';
 import 'package:everydaybible/platform/mobile/quite_time_view/bloc/quite_time_bloc.dart';
 import 'package:everydaybible/platform/mobile/setting_view/bloc/setting_bloc.dart';
 import 'package:everydaybible/repo/repo.dart';
@@ -91,6 +92,12 @@ class App extends StatelessWidget {
                   create: (_) => AudioPlayerBloc(Repo.of(context))
                     ..add(
                       const AudioPlayerEventInited(),
+                    ),
+                ),
+                BlocProvider(
+                  create: (_) => MemoBloc(Repo.of(context))
+                    ..add(
+                      const MemoEventInited(),
                     ),
                 ),
               ],

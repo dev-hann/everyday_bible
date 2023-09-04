@@ -1,6 +1,6 @@
-import 'package:everydaybible/models/bible/bible_chapter.dart';
-import 'package:everydaybible/models/bible/bible_data.dart';
-import 'package:everydaybible/models/bible/bible_verse.dart';
+import 'package:everydaybible/model/bible/bible_chapter.dart';
+import 'package:everydaybible/model/bible/bible_data.dart';
+import 'package:everydaybible/model/bible/bible_verse.dart';
 import 'package:everydaybible/platform/desktop/bible_view/bloc/bible_bloc.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:everydaybible/widgets/gospel_text.dart';

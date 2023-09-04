@@ -1,5 +1,6 @@
 import 'package:everydaybible/platform/desktop/bible_view/bible_view.dart';
 import 'package:everydaybible/platform/desktop/home_view/bloc/home_bloc.dart';
+import 'package:everydaybible/platform/desktop/memo_view/memo_view.dart';
 import 'package:everydaybible/platform/desktop/quite_time_view/quite_time_view.dart';
 import 'package:everydaybible/platform/desktop/setting_view/setting_view.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
@@ -49,11 +50,11 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  PaneItem favoritePaneItem() {
+  PaneItem memoView() {
     return PaneItem(
-      icon: const Icon(FluentIcons.heart),
-      title: const Text("Favorite"),
-      body: const Text("Favorite"),
+      icon: const Icon(FluentIcons.memo),
+      title: const Text("Memo"),
+      body: const MemoView(),
     );
   }
 
@@ -80,6 +81,7 @@ class _HomeViewState extends State<HomeView> {
         return NavigationView(
           appBar: appBar(),
           pane: NavigationPane(
+            size: const NavigationPaneSize(openWidth: 160.0),
             selected: state.index,
             onChanged: (index) {
               bloc.add(HomeEventUpdatedIndex(index));
@@ -87,7 +89,7 @@ class _HomeViewState extends State<HomeView> {
             items: [
               quiteTimeView(),
               bibleView(),
-              favoritePaneItem(),
+              memoView(),
               settingView(),
             ],
           ),
