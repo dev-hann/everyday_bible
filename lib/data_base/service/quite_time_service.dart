@@ -10,22 +10,26 @@ class QuiteTimeService {
     ),
   );
 
+  String dateTimeFormat(DateTime dateTime) {
+    return DateFormat("yyyy-MM-dd").format(dateTime);
+  }
+
   Future<Response> requestData(DateTime dateTime) {
-    return dio.post(
+    return dio.get(
       "$_url/BodyMatterDetail",
-      data: {
+      queryParameters: {
         "qt_ty": "QT1",
-        "Base_de": DateFormat("yyyy-MM-dd").format(dateTime),
+        "Base_de": dateTimeFormat(dateTime),
       },
     );
   }
 
   Future<Response> requestGospelList(DateTime dateTime) {
-    return dio.post(
+    return dio.get(
       "$_url/BodyBible",
-      data: {
+      queryParameters: {
         "qt_ty": "QT1",
-        "Base_de": DateFormat("yyyy-MM-dd").format(dateTime),
+        "Base_de": dateTimeFormat(dateTime),
       },
     );
   }
