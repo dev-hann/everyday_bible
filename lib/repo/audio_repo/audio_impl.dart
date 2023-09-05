@@ -86,4 +86,9 @@ class AudioImpl extends AudioRepo {
   Future setVolume(double value) {
     return player.setVolume(value);
   }
+
+  @override
+  Future stopAudio() {
+    return player.stop();
+  }
 }

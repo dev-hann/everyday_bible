@@ -17,7 +17,10 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SettingBloc()..add(SettingEventInited()),
+      create: (context) => SettingBloc()
+        ..add(
+          const SettingEventInited(),
+        ),
       child: BlocBuilder<SettingBloc, SettingState>(
         builder: (context, state) {
           final status = state.status;
@@ -77,28 +80,16 @@ class App extends StatelessWidget {
                   create: (_) => HomeBloc(),
                 ),
                 BlocProvider(
-                  create: (_) => BibleBloc(Repo.of(context))
-                    ..add(
-                      const BibleEventInited(),
-                    ),
+                  create: (_) => BibleBloc(Repo.of(context)),
                 ),
                 BlocProvider(
-                  create: (_) => QuiteTimeBloc(Repo.of(context))
-                    ..add(
-                      const QuiteTimeEventInited(),
-                    ),
+                  create: (_) => QuiteTimeBloc(Repo.of(context)),
                 ),
                 BlocProvider(
-                  create: (_) => AudioPlayerBloc(Repo.of(context))
-                    ..add(
-                      const AudioPlayerEventInited(),
-                    ),
+                  create: (_) => AudioPlayerBloc(Repo.of(context)),
                 ),
                 BlocProvider(
-                  create: (_) => MemoBloc(Repo.of(context))
-                    ..add(
-                      const MemoEventInited(),
-                    ),
+                  create: (_) => MemoBloc(Repo.of(context)),
                 ),
               ],
               child: const HomeView(),

@@ -33,4 +33,8 @@ class AudioUseCase extends UseCase<AudioRepo> {
   Future setVolume(double value) {
     return repo.setVolume(value);
   }
+
+  Future stopAudio() {
+    return repo.stopAudio();
+  }
 }

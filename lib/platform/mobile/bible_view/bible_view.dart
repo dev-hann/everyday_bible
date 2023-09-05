@@ -14,8 +14,15 @@ class BibleView extends StatefulWidget {
   State<BibleView> createState() => _BibleViewState();
 }
 
-class _BibleViewState extends State<BibleView> {
+class _BibleViewState extends State<BibleView>
+    with AutomaticKeepAliveClientMixin {
   BibleBloc get bloc => BlocProvider.of(context);
+
+  @override
+  void initState() {
+    super.initState();
+    bloc.add(const BibleEventInited());
+  }
 
   AppBar appBar({
     required String? title,
@@ -60,6 +67,7 @@ class _BibleViewState extends State<BibleView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocBuilder<BibleBloc, BibleState>(
       builder: (context, state) {
         final status = state.status;
@@ -100,4 +108,7 @@ class _BibleViewState extends State<BibleView> {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

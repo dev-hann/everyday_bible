@@ -15,6 +15,11 @@ class MemoView extends StatefulWidget {
 
 class _MemoViewState extends State<MemoView> {
   MemoBloc get bloc => BlocProvider.of(context);
+  @override
+  void initState() {
+    super.initState();
+    bloc.add(const MemoEventInited());
+  }
 
   AppBar appBar() {
     return AppBar(
@@ -52,6 +57,9 @@ class _MemoViewState extends State<MemoView> {
             case MemoViewStatus.success:
           }
           final list = state.memoList;
+          if (list.isEmpty) {
+            return const Text("Empty View");
+          }
           return ListView(
             padding: const EdgeInsets.all(16.0),
             children: list.map((memo) {

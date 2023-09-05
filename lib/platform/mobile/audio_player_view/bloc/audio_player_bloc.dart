@@ -26,20 +26,28 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
 
   FutureOr<void> _onInited(
       AudioPlayerEventInited event, Emitter<AudioPlayerState> emit) async {
+    final audioState = state.audioState;
+    if (audioState.url.isNotEmpty) {
+      await useCase.stopAudio();
+    }
     emit(
       state.copyWith(
         status: AudioPlayerViewStatus.init,
-        dateTime: DateTime.now(),
+        dateTime: event.dateTime,
+        audioState: const AudioState(),
       ),
     );
     add(AudioPlayerEventLoadedAudio());
-    await emit.onEach(useCase.stateStream(), onData: (audioState) {
-      emit(
-        state.copyWith(
-          audioState: audioState,
-        ),
-      );
-    });
+    await emit.onEach(
+      useCase.stateStream(),
+      onData: (audioState) {
+        emit(
+          state.copyWith(
+            audioState: audioState,
+          ),
+        );
+      },
+    );
   }
 
   FutureOr<void> _onLoadedAudio(

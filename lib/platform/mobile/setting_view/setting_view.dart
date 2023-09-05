@@ -10,8 +10,10 @@ class SettingView extends StatefulWidget {
   State<SettingView> createState() => _SettingViewState();
 }
 
-class _SettingViewState extends State<SettingView> {
+class _SettingViewState extends State<SettingView>
+    with AutomaticKeepAliveClientMixin {
   SettingBloc get bloc => BlocProvider.of(context);
+
   AppBar appBar() {
     return AppBar(
       title: const Text("Setting"),
@@ -23,14 +25,18 @@ class _SettingViewState extends State<SettingView> {
     required Function(ThemeMode themeMode) onChanged,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text("Theme : ${themeMode.name}"),
+        const Text("Theme :"),
+        const Spacer(),
+        const Text("Dark"),
         Switch(
           value: themeMode.index == 1,
           onChanged: (value) {
             onChanged(value ? ThemeMode.light : ThemeMode.dark);
           },
         ),
+        const Text("Light"),
       ],
     );
   }
@@ -40,6 +46,7 @@ class _SettingViewState extends State<SettingView> {
     required Function(TextScaleFactor factor) onChanged,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text("TextFactor: "),
         DropdownMenu(
@@ -62,12 +69,14 @@ class _SettingViewState extends State<SettingView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocBuilder<SettingBloc, SettingState>(
       builder: (context, state) {
         final setting = state.setting;
         return Scaffold(
           appBar: appBar(),
           body: ListView(
+            padding: const EdgeInsets.all(16.0),
             children: [
               themeWidget(
                 themeMode: setting.themeMode,
@@ -96,4 +105,7 @@ class _SettingViewState extends State<SettingView> {
       },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

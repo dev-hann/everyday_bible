@@ -19,4 +19,6 @@ abstract class AudioRepo extends Repo {
   Future playAudio();
   Future pauseAudio();
   Future seekAudio(Duration duration);
+
+  Future stopAudio();
 }

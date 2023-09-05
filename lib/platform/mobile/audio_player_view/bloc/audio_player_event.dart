@@ -8,7 +8,10 @@ abstract class AudioPlayerEvent extends Equatable {
 }
 
 class AudioPlayerEventInited extends AudioPlayerEvent {
-  const AudioPlayerEventInited();
+  const AudioPlayerEventInited(this.dateTime);
+  final DateTime dateTime;
+  @override
+  List<Object?> get props => [dateTime];
 }
 
 class AudioPlayerEventLoadedAudio extends AudioPlayerEvent {}
