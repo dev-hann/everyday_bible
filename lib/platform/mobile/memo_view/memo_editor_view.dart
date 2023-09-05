@@ -25,13 +25,21 @@ class _MemoEditorViewState extends State<MemoEditorView> {
   AppBar appBar() {
     return AppBar(
       title: const Text("Memo Edit View"),
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.pop(
+              context,
+              widget.controller.memo,
+            );
+          },
+          icon: const Icon(Icons.save),
+        ),
+      ],
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
-          Navigator.pop(
-            context,
-            widget.controller.memo,
-          );
+          Navigator.pop(context);
         },
       ),
     );

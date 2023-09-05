@@ -17,3 +17,10 @@ class MemoEventUpdatedMemo extends MemoEvent {
   @override
   List<Object> get props => [memo];
 }
+
+class MemoEventRemovedMemo extends MemoEvent {
+  const MemoEventRemovedMemo(this.memo);
+  final Memo memo;
+  @override
+  List<Object> get props => [memo];
+}

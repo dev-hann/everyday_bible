@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 enum MobileMenuType {
   bible,
   quiteTime,
+  memo,
   setting,
 }
 
@@ -15,6 +16,8 @@ extension MobileMenuTypeExtension on MobileMenuType {
         return "Quite Time";
       case MobileMenuType.setting:
         return "Setting";
+      case MobileMenuType.memo:
+        return "Memo";
     }
   }
 
@@ -26,6 +29,8 @@ extension MobileMenuTypeExtension on MobileMenuType {
         return Icons.bookmark;
       case MobileMenuType.setting:
         return Icons.settings;
+      case MobileMenuType.memo:
+        return Icons.note;
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:everydaybible/model/memo/memo.dart';
 import 'package:everydaybible/platform/mobile/memo_view/bloc/memo_bloc.dart';
 import 'package:everydaybible/platform/mobile/memo_view/memo_editor_view.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
@@ -18,6 +19,21 @@ class _MemoViewState extends State<MemoView> {
   AppBar appBar() {
     return AppBar(
       title: const Text("Memo"),
+      actions: [
+        IconButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MemoEditorView.route(Memo()),
+            ).then((edited) {
+              if (edited != null) {
+                bloc.add(MemoEventUpdatedMemo(edited));
+              }
+            });
+          },
+          icon: const Icon(Icons.add),
+        ),
+      ],
     );
   }
 
@@ -39,16 +55,31 @@ class _MemoViewState extends State<MemoView> {
           return ListView(
             padding: const EdgeInsets.all(16.0),
             children: list.map((memo) {
-              return MobileMemoListTile(
-                memo: memo,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MemoEditorView.route(memo),
-                  ).then((edited) {
-                    bloc.add(MemoEventUpdatedMemo(edited));
-                  });
-                },
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Card(
+                  clipBehavior: Clip.hardEdge,
+                  child: MobileMemoListTile(
+                    memo: memo,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MemoEditorView.route(memo),
+                      ).then((edited) {
+                        if (edited != null) {
+                          bloc.add(
+                            MemoEventUpdatedMemo(edited),
+                          );
+                        }
+                      });
+                    },
+                    onTapDelete: () {
+                      bloc.add(
+                        MemoEventRemovedMemo(memo),
+                      );
+                    },
+                  ),
+                ),
               );
             }).toList(),
           );

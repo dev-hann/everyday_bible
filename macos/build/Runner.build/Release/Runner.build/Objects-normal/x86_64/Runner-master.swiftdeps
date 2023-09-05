@@ -1,0 +1,8 @@
+version: "Apple Swift version 5.8.1 (swiftlang-5.8.0.124.5 clang-1403.0.22.11.100)"
+options: "8d3f217809b3d0a397a2a1189bf00c146720b84f8d0f8cbd9884448f8f58b1a9"
+build_start_time: [1693818479, 300519000]
+build_end_time: [1693818479, 330141000]
+inputs:
+  "/Users/secom/Documents/everyday_bible/macos/Flutter/GeneratedPluginRegistrant.swift": !dirty [1693800595, 458186769]
+  "/Users/secom/Documents/everyday_bible/macos/Runner/AppDelegate.swift": !dirty [1693290415, 409792430]
+  "/Users/secom/Documents/everyday_bible/macos/Runner/MainFlutterWindow.swift": !dirty [1693290415, 411444891]

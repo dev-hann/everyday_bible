@@ -15,6 +15,7 @@ class MemoBloc extends Bloc<MemoEvent, MemoState> {
         super(const MemoState()) {
     on<MemoEventInited>(_onInited);
     on<MemoEventUpdatedMemo>(_onUpdatedMemo);
+    on<MemoEventRemovedMemo>(_onRemovedMemo);
   }
   final MemoUseCase useCase;
 
@@ -59,5 +60,10 @@ class MemoBloc extends Bloc<MemoEvent, MemoState> {
       },
       (fail) {},
     );
+  }
+
+  FutureOr<void> _onRemovedMemo(
+      MemoEventRemovedMemo event, Emitter<MemoState> emit) {
+    useCase.removeMemo(event.memo);
   }
 }
