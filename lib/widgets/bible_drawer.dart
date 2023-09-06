@@ -3,7 +3,7 @@ import 'package:everydaybible/model/bible/bible_data.dart';
 import 'package:flutter/material.dart';
 
 class BibleDrawer extends StatelessWidget {
-  const BibleDrawer({
+  BibleDrawer({
     super.key,
     required this.dataList,
     required this.currentChapter,
@@ -12,43 +12,66 @@ class BibleDrawer extends StatelessWidget {
   final BibleChapter? currentChapter;
   final List<BibleData> dataList;
   final Function(BibleChapter chapter) onTapChapter;
+  final TextEditingController searchController = TextEditingController();
+  Widget searchTextfield() {
+    return TextField(
+      controller: searchController,
+    );
+  }
+
+  Widget chapterWidget({
+    required bool isSelected,
+    required BibleChapter item,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.orange : Colors.white10,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          child: Center(child: Text("${item.number}장")),
+        ),
+      ),
+    );
+  }
 
   Widget capterList({
     required BibleData data,
     required bool Function(BibleChapter chapter) isSelected,
     required Function(BibleChapter chapter) onTapChapter,
   }) {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return ValueListenableBuilder<TextEditingValue>(
+      valueListenable: searchController,
+      builder: (context, value, _) {
+        final title = data.name;
+        if (!title.contains(value.text)) {
+          return const SizedBox();
+        }
+        return ExpansionTile(
+          tilePadding: EdgeInsets.zero,
+          title: Row(
             children: [
-              Text(data.title),
+              Text(title),
               const SizedBox(width: 4.0),
               const Expanded(child: Divider()),
             ],
           ),
-          for (final item in data.chatperList)
-            GestureDetector(
-              onTap: () {
-                onTapChapter(item);
-              },
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: isSelected(item) ? Colors.orange : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 4.0),
-                  child: Text("${item.number}장"),
-                ),
-              ),
-            )
-        ],
-      ),
+          children: data.chapterList
+              .map((item) => GestureDetector(
+                    onTap: () {
+                      onTapChapter(item);
+                    },
+                    child: chapterWidget(
+                      isSelected: isSelected(item),
+                      item: item,
+                    ),
+                  ))
+              .toList(),
+        );
+      },
     );
   }
 
@@ -61,18 +84,20 @@ class BibleDrawer extends StatelessWidget {
           horizontal: 16.0,
           vertical: kToolbarHeight,
         ),
-        children: dataList.map((e) {
-          return capterList(
-            data: e,
-            isSelected: (chapter) {
-              return currentChapter == chapter;
-            },
-            onTapChapter: (chapter) {
-              onTapChapter(chapter);
-              Navigator.pop(context);
-            },
-          );
-        }).toList(),
+        children: [
+          searchTextfield(),
+          for (final data in dataList)
+            capterList(
+              data: data,
+              isSelected: (chapter) {
+                return currentChapter == chapter;
+              },
+              onTapChapter: (chapter) {
+                onTapChapter(chapter);
+                Navigator.pop(context);
+              },
+            )
+        ],
       ),
     );
   }

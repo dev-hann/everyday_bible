@@ -32,7 +32,7 @@ class App extends StatelessWidget {
           return FluentApp(
             title: "Everyday Bible",
             debugShowCheckedModeBanner: false,
-            themeMode: setting.themeMode,
+            // themeMode: setting.brightness,
             theme: FluentThemeData.light().copyWith(
               typography: Typography.fromBrightness(
                 brightness: Brightness.light,

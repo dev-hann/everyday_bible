@@ -11,37 +11,32 @@ class BibleState extends Equatable {
   BibleState({
     this.status = BibleViewStatus.init,
     this.bibleDataList = const [],
-    this.currentChapter,
-    this.verseList = const [],
+    this.selectedChapter,
     GlobalKey<ScaffoldState>? drawerKey,
   }) : drawerKey = drawerKey ?? GlobalKey();
   final BibleViewStatus status;
   final List<BibleData> bibleDataList;
-  final BibleChapter? currentChapter;
-  final List<BibleVerse> verseList;
+  final BibleChapter? selectedChapter;
   final GlobalKey<ScaffoldState> drawerKey;
 
   @override
   List<Object?> get props => [
         status,
         bibleDataList,
-        currentChapter,
-        verseList,
+        selectedChapter,
         drawerKey,
       ];
 
   BibleState copyWith({
     BibleViewStatus? status,
     List<BibleData>? bibleDataList,
-    BibleChapter? currentChapter,
-    List<BibleVerse>? verseList,
+    BibleChapter? selectedChapter,
     GlobalKey<ScaffoldState>? drawerKey,
   }) {
     return BibleState(
       status: status ?? this.status,
       bibleDataList: bibleDataList ?? this.bibleDataList,
-      currentChapter: currentChapter ?? this.currentChapter,
-      verseList: verseList ?? this.verseList,
+      selectedChapter: selectedChapter ?? this.selectedChapter,
       drawerKey: drawerKey ?? this.drawerKey,
     );
   }

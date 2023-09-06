@@ -9,18 +9,37 @@ import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
 class BibleUseCase extends UseCase<BibleRepo> {
   BibleUseCase(super.repo);
 
-  Future<Either<Failure, List<BibleData>>> requestBibleData() async {
+  Future initDataBase() async {
+    if (repo.databaseIsEmpty()) {
+      await repo.initDataBase();
+    }
+  }
+
+  Either<Failure, List<BibleData>> loadBibleDataList() {
     try {
-      final res = await repo.requestBibleData();
-      final list = List.from(res['books']);
-      return Right(list.map((e) => BibleData.fromMap(e)).toList());
+      final list = repo.loadBibleDataList();
+      return Right(
+        list.map((e) => BibleData.fromMapEntry(e)).toList(),
+      );
     } catch (e) {
       return Left(Failure.fromException(e));
     }
   }
 
+  @Deprecated("will be deprecated")
+  Future<Either<Failure, List<BibleDataOld>>> requestBibleData() async {
+    try {
+      final res = await repo.requestBibleData();
+      final list = List.from(res['books']);
+      return Right(list.map((e) => BibleDataOld.fromMap(e)).toList());
+    } catch (e) {
+      return Left(Failure.fromException(e));
+    }
+  }
+
+  @Deprecated("will be deprecated")
   Future<Either<Failure, List<BibleVerse>>> requestVerseList(
-      BibleChapter chapter) async {
+      BibleChapterOld chapter) async {
     try {
       final res = await repo.requestVerseList(chapter.usfm);
       final List<BibleVerse> list = [];

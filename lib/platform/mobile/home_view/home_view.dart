@@ -56,15 +56,15 @@ class _HomeViewState extends State<HomeView> {
           body: body(
             currentType: currentType,
           ),
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: currentType.index,
-            onTap: (index) {
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: currentType.index,
+            onDestinationSelected: (index) {
               bloc.add(
                 HomeEventUpdatedMenu(MobileMenuType.values[index]),
               );
             },
-            items: MobileMenuType.values.map((e) {
-              return BottomNavigationBarItem(
+            destinations: MobileMenuType.values.map((e) {
+              return NavigationDestination(
                 icon: Icon(e.toIcons()),
                 label: e.toTitle(),
               );

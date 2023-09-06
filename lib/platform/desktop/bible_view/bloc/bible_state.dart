@@ -15,8 +15,8 @@ class BibleState extends Equatable {
     this.verseList = const [],
   });
   final BibleViewStatus status;
-  final List<BibleData> bibleDataList;
-  final BibleChapter? currentChapter;
+  final List<BibleDataOld> bibleDataList;
+  final BibleChapterOld? currentChapter;
   final List<BibleVerse> verseList;
 
   @override
@@ -29,8 +29,8 @@ class BibleState extends Equatable {
 
   BibleState copyWith({
     BibleViewStatus? status,
-    List<BibleData>? bibleDataList,
-    BibleChapter? currentChapter,
+    List<BibleDataOld>? bibleDataList,
+    BibleChapterOld? currentChapter,
     List<BibleVerse>? verseList,
   }) {
     return BibleState(

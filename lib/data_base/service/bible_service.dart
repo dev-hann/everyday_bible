@@ -9,8 +9,13 @@ class BibleService {
     return dio.get("$_url/api/bible/version/88");
   }
 
-  Future<Response> requestVerseList(String usfm) {
+  Future<Response> requestVerseList(String usfm) async {
     return dio.get(
-        "$_url/_next/data/dyrln-AQDC54GUBZ-FDh2/ko/bible/88/$usfm.KRV.json");
+      "$_url/_next/data/dyrln-AQDC54GUBZ-FDh2/en/bible/88/$usfm.KRV.json",
+      queryParameters: {
+        "versionId": 88,
+        "usfm": "$usfm.KRV",
+      },
+    );
   }
 }

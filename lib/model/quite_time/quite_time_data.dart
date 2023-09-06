@@ -25,6 +25,12 @@ class QuiteTimeData extends Equatable {
         title,
       ];
 
+  bool isSameDateTime(DateTime other) {
+    return dateTime.year == other.year &&
+        dateTime.month == other.month &&
+        dateTime.day == other.day;
+  }
+
   factory QuiteTimeData.fromMap(Map<String, dynamic> map) {
     return QuiteTimeData(
       type: map['Qt_ty'] as String,

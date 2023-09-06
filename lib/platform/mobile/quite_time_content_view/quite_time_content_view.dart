@@ -1,3 +1,4 @@
+import 'package:everydaybible/model/quite_time/quite_time_data.dart';
 import 'package:everydaybible/platform/mobile/audio_player_view/audio_player_view.dart';
 import 'package:everydaybible/platform/mobile/audio_player_view/bloc/audio_player_bloc.dart';
 import 'package:everydaybible/platform/mobile/quite_time_content_view/bloc/quite_time_content_bloc.dart';
@@ -10,21 +11,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class QuiteTimeContentView extends StatefulWidget {
   const QuiteTimeContentView({
     super.key,
-    required this.dateTime,
+    required this.data,
   });
 
-  final DateTime dateTime;
+  final QuiteTimeData data;
 
   static PageRoute route({
     required BuildContext context,
-    required DateTime dateTime,
+    required QuiteTimeData data,
   }) {
     return MaterialPageRoute(builder: (_) {
-      return BlocProvider(
-        create: (_) => QuiteTimeContentBloc(Repo.of(context)),
-        child: QuiteTimeContentView(
-          dateTime: dateTime,
-        ),
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => QuiteTimeContentBloc(Repo.of(context)),
+          ),
+          BlocProvider<AudioPlayerBloc>.value(
+            value: BlocProvider.of(context),
+          ),
+        ],
+        child: QuiteTimeContentView(data: data),
       );
     });
   }
@@ -39,7 +45,7 @@ class _QuiteTimeContentViewState extends State<QuiteTimeContentView> {
   @override
   void initState() {
     super.initState();
-    final dateTime = widget.dateTime;
+    final dateTime = widget.data.dateTime;
     bloc.add(
       QuiteTimeContentEventInited(dateTime),
     );
@@ -60,11 +66,11 @@ class _QuiteTimeContentViewState extends State<QuiteTimeContentView> {
       builder: (context, state) {
         final status = state.status;
         switch (status) {
-          case QuiteTimeViewStatus.init:
-          case QuiteTimeViewStatus.loading:
+          case QuiteTimeContentViewStatus.init:
+          case QuiteTimeContentViewStatus.loading:
             return const BibleLoading();
-          case QuiteTimeViewStatus.failure:
-          case QuiteTimeViewStatus.success:
+          case QuiteTimeContentViewStatus.failure:
+          case QuiteTimeContentViewStatus.success:
         }
         final quiteTime = state.quiteTime!;
 

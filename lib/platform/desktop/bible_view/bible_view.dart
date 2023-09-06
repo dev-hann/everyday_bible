@@ -18,9 +18,9 @@ class _BibleViewState extends State<BibleView> {
   BibleBloc get bloc => BlocProvider.of(context);
 
   Widget capterList({
-    required BibleData data,
-    required bool Function(BibleChapter chapter) isSelected,
-    required Function(BibleChapter chapter) onTapChapter,
+    required BibleDataOld data,
+    required bool Function(BibleChapterOld chapter) isSelected,
+    required Function(BibleChapterOld chapter) onTapChapter,
   }) {
     return Padding(
       padding: const EdgeInsets.all(4.0),

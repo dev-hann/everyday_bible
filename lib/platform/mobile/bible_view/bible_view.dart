@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:everydaybible/model/bible/bible_chapter.dart';
 import 'package:everydaybible/model/bible/bible_data.dart';
 import 'package:everydaybible/platform/mobile/bible_view/bloc/bible_bloc.dart';
@@ -6,6 +7,7 @@ import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:everydaybible/widgets/gospel_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:collection';
 
 class BibleView extends StatefulWidget {
   const BibleView({super.key});
@@ -42,8 +44,8 @@ class _BibleViewState extends State<BibleView>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(data.title),
-          for (final item in data.chatperList)
+          Text(data.name),
+          for (final item in data.chapterList)
             GestureDetector(
               onTap: () {
                 onTapChapter(item);
@@ -79,15 +81,15 @@ class _BibleViewState extends State<BibleView>
           case BibleViewStatus.success:
         }
         final dataList = state.bibleDataList;
-        final currentChapter = state.currentChapter;
-        final verseList = state.verseList;
-        final currentData = dataList.where(
-            (element) => currentChapter?.usfm.contains(element.usfm) ?? false);
+        final currentChapter = state.selectedChapter!;
+        final verseList = currentChapter.verseList;
+        final currentData = dataList.firstWhereOrNull(
+            (element) => element.chapterList.contains(currentChapter));
 
         return Scaffold(
           key: state.drawerKey,
           appBar: appBar(
-            title: currentData.first.title,
+            title: currentData?.name,
           ),
           drawer: BibleDrawer(
             dataList: dataList,
@@ -100,9 +102,13 @@ class _BibleViewState extends State<BibleView>
           ),
           body: ListView(
             padding: const EdgeInsets.all(16.0),
-            children: verseList.map((e) {
-              return VerseText(index: e.index, text: e.text);
-            }).toList(),
+            children: [
+              for (int index = 0; index < verseList.length; index++)
+                VerseText(
+                  index: index + 1,
+                  text: verseList[index],
+                ),
+            ],
           ),
         );
       },

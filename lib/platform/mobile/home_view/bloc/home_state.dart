@@ -10,7 +10,7 @@ enum HomeViewStatus {
 class HomeState extends Equatable {
   const HomeState({
     this.status = HomeViewStatus.init,
-    this.menuType = MobileMenuType.quiteTime,
+    this.menuType = MobileMenuType.bible,
   });
   final HomeViewStatus status;
   final MobileMenuType menuType;

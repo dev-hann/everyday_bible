@@ -31,7 +31,7 @@ class QuiteTimeContentBloc
     final dateTime = event.dateTime;
     emit(
       state.copyWith(
-        status: QuiteTimeViewStatus.loading,
+        status: QuiteTimeContentViewStatus.loading,
         dateTime: dateTime,
       ),
     );
@@ -41,7 +41,7 @@ class QuiteTimeContentBloc
       (data) {
         emit(
           state.copyWith(
-            status: QuiteTimeViewStatus.success,
+            status: QuiteTimeContentViewStatus.success,
             quiteTime: data,
           ),
         );

@@ -19,6 +19,7 @@ dependencies:
   # UI
   fluent_ui: ^4.0.2
   flutter_slidable:
+  table_calendar:
 
   # Database
   hive: ^2.0.0
@@ -35,6 +36,7 @@ dependencies:
   equatable:
   dartz:
   html:
+  collection:
 
   just_audio: ^0.9.29
   just_audio_mpv: any
@@ -64,3 +66,4 @@ flutter:
 
   assets:
     - assets/
+    - assets/data/bible.json

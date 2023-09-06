@@ -9,6 +9,17 @@ import 'package:everydaybible/use_case/use_case.dart';
 class QuiteTimeUseCase extends UseCase<QuiteTimeRepo> {
   QuiteTimeUseCase(super.repo);
 
+  Future<Either<Failure, QuiteTimeData>> requestQuiteTimeData(
+      DateTime dateTime) async {
+    try {
+      final data =
+          QuiteTimeData.fromMap(await repo.requestQuiteTimeData(dateTime));
+      return Right(data);
+    } catch (e) {
+      return Left(Failure.fromException(e));
+    }
+  }
+
   Future<Either<Failure, QuiteTime>> requestQuiteTime(DateTime dateTime) async {
     try {
       final data =

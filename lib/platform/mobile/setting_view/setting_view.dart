@@ -80,10 +80,10 @@ class _SettingViewState extends State<SettingView>
             children: [
               themeWidget(
                 themeMode: setting.themeMode,
-                onChanged: (mode) {
+                onChanged: (brightness) {
                   bloc.add(
                     SettingEventUpdatedSetting(
-                      setting.copyWith(themeMode: mode),
+                      setting.copyWith(themeMode: brightness),
                     ),
                   );
                 },

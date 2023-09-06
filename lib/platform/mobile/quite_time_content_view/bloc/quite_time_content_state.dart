@@ -1,6 +1,6 @@
 part of 'quite_time_content_bloc.dart';
 
-enum QuiteTimeViewStatus {
+enum QuiteTimeContentViewStatus {
   init,
   loading,
   failure,
@@ -9,11 +9,11 @@ enum QuiteTimeViewStatus {
 
 class QuiteTimeContentState extends Equatable {
   QuiteTimeContentState({
-    this.status = QuiteTimeViewStatus.init,
+    this.status = QuiteTimeContentViewStatus.init,
     this.quiteTime,
     DateTime? dateTime,
   }) : dateTime = dateTime ?? DateTime.now();
-  final QuiteTimeViewStatus status;
+  final QuiteTimeContentViewStatus status;
   final DateTime dateTime;
   final QuiteTime? quiteTime;
 
@@ -25,7 +25,7 @@ class QuiteTimeContentState extends Equatable {
       ];
 
   QuiteTimeContentState copyWith({
-    QuiteTimeViewStatus? status,
+    QuiteTimeContentViewStatus? status,
     DateTime? dateTime,
     QuiteTime? quiteTime,
   }) {

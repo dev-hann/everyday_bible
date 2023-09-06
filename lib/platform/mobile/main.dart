@@ -38,15 +38,7 @@ class App extends StatelessWidget {
             themeMode: setting.themeMode,
             darkTheme: ThemeData.dark().copyWith(
               useMaterial3: true,
-              typography: Typography.material2021(
-                colorScheme: const ColorScheme.dark(),
-                black: const TextTheme().apply(
-                  fontSizeFactor: setting.textScaleFactor.toScaleFactor(),
-                ),
-                white: const TextTheme().apply(
-                  fontSizeFactor: setting.textScaleFactor.toScaleFactor(),
-                ),
-              ),
+              typography: Typography.material2021(),
               appBarTheme: const AppBarTheme(
                 centerTitle: true,
                 scrolledUnderElevation: 0.0,
@@ -55,17 +47,9 @@ class App extends StatelessWidget {
                 margin: EdgeInsets.zero,
               ),
             ),
-            theme: ThemeData(
+            theme: ThemeData.light().copyWith(
               useMaterial3: true,
-              typography: Typography.material2021(
-                colorScheme: const ColorScheme.light(),
-                black: const TextTheme().apply(
-                  fontSizeFactor: setting.textScaleFactor.toScaleFactor(),
-                ),
-                white: const TextTheme().apply(
-                  fontSizeFactor: setting.textScaleFactor.toScaleFactor(),
-                ),
-              ),
+              typography: Typography.material2021(),
               appBarTheme: const AppBarTheme(
                 centerTitle: true,
                 scrolledUnderElevation: 0.0,
@@ -92,7 +76,12 @@ class App extends StatelessWidget {
                   create: (_) => MemoBloc(Repo.of(context)),
                 ),
               ],
-              child: const HomeView(),
+              child: MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  textScaleFactor: setting.textScaleFactor.toScaleFactor(),
+                ),
+                child: const HomeView(),
+              ),
             ),
           );
         },
