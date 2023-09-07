@@ -14,25 +14,3 @@ class BibleChapter extends Equatable {
         verseList,
       ];
 }
-
-class BibleChapterOld extends Equatable {
-  const BibleChapterOld({
-    required this.usfm,
-    required this.number,
-  });
-  final String usfm;
-  final String number;
-
-  @override
-  List<Object?> get props => [
-        usfm,
-        number,
-      ];
-
-  factory BibleChapterOld.fromMap(Map<String, dynamic> map) {
-    return BibleChapterOld(
-      usfm: map['usfm'] as String,
-      number: map['human'] as String,
-    );
-  }
-}

@@ -18,14 +18,21 @@ class _SettingViewState extends State<SettingView> {
     required Function(ThemeMode themeMode) onChanged,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text("Theme : ${themeMode.name}"),
-        ToggleSwitch(
-          checked: themeMode.index == 1,
-          onChanged: (value) {
-            onChanged(value ? ThemeMode.light : ThemeMode.dark);
-          },
+        const Spacer(),
+        const Text("Dark"),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ToggleSwitch(
+            checked: themeMode.index == 1,
+            onChanged: (value) {
+              onChanged(value ? ThemeMode.light : ThemeMode.dark);
+            },
+          ),
         ),
+        const Text("Light"),
       ],
     );
   }
@@ -35,6 +42,7 @@ class _SettingViewState extends State<SettingView> {
     required Function(TextScaleFactor factor) onChanged,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text("TextFactor: "),
         DropDownButton(
@@ -69,6 +77,7 @@ class _SettingViewState extends State<SettingView> {
                 );
               },
             ),
+            const SizedBox(height: 8.0),
             textFactorWidget(
               scaleFactor: setting.textScaleFactor,
               onChanged: (factor) {

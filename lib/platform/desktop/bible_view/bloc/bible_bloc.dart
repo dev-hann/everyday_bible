@@ -4,9 +4,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:everydaybible/model/bible/bible_chapter.dart';
 import 'package:everydaybible/model/bible/bible_data.dart';
-import 'package:everydaybible/model/bible/bible_verse.dart';
 import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
 import 'package:everydaybible/use_case/bible_use_case/bible_use_case.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 
 part 'bible_event.dart';
 part 'bible_state.dart';
@@ -14,7 +14,7 @@ part 'bible_state.dart';
 class BibleBloc extends Bloc<BibleEvent, BibleState> {
   BibleBloc(BibleRepo repo)
       : useCase = BibleUseCase(repo),
-        super(const BibleState()) {
+        super(BibleState()) {
     on<BibleEventInited>(_onInited);
     on<BibleEventUpdatedChapter>(_onUpdatedChapter);
   }
@@ -22,19 +22,25 @@ class BibleBloc extends Bloc<BibleEvent, BibleState> {
 
   FutureOr<void> _onInited(
       BibleEventInited event, Emitter<BibleState> emit) async {
-    final either = await useCase.requestBibleData();
+    await useCase.initDataBase();
+
+    final either = useCase.loadBibleDataList();
     either.fold(
       (fail) {},
       (list) {
         emit(
           state.copyWith(
-            status: BibleViewStatus.success,
+            status: BibleViewStatus.loading,
             bibleDataList: list,
           ),
         );
       },
     );
-    add(BibleEventUpdatedChapter(state.bibleDataList.first.chatperList.first));
+    add(
+      BibleEventUpdatedChapter(
+        state.bibleDataList.first.chapterList.first,
+      ),
+    );
   }
 
   FutureOr<void> _onUpdatedChapter(
@@ -42,19 +48,11 @@ class BibleBloc extends Bloc<BibleEvent, BibleState> {
     final chapter = event.chapter;
     emit(
       state.copyWith(
-        currentChapter: chapter,
+        status: BibleViewStatus.success,
+        selectedChapter: chapter,
       ),
     );
-    final either = await useCase.requestVerseList(chapter);
-    either.fold(
-      (fail) {},
-      (list) {
-        emit(
-          state.copyWith(
-            verseList: list,
-          ),
-        );
-      },
-    );
+    await WidgetsBinding.instance.endOfFrame;
+    state.scrollController.jumpTo(0);
   }
 }

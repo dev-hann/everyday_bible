@@ -1,6 +1,6 @@
+import 'package:collection/collection.dart';
 import 'package:everydaybible/model/bible/bible_chapter.dart';
 import 'package:everydaybible/model/bible/bible_data.dart';
-import 'package:everydaybible/model/bible/bible_verse.dart';
 import 'package:everydaybible/platform/desktop/bible_view/bloc/bible_bloc.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:everydaybible/widgets/gospel_text.dart';
@@ -18,30 +18,33 @@ class _BibleViewState extends State<BibleView> {
   BibleBloc get bloc => BlocProvider.of(context);
 
   Widget capterList({
-    required BibleDataOld data,
-    required bool Function(BibleChapterOld chapter) isSelected,
-    required Function(BibleChapterOld chapter) onTapChapter,
+    required BibleData data,
+    required bool Function(BibleChapter chapter) isSelected,
+    required Function(BibleChapter chapter) onTapChapter,
   }) {
     return Padding(
-      padding: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.symmetric(
+        vertical: 4.0,
+        horizontal: 16.0,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(data.title),
-          for (final item in data.chatperList)
+          Text(data.name),
+          for (final item in data.chapterList)
             GestureDetector(
               onTap: () {
                 onTapChapter(item);
               },
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: isSelected(item) ? Colors.orange : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 4.0),
-                  child: Text("${item.number}장"),
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Card(
+                  backgroundColor: isSelected(item) ? Colors.orange : null,
+                  child: Center(
+                    child: Text(
+                      "${item.number}장",
+                    ),
+                  ),
                 ),
               ),
             )
@@ -50,17 +53,22 @@ class _BibleViewState extends State<BibleView> {
     );
   }
 
-  Widget verseListView(List<BibleVerse> verseList) {
+  Widget verseListView({
+    required List<String> verseList,
+    required ScrollController scrollController,
+  }) {
     if (verseList.isEmpty) {
       return const BibleLoading();
     }
     return ListView(
-      children: verseList.map((e) {
-        return VerseText(
-          index: e.index,
-          text: e.text,
-        );
-      }).toList(),
+      controller: scrollController,
+      children: [
+        for (int index = 0; index < verseList.length; index++)
+          VerseText(
+            index: index + 1,
+            text: verseList[index],
+          )
+      ],
     );
   }
 
@@ -77,10 +85,17 @@ class _BibleViewState extends State<BibleView> {
           case BibleViewStatus.success:
         }
         final dataList = state.bibleDataList;
-        final currentChapter = state.currentChapter;
-        final verseList = state.verseList;
+        final currentChapter = state.selectedChapter!;
+        final verseList = currentChapter.verseList;
+
+        final currentData = dataList.firstWhereOrNull(
+            (element) => element.chapterList.contains(currentChapter))!;
         return ScaffoldPage.withPadding(
-          header: const Text("Title"),
+          header: PageHeader(
+            title: Text(
+              "${currentData.name} ${currentChapter.number}장",
+            ),
+          ),
           content: Row(
             children: [
               Expanded(
@@ -101,9 +116,13 @@ class _BibleViewState extends State<BibleView> {
                   }).toList(),
                 ),
               ),
+              const SizedBox(width: 8.0),
               Expanded(
                 flex: 9,
-                child: verseListView(verseList),
+                child: verseListView(
+                  verseList: verseList,
+                  scrollController: state.scrollController,
+                ),
               ),
             ],
           ),

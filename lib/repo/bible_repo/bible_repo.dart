@@ -1,7 +1,6 @@
 library bible_repo;
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:everydaybible/data_base/service/bible_service.dart';
 import 'package:everydaybible/repo/repo.dart';
@@ -15,7 +14,4 @@ abstract class BibleRepo extends Repo {
   Future initDataBase();
 
   List<MapEntry<String, dynamic>> loadBibleDataList();
-
-  Future<dynamic> requestBibleData();
-  Future<List<String>> requestVerseList(String usfm);
 }

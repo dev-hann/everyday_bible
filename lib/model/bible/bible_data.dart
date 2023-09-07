@@ -39,31 +39,3 @@ class BibleData extends Equatable {
     );
   }
 }
-
-class BibleDataOld extends Equatable {
-  const BibleDataOld({
-    required this.title,
-    required this.usfm,
-    required this.chatperList,
-  });
-  final String title;
-  final String usfm;
-  final List<BibleChapterOld> chatperList;
-
-  @override
-  List<Object?> get props => [
-        title,
-        usfm,
-        chatperList,
-      ];
-
-  factory BibleDataOld.fromMap(Map<String, dynamic> map) {
-    return BibleDataOld(
-      title: map['human'] as String,
-      usfm: map['usfm'] as String,
-      chatperList: List.from(map["chapters"])
-          .map((e) => BibleChapterOld.fromMap(e))
-          .toList(),
-    );
-  }
-}

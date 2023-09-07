@@ -32,7 +32,9 @@ class BibleDrawer extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-          child: Center(child: Text("${item.number}장")),
+          child: Center(
+            child: Text("${item.number}장"),
+          ),
         ),
       ),
     );
