@@ -12,8 +12,9 @@ class BibleEventInited extends BibleEvent {
 }
 
 class BibleEventUpdatedChapter extends BibleEvent {
-  const BibleEventUpdatedChapter(this.chapter);
+  const BibleEventUpdatedChapter(this.data, this.chapter);
+  final BibleData data;
   final BibleChapter chapter;
   @override
-  List<Object> get props => [chapter];
+  List<Object> get props => [data, chapter];
 }

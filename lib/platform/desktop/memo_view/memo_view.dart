@@ -55,9 +55,7 @@ class _MemoViewState extends State<MemoView> {
               },
             ),
           ),
-          const Divider(
-            direction: Axis.vertical,
-          ),
+          const Divider(direction: Axis.vertical),
           Expanded(
             flex: 7,
             child: BlocBuilder<MemoBloc, MemoState>(
@@ -74,7 +72,9 @@ class _MemoViewState extends State<MemoView> {
                         MemoEventSelectedMemo(Memo()),
                       );
                     },
-                    icon: const Icon(FluentIcons.add),
+                    icon: const Center(
+                      child: Icon(FluentIcons.add),
+                    ),
                   );
                 }
                 return LayoutBuilder(

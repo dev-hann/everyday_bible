@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:everydaybible/model/bible/bible_chapter.dart';
 import 'package:everydaybible/model/bible/bible_data.dart';
 import 'package:everydaybible/platform/desktop/bible_view/bloc/bible_bloc.dart';
@@ -17,58 +16,74 @@ class BibleView extends StatefulWidget {
 class _BibleViewState extends State<BibleView> {
   BibleBloc get bloc => BlocProvider.of(context);
 
-  Widget capterList({
-    required BibleData data,
-    required bool Function(BibleChapter chapter) isSelected,
-    required Function(BibleChapter chapter) onTapChapter,
+  Widget chapterListDialog({
+    required List<BibleData> dataList,
+    required BibleChapter currentChapter,
+    required Function(BibleData data, BibleChapter chapter) onTapChapter,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 4.0,
-        horizontal: 16.0,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(data.name),
-          for (final item in data.chapterList)
-            GestureDetector(
-              onTap: () {
-                onTapChapter(item);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Card(
-                  backgroundColor: isSelected(item) ? Colors.orange : null,
-                  child: Center(
-                    child: Text(
-                      "${item.number}장",
-                    ),
-                  ),
-                ),
+    final TextEditingController searchController = TextEditingController();
+    return Center(
+      child: Card(
+        backgroundColor: Colors.black,
+        child: Column(
+          children: [
+            TextBox(
+              controller: searchController,
+            ),
+            Expanded(
+              child: ListView(
+                children: dataList.map((data) {
+                  return ValueListenableBuilder<TextEditingValue>(
+                    valueListenable: searchController,
+                    builder: (context, value, _) {
+                      final query = value.text;
+                      if (!data.name.contains(query)) {
+                        return const SizedBox();
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4.0,
+                          horizontal: 16.0,
+                        ),
+                        child: TreeView(
+                          items: dataList.map((data) {
+                            return TreeViewItem(
+                              lazy: true,
+                              content: Text(data.name),
+                              onExpandToggle: (item, getsExpanded) async {
+                                if (item.children.isNotEmpty) {
+                                  return;
+                                }
+                                item.children.addAll(
+                                  data.chapterList.map((chapter) {
+                                    return TreeViewItem(
+                                      onInvoked: (item, reason) async {
+                                        if (item.value != null) {
+                                          onTapChapter(data, item.value);
+                                          Navigator.pop(context);
+                                        }
+                                      },
+                                      value: chapter,
+                                      content: Text(
+                                        "${chapter.number}장",
+                                      ),
+                                    );
+                                  }).toList(),
+                                );
+                              },
+                              children: [],
+                            );
+                          }).toList(),
+                        ),
+                      );
+                    },
+                  );
+                }).toList(),
               ),
-            )
-        ],
+            ),
+          ],
+        ),
       ),
-    );
-  }
-
-  Widget verseListView({
-    required List<String> verseList,
-    required ScrollController scrollController,
-  }) {
-    if (verseList.isEmpty) {
-      return const BibleLoading();
-    }
-    return ListView(
-      controller: scrollController,
-      children: [
-        for (int index = 0; index < verseList.length; index++)
-          VerseText(
-            index: index + 1,
-            text: verseList[index],
-          )
-      ],
     );
   }
 
@@ -85,47 +100,57 @@ class _BibleViewState extends State<BibleView> {
           case BibleViewStatus.success:
         }
         final dataList = state.bibleDataList;
+        final currentData = state.selectedData!;
         final currentChapter = state.selectedChapter!;
         final verseList = currentChapter.verseList;
-
-        final currentData = dataList.firstWhereOrNull(
-            (element) => element.chapterList.contains(currentChapter))!;
         return ScaffoldPage.withPadding(
           header: PageHeader(
-            title: Text(
-              "${currentData.name} ${currentChapter.number}장",
+            title: Center(
+              child: Text(
+                "${currentData.name} ${currentChapter.number}장",
+              ),
             ),
-          ),
-          content: Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: ListView(
-                  children: dataList.map((e) {
-                    return capterList(
-                      data: e,
-                      isSelected: (chapter) {
-                        return currentChapter == chapter;
-                      },
-                      onTapChapter: (chapter) {
+            leading: IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (_) {
+                    return chapterListDialog(
+                      dataList: dataList,
+                      currentChapter: currentChapter,
+                      onTapChapter: (data, chapter) {
                         bloc.add(
-                          BibleEventUpdatedChapter(chapter),
+                          BibleEventUpdatedChapter(data, chapter),
                         );
                       },
                     );
-                  }).toList(),
+                  },
+                );
+              },
+              icon: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(
+                  FluentIcons.collapse_menu,
+                  size: 24.0,
                 ),
               ),
-              const SizedBox(width: 8.0),
-              Expanded(
-                flex: 9,
-                child: verseListView(
-                  verseList: verseList,
-                  scrollController: state.scrollController,
-                ),
-              ),
-            ],
+            ),
           ),
+          content: Builder(builder: (context) {
+            if (verseList.isEmpty) {
+              return const BibleLoading();
+            }
+            return ListView(
+              controller: state.scrollController,
+              children: [
+                for (int index = 0; index < verseList.length; index++)
+                  VerseText(
+                    index: index + 1,
+                    text: verseList[index],
+                  )
+              ],
+            );
+          }),
         );
       },
     );

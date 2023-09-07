@@ -1,4 +1,0 @@
-enum FavoriteType {
-  quiteTime,
-  bible,
-}

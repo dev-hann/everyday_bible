@@ -10,7 +10,7 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(const HomeState()) {
     on<HomeEventInited>(_onInited);
-    on<HomeEventUpdatedMenu>(_onUpdatedMenu);
+    on<HomeEventUpdatedIndex>(_onUpdatedMenu);
   }
 
   FutureOr<void> _onInited(HomeEventInited event, Emitter<HomeState> emit) {
@@ -22,7 +22,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   FutureOr<void> _onUpdatedMenu(
-      HomeEventUpdatedMenu event, Emitter<HomeState> emit) {
+      HomeEventUpdatedIndex event, Emitter<HomeState> emit) {
     emit(
       state.copyWith(
         status: HomeViewStatus.success,

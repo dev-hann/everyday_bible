@@ -33,20 +33,8 @@ class App extends StatelessWidget {
             title: "Everyday Bible",
             debugShowCheckedModeBanner: false,
             themeMode: setting.themeMode,
-            theme: FluentThemeData.light().copyWith(
-              typography: Typography.fromBrightness(
-                brightness: Brightness.light,
-              ).apply(
-                fontSizeFactor: setting.textScaleFactor.toScaleFactor(),
-              ),
-            ),
-            darkTheme: FluentThemeData.dark().copyWith(
-              typography: Typography.fromBrightness(
-                brightness: Brightness.dark,
-              ).apply(
-                fontSizeFactor: setting.textScaleFactor.toScaleFactor(),
-              ),
-            ),
+            theme: FluentThemeData.light(),
+            darkTheme: FluentThemeData.dark(),
             home: MultiBlocProvider(
               providers: [
                 BlocProvider(
@@ -69,7 +57,12 @@ class App extends StatelessWidget {
                       MemoBloc(Repo.of(context))..add(const MemoEventInited()),
                 ),
               ],
-              child: const HomeView(),
+              child: MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  textScaleFactor: setting.textScaleFactor.toScaleFactor(),
+                ),
+                child: const HomeView(),
+              ),
             ),
           );
         },

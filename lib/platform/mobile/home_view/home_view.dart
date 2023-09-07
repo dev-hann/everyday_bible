@@ -1,4 +1,3 @@
-import 'package:everydaybible/enum/mobile_menu_type.dart';
 import 'package:everydaybible/platform/mobile/bible_view/bible_view.dart';
 import 'package:everydaybible/platform/mobile/home_view/bloc/home_bloc.dart';
 import 'package:everydaybible/platform/mobile/memo_view/memo_view.dart';
@@ -24,19 +23,32 @@ class _HomeViewState extends State<HomeView> {
     bloc.add(HomeEventInited());
   }
 
-  Widget body({
-    required MobileMenuType currentType,
-  }) {
-    switch (currentType) {
-      case MobileMenuType.bible:
-        return const BibleView();
-      case MobileMenuType.quiteTime:
-        return const QuiteTimeView();
-      case MobileMenuType.setting:
-        return const SettingView();
-      case MobileMenuType.memo:
-        return const MemoView();
-    }
+  NavigationDestination bibleMenuItem() {
+    return const NavigationDestination(
+      icon: Icon(Icons.book),
+      label: "Bible",
+    );
+  }
+
+  NavigationDestination quiteTimeMenuItem() {
+    return const NavigationDestination(
+      icon: Icon(Icons.bookmark),
+      label: "QuiteTime",
+    );
+  }
+
+  NavigationDestination memoMenuItem() {
+    return const NavigationDestination(
+      icon: Icon(Icons.note),
+      label: "Memo",
+    );
+  }
+
+  NavigationDestination settinguItem() {
+    return const NavigationDestination(
+      icon: Icon(Icons.settings),
+      label: "Setting",
+    );
   }
 
   @override
@@ -51,24 +63,30 @@ class _HomeViewState extends State<HomeView> {
           case HomeViewStatus.failure:
           case HomeViewStatus.success:
         }
-        final currentType = state.menuType;
+        final currentIndex = state.menuIndex;
         return Scaffold(
-          body: body(
-            currentType: currentType,
+          body: PageView(
+            controller: PageController(initialPage: currentIndex),
+            children: const [
+              BibleView(),
+              QuiteTimeView(),
+              SettingView(),
+              MemoView(),
+            ],
           ),
           bottomNavigationBar: NavigationBar(
-            selectedIndex: currentType.index,
+            selectedIndex: currentIndex,
             onDestinationSelected: (index) {
               bloc.add(
-                HomeEventUpdatedMenu(MobileMenuType.values[index]),
+                HomeEventUpdatedIndex(index),
               );
             },
-            destinations: MobileMenuType.values.map((e) {
-              return NavigationDestination(
-                icon: Icon(e.toIcons()),
-                label: e.toTitle(),
-              );
-            }).toList(),
+            destinations: [
+              bibleMenuItem(),
+              quiteTimeMenuItem(),
+              memoMenuItem(),
+              settinguItem()
+            ],
           ),
         );
       },

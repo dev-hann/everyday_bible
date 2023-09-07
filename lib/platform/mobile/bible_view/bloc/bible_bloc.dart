@@ -35,9 +35,13 @@ class BibleBloc extends Bloc<BibleEvent, BibleState> {
         );
       },
     );
+    final data = state.bibleDataList.first;
+    final chapter = data.chapterList.first;
+
     add(
       BibleEventUpdatedChapter(
-        state.bibleDataList.first.chapterList.first,
+        data,
+        chapter,
       ),
     );
   }
@@ -48,6 +52,7 @@ class BibleBloc extends Bloc<BibleEvent, BibleState> {
     emit(
       state.copyWith(
         status: BibleViewStatus.success,
+        selectedData: event.data,
         selectedChapter: chapter,
       ),
     );

@@ -1,6 +1,3 @@
-import 'package:collection/collection.dart';
-import 'package:everydaybible/model/bible/bible_chapter.dart';
-import 'package:everydaybible/model/bible/bible_data.dart';
 import 'package:everydaybible/platform/mobile/bible_view/bloc/bible_bloc.dart';
 import 'package:everydaybible/widgets/bible_drawer.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
@@ -47,10 +44,9 @@ class _BibleViewState extends State<BibleView>
           case BibleViewStatus.success:
         }
         final dataList = state.bibleDataList;
+        final currentData = state.selectedData!;
         final currentChapter = state.selectedChapter!;
         final verseList = currentChapter.verseList;
-        final currentData = dataList.firstWhereOrNull(
-            (element) => element.chapterList.contains(currentChapter))!;
 
         return Scaffold(
           key: state.drawerKey,
@@ -60,11 +56,11 @@ class _BibleViewState extends State<BibleView>
           drawer: BibleDrawer(
             dataList: dataList,
             currentChapter: currentChapter,
-            onTapChapter: ((chapter) {
+            onTapChapter: (data, chapter) {
               bloc.add(
-                BibleEventUpdatedChapter(chapter),
+                BibleEventUpdatedChapter(data, chapter),
               );
-            }),
+            },
           ),
           body: ListView(
             padding: const EdgeInsets.all(16.0),

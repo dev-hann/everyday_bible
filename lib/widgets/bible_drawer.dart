@@ -11,7 +11,7 @@ class BibleDrawer extends StatelessWidget {
   });
   final BibleChapter? currentChapter;
   final List<BibleData> dataList;
-  final Function(BibleChapter chapter) onTapChapter;
+  final Function(BibleData data, BibleChapter chapter) onTapChapter;
   final TextEditingController searchController = TextEditingController();
   Widget searchTextfield() {
     return TextField(
@@ -95,7 +95,7 @@ class BibleDrawer extends StatelessWidget {
                 return currentChapter == chapter;
               },
               onTapChapter: (chapter) {
-                onTapChapter(chapter);
+                onTapChapter(data, chapter);
                 Navigator.pop(context);
               },
             )

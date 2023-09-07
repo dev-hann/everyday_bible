@@ -10,24 +10,24 @@ enum HomeViewStatus {
 class HomeState extends Equatable {
   const HomeState({
     this.status = HomeViewStatus.init,
-    this.menuType = MobileMenuType.bible,
+    this.menuIndex = 0,
   });
   final HomeViewStatus status;
-  final MobileMenuType menuType;
+  final int menuIndex;
 
   @override
   List<Object> get props => [
         status,
-        menuType,
+        menuIndex,
       ];
 
   HomeState copyWith({
     HomeViewStatus? status,
-    MobileMenuType? menuType,
+    int? menuIndex,
   }) {
     return HomeState(
       status: status ?? this.status,
-      menuType: menuType ?? this.menuType,
+      menuIndex: menuIndex ?? this.menuIndex,
     );
   }
 }

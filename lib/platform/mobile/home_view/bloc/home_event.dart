@@ -9,9 +9,9 @@ abstract class HomeEvent extends Equatable {
 
 class HomeEventInited extends HomeEvent {}
 
-class HomeEventUpdatedMenu extends HomeEvent {
-  const HomeEventUpdatedMenu(this.type);
-  final MobileMenuType type;
+class HomeEventUpdatedIndex extends HomeEvent {
+  const HomeEventUpdatedIndex(this.index);
+  final int index;
   @override
-  List<Object> get props => [type];
+  List<Object> get props => [index];
 }

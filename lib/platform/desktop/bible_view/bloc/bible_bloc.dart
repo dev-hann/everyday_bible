@@ -36,20 +36,23 @@ class BibleBloc extends Bloc<BibleEvent, BibleState> {
         );
       },
     );
+    final data = state.bibleDataList.first;
+    final chapter = data.chapterList.first;
     add(
       BibleEventUpdatedChapter(
-        state.bibleDataList.first.chapterList.first,
+        data,
+        chapter,
       ),
     );
   }
 
   FutureOr<void> _onUpdatedChapter(
       BibleEventUpdatedChapter event, Emitter<BibleState> emit) async {
-    final chapter = event.chapter;
     emit(
       state.copyWith(
         status: BibleViewStatus.success,
-        selectedChapter: chapter,
+        selectedData: event.data,
+        selectedChapter: event.chapter,
       ),
     );
     await WidgetsBinding.instance.endOfFrame;
