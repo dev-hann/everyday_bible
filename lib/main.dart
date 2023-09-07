@@ -11,8 +11,7 @@ import 'package:everydaybible/repo/setting_repo/repo_setting.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() async {
-  // await LocalBox.init();
+void main(List<String> args) async {
   final isMobile = Platform.isAndroid || Platform.isIOS;
   runApp(
     MultiRepositoryProvider(
@@ -23,7 +22,7 @@ void main() async {
         RepositoryProvider<SettingRepo>(create: (_) => SettingImpl()),
         RepositoryProvider<MemoRepo>(create: (_) => MemoImpl()),
       ],
-      child: isMobile ? const mobile.App() : const desktop.App(),
+      child: isMobile ? const mobile.App() : desktop.App(args: args),
     ),
   );
 }

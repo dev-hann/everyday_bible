@@ -1,6 +1,7 @@
 import 'package:everydaybible/model/bible/bible_chapter.dart';
 import 'package:everydaybible/model/bible/bible_data.dart';
 import 'package:flutter/material.dart';
+import 'package:highlight_text/highlight_text.dart';
 
 class BibleDrawer extends StatelessWidget {
   BibleDrawer({
@@ -56,7 +57,14 @@ class BibleDrawer extends StatelessWidget {
           tilePadding: EdgeInsets.zero,
           title: Row(
             children: [
-              Text(title),
+              TextHighlight(
+                words: {
+                  title: HighlightedWord(
+                    textStyle: const TextStyle(color: Colors.orangeAccent),
+                  )
+                },
+                text: title,
+              ),
               const SizedBox(width: 4.0),
               const Expanded(child: Divider()),
             ],

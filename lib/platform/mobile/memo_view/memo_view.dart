@@ -1,6 +1,6 @@
 import 'package:everydaybible/model/memo/memo.dart';
 import 'package:everydaybible/platform/mobile/memo_view/bloc/memo_bloc.dart';
-import 'package:everydaybible/platform/mobile/memo_view/memo_editor_view.dart';
+import 'package:everydaybible/platform/mobile/memo_edit_view/memo_editor_view.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:everydaybible/widgets/memo_list_tile/mobile_memo_list_tile.dart';
 import 'package:flutter/material.dart';

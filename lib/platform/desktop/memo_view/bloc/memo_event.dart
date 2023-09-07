@@ -18,9 +18,13 @@ class MemoEventUpdatedMemo extends MemoEvent {
   List<Object> get props => [memo];
 }
 
-class MemoEventSelectedMemo extends MemoEvent {
-  const MemoEventSelectedMemo(this.memo);
+class MemoEventRemoveddMemo extends MemoEvent {
+  const MemoEventRemoveddMemo(this.memo);
   final Memo memo;
   @override
   List<Object> get props => [memo];
+}
+
+class MemoEventInitedEdit extends MemoEvent {
+  const MemoEventInitedEdit();
 }

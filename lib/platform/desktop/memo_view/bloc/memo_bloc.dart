@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:equatable/equatable.dart';
 import 'package:everydaybible/model/memo/memo.dart';
 import 'package:everydaybible/repo/memo_repo/memo_repo.dart';
@@ -16,7 +18,8 @@ class MemoBloc extends Bloc<MemoEvent, MemoState> {
         super(MemoState()) {
     on<MemoEventInited>(_onInited);
     on<MemoEventUpdatedMemo>(_onUpdatedMemo);
-    on<MemoEventSelectedMemo>(_onSelectedMemo);
+    on<MemoEventInitedEdit>(_onInitedEdit);
+    on<MemoEventRemoveddMemo>(_onRemovedMemo);
   }
 
   final MemoUseCase useCase;
@@ -36,6 +39,7 @@ class MemoBloc extends Bloc<MemoEvent, MemoState> {
       },
     );
 
+    add(const MemoEventInitedEdit());
     await emit.onEach(
       useCase.memoListStream(),
       onData: (list) {
@@ -64,13 +68,23 @@ class MemoBloc extends Bloc<MemoEvent, MemoState> {
     );
   }
 
-  FutureOr<void> _onSelectedMemo(
-      MemoEventSelectedMemo event, Emitter<MemoState> emit) {
-    emit(
-      state.copyWith(
-        selectedMemo: event.memo,
-      ),
+  FutureOr<void> _onRemovedMemo(
+      MemoEventRemoveddMemo event, Emitter<MemoState> emit) {
+    final memo = event.memo;
+    useCase.removeMemo(memo);
+  }
+
+  FutureOr<void> _onInitedEdit(
+      MemoEventInitedEdit event, Emitter<MemoState> emit) {
+    DesktopMultiWindow.setMethodHandler(
+      (call, fromWindowId) async {
+        final method = call.method;
+        final arg = call.arguments;
+        if (method == "onUpdated") {
+          final memo = Memo.fromMap(jsonDecode(arg));
+          add(MemoEventUpdatedMemo(memo));
+        }
+      },
     );
-    state.focusNode.requestFocus();
   }
 }

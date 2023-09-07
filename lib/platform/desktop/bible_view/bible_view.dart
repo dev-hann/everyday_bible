@@ -5,6 +5,7 @@ import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:everydaybible/widgets/gospel_text.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:highlight_text/highlight_text.dart';
 
 class BibleView extends StatefulWidget {
   const BibleView({super.key});
@@ -37,7 +38,8 @@ class _BibleViewState extends State<BibleView> {
                     valueListenable: searchController,
                     builder: (context, value, _) {
                       final query = value.text;
-                      if (!data.name.contains(query)) {
+                      final title = data.name;
+                      if (!title.contains(query)) {
                         return const SizedBox();
                       }
                       return Padding(
@@ -49,7 +51,15 @@ class _BibleViewState extends State<BibleView> {
                           items: dataList.map((data) {
                             return TreeViewItem(
                               lazy: true,
-                              content: Text(data.name),
+                              content: TextHighlight(
+                                words: {
+                                  title: HighlightedWord(
+                                    textStyle:
+                                        TextStyle(color: Colors.orange.light),
+                                  )
+                                },
+                                text: title,
+                              ),
                               onExpandToggle: (item, getsExpanded) async {
                                 if (item.children.isNotEmpty) {
                                   return;

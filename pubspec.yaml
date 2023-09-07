@@ -20,6 +20,8 @@ dependencies:
   fluent_ui: ^4.0.2
   flutter_slidable:
   table_calendar:
+  desktop_multi_window:
+  highlight_text:
 
   # Database
   hive: ^2.0.0

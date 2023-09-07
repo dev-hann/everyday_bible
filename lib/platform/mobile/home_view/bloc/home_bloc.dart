@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:everydaybible/enum/mobile_menu_type.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -10,7 +9,7 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(const HomeState()) {
     on<HomeEventInited>(_onInited);
-    on<HomeEventUpdatedIndex>(_onUpdatedMenu);
+    on<HomeEventUpdatedIndex>(_onUpdatedIndex);
   }
 
   FutureOr<void> _onInited(HomeEventInited event, Emitter<HomeState> emit) {
@@ -21,12 +20,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     );
   }
 
-  FutureOr<void> _onUpdatedMenu(
+  FutureOr<void> _onUpdatedIndex(
       HomeEventUpdatedIndex event, Emitter<HomeState> emit) {
     emit(
       state.copyWith(
         status: HomeViewStatus.success,
-        menuType: event.type,
+        menuIndex: event.index,
       ),
     );
   }
