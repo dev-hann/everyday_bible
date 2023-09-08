@@ -4,7 +4,7 @@ import 'package:everydaybible/platform/mobile/bible_view/bloc/bible_bloc.dart';
 import 'package:everydaybible/platform/mobile/home_view/bloc/home_bloc.dart';
 import 'package:everydaybible/platform/mobile/home_view/home_view.dart';
 import 'package:everydaybible/platform/mobile/memo_view/bloc/memo_bloc.dart';
-import 'package:everydaybible/platform/mobile/quite_time_view/bloc/quite_time_bloc.dart';
+import 'package:everydaybible/platform/mobile/quite_time_dash_board_view/bloc/quite_time_dash_board_bloc.dart';
 import 'package:everydaybible/platform/mobile/setting_view/bloc/setting_bloc.dart';
 import 'package:everydaybible/repo/repo.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
@@ -67,7 +67,7 @@ class App extends StatelessWidget {
                   create: (_) => BibleBloc(Repo.of(context)),
                 ),
                 BlocProvider(
-                  create: (_) => QuiteTimeBloc(Repo.of(context)),
+                  create: (_) => QuiteTimeDashBoardBloc(Repo.of(context)),
                 ),
                 BlocProvider(
                   create: (_) => AudioPlayerBloc(Repo.of(context)),

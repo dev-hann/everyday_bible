@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:everydaybible/model/quite_time/quite_time_data.dart';
+import 'package:everydaybible/model/quite_time/quite_time.dart';
 import 'package:everydaybible/repo/quite_time_repo/quite_time_repo.dart';
 import 'package:everydaybible/use_case/quite_time_use_case/quite_time_use_case.dart';
 
@@ -14,43 +14,34 @@ class QuiteTimeBloc extends Bloc<QuiteTimeEvent, QuiteTimeState> {
       : useCase = QuiteTimeUseCase(repo),
         super(QuiteTimeState()) {
     on<QuiteTimeEventInited>(_onInited);
-    on<QuiteTimeEventChangedDateTime>(_onChangedDateTime);
+    on<QuiteTimeEventUpdatedDateTime>(_onUpdatedDateTime);
   }
-
   final QuiteTimeUseCase useCase;
 
   FutureOr<void> _onInited(
       QuiteTimeEventInited event, Emitter<QuiteTimeState> emit) {
-    emit(
-      state.copyWith(
-        status: QuiteTimeViewStatus.success,
-      ),
-    );
     add(
-      QuiteTimeEventChangedDateTime(state.selectedDateTime),
+      QuiteTimeEventUpdatedDateTime(event.dateTime),
     );
   }
 
-  FutureOr<void> _onChangedDateTime(
-      QuiteTimeEventChangedDateTime event, Emitter<QuiteTimeState> emit) async {
+  FutureOr<void> _onUpdatedDateTime(
+      QuiteTimeEventUpdatedDateTime event, Emitter<QuiteTimeState> emit) async {
+    final dateTime = event.dateTime;
     emit(
       state.copyWith(
-        selectedDateTime: event.dateTime,
+        status: QuiteTimeViewStatus.loading,
+        dateTime: dateTime,
       ),
     );
-    final list = state.dataList;
-    for (final item in list) {
-      if (item.isSameDateTime(event.dateTime)) {
-        return;
-      }
-    }
-    final either = await useCase.requestQuiteTimeData(event.dateTime);
+    final either = await useCase.requestQuiteTime(dateTime);
     either.fold(
       (fail) {},
       (data) {
         emit(
           state.copyWith(
-            dataList: [...list, data],
+            status: QuiteTimeViewStatus.success,
+            quiteTime: data,
           ),
         );
       },

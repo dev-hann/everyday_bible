@@ -1,5 +1,6 @@
+import 'package:everydaybible/platform/mobile/bible_drawer_view/bloc/bible_drawer_bloc.dart';
 import 'package:everydaybible/platform/mobile/bible_view/bloc/bible_bloc.dart';
-import 'package:everydaybible/widgets/bible_drawer.dart';
+import 'package:everydaybible/platform/mobile/bible_drawer_view/bible_drawer_view.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:everydaybible/widgets/gospel_text.dart';
 import 'package:flutter/material.dart';
@@ -33,47 +34,51 @@ class _BibleViewState extends State<BibleView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BlocBuilder<BibleBloc, BibleState>(
-      builder: (context, state) {
-        final status = state.status;
-        switch (status) {
-          case BibleViewStatus.init:
-            return const BibleLoading();
-          case BibleViewStatus.loading:
-          case BibleViewStatus.failure:
-          case BibleViewStatus.success:
-        }
-        final dataList = state.bibleDataList;
-        final currentData = state.selectedData!;
-        final currentChapter = state.selectedChapter!;
-        final verseList = currentChapter.verseList;
+    return BlocProvider(
+      create: (context) => BibleDrawerBloc(),
+      child: BlocBuilder<BibleBloc, BibleState>(
+        builder: (context, state) {
+          final status = state.status;
+          switch (status) {
+            case BibleViewStatus.init:
+              return const BibleLoading();
+            case BibleViewStatus.loading:
+            case BibleViewStatus.failure:
+            case BibleViewStatus.success:
+          }
+          final dataList = state.bibleDataList;
+          final currentData = state.selectedData!;
+          final currentChapter = state.selectedChapter!;
+          final verseList = currentChapter.verseList;
 
-        return Scaffold(
-          key: state.drawerKey,
-          appBar: appBar(
-            title: "${currentData.name} ${currentChapter.number}장",
-          ),
-          drawer: BibleDrawer(
-            dataList: dataList,
-            currentChapter: currentChapter,
-            onTapChapter: (data, chapter) {
-              bloc.add(
-                BibleEventUpdatedChapter(data, chapter),
-              );
-            },
-          ),
-          body: ListView(
-            padding: const EdgeInsets.all(16.0),
-            children: [
-              for (int index = 0; index < verseList.length; index++)
-                VerseText(
-                  index: index + 1,
-                  text: verseList[index],
-                ),
-            ],
-          ),
-        );
-      },
+          return Scaffold(
+            key: state.drawerKey,
+            appBar: appBar(
+              title: "${currentData.name} ${currentChapter.number}장",
+            ),
+            drawer: BibleDrawerView(
+              dataList: dataList,
+              currentData: currentData,
+              currentChapter: currentChapter,
+              onTapChapter: (data, chapter) {
+                bloc.add(
+                  BibleEventUpdatedChapter(data, chapter),
+                );
+              },
+            ),
+            body: ListView(
+              padding: const EdgeInsets.all(16.0),
+              children: [
+                for (int index = 0; index < verseList.length; index++)
+                  VerseText(
+                    index: index + 1,
+                    text: verseList[index],
+                  ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 

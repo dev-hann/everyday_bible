@@ -4,16 +4,22 @@ abstract class QuiteTimeEvent extends Equatable {
   const QuiteTimeEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class QuiteTimeEventInited extends QuiteTimeEvent {
-  const QuiteTimeEventInited();
-}
-
-class QuiteTimeEventChangedDateTime extends QuiteTimeEvent {
-  const QuiteTimeEventChangedDateTime(this.dateTime);
+  const QuiteTimeEventInited(
+    this.dateTime,
+  );
   final DateTime dateTime;
   @override
-  List<Object> get props => [dateTime];
+  List<Object?> get props => [dateTime];
+}
+
+class QuiteTimeEventUpdatedDateTime extends QuiteTimeEvent {
+  const QuiteTimeEventUpdatedDateTime(this.dateTime);
+  final DateTime dateTime;
+
+  @override
+  List<Object?> get props => [dateTime];
 }

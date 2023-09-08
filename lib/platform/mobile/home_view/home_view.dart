@@ -1,7 +1,6 @@
 import 'package:everydaybible/platform/mobile/bible_view/bible_view.dart';
 import 'package:everydaybible/platform/mobile/home_view/bloc/home_bloc.dart';
-import 'package:everydaybible/platform/mobile/memo_view/memo_view.dart';
-import 'package:everydaybible/platform/mobile/quite_time_view/quite_time_view.dart';
+import 'package:everydaybible/platform/mobile/quite_time_dash_board_view/quite_time_dash_board_view.dart';
 import 'package:everydaybible/platform/mobile/setting_view/setting_view.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:flutter/material.dart';
@@ -69,9 +68,9 @@ class _HomeViewState extends State<HomeView> {
             controller: PageController(initialPage: currentIndex),
             children: const [
               BibleView(),
-              QuiteTimeView(),
+              QuiteTimeDashBoardView(),
+              // MemoView(),
               SettingView(),
-              MemoView(),
             ],
           ),
           bottomNavigationBar: NavigationBar(
@@ -84,7 +83,7 @@ class _HomeViewState extends State<HomeView> {
             destinations: [
               bibleMenuItem(),
               quiteTimeMenuItem(),
-              memoMenuItem(),
+              // memoMenuItem(),
               settinguItem()
             ],
           ),
