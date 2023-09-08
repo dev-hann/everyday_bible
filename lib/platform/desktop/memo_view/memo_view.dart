@@ -38,7 +38,7 @@ class _MemoViewState extends State<MemoView> {
           final list = state.memoList;
           final selectedMemo = state.selectedMemo;
 
-          if (selectedMemo == null) {
+          if (list.isEmpty) {
             return IconButton(
               onPressed: () {
                 final memo = Memo();
@@ -53,14 +53,17 @@ class _MemoViewState extends State<MemoView> {
           return ListView(
             children: list.map((memo) {
               return DesktopMemoListTile(
-                isSelected: selectedMemo.index == memo.index,
+                isSelected: selectedMemo == memo,
                 memo: memo,
                 onTapDelete: () {
                   bloc.add(
-                    MemoEventUpdatedMemo(memo),
+                    MemoEventRemoveddMemo(memo),
                   );
                 },
                 onTap: () async {
+                  bloc.add(
+                    MemoEventUpdatedMemo(memo),
+                  );
                   MemoEditView.show(memo);
                 },
               );

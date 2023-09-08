@@ -5,7 +5,7 @@ import 'package:everydaybible/model/memo/memo.dart';
 import 'package:everydaybible/widgets/memo_editor_controller.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
-class MemoEditView extends StatelessWidget {
+class MemoEditView extends StatefulWidget {
   MemoEditView({
     super.key,
     required int windowID,
@@ -26,6 +26,11 @@ class MemoEditView extends StatelessWidget {
   }
 
   @override
+  State<MemoEditView> createState() => _MemoEditViewState();
+}
+
+class _MemoEditViewState extends State<MemoEditView> {
+  @override
   Widget build(BuildContext context) {
     return ScaffoldPage(
       content: LayoutBuilder(
@@ -33,7 +38,7 @@ class MemoEditView extends StatelessWidget {
           return SizedBox(
             height: constraints.maxHeight,
             child: TextBox(
-              controller: memoController,
+              controller: widget.memoController,
               // focusNode: state.focusNode,
               expands: true,
               maxLines: null,
@@ -44,7 +49,7 @@ class MemoEditView extends StatelessWidget {
               ),
               highlightColor: Colors.transparent,
               onChanged: (_) async {
-                final memo = memoController.memo;
+                final memo = widget.memoController.memo;
                 await DesktopMultiWindow.invokeMethod(
                   0,
                   "onUpdated",

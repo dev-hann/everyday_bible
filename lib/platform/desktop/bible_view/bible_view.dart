@@ -32,64 +32,65 @@ class _BibleViewState extends State<BibleView> {
               controller: searchController,
             ),
             Expanded(
-              child: ListView(
-                children: dataList.map((data) {
-                  return ValueListenableBuilder<TextEditingValue>(
-                    valueListenable: searchController,
-                    builder: (context, value, _) {
-                      final query = value.text;
-                      final title = data.name;
-                      if (!title.contains(query)) {
-                        return const SizedBox();
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 4.0,
-                          horizontal: 16.0,
-                        ),
-                        child: TreeView(
-                          items: dataList.map((data) {
-                            return TreeViewItem(
-                              lazy: true,
-                              content: TextHighlight(
-                                words: {
-                                  title: HighlightedWord(
-                                    textStyle:
-                                        TextStyle(color: Colors.orange.light),
-                                  )
-                                },
-                                text: title,
-                              ),
-                              onExpandToggle: (item, getsExpanded) async {
-                                if (item.children.isNotEmpty) {
-                                  return;
-                                }
-                                item.children.addAll(
-                                  data.chapterList.map((chapter) {
-                                    return TreeViewItem(
-                                      onInvoked: (item, reason) async {
-                                        if (item.value != null) {
-                                          onTapChapter(data, item.value);
-                                          Navigator.pop(context);
-                                        }
-                                      },
-                                      value: chapter,
-                                      content: Text(
-                                        "${chapter.number}장",
-                                      ),
-                                    );
-                                  }).toList(),
-                                );
-                              },
-                              children: [],
-                            );
-                          }).toList(),
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
-              ),
+              child: ValueListenableBuilder<TextEditingValue>(
+                  valueListenable: searchController,
+                  builder: (context, value, _) {
+                    final query = value.text;
+                    final list = dataList
+                        .where((element) => element.name.contains(query))
+                        .toList();
+                    if (list.isEmpty) {
+                      return const SizedBox();
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 4.0,
+                        horizontal: 16.0,
+                      ),
+                      child: TreeView(
+                        items: list.map((data) {
+                          final title = data.name;
+                          return TreeViewItem(
+                            lazy: true,
+                            content: Text(title),
+
+                            /// TODO: [TextHelight] Widget is too slow draw UI..
+                            // content: TextHighlight(
+                            //   words: {
+                            //     query: HighlightedWord(
+                            //       textStyle:
+                            //           TextStyle(color: Colors.orange.light),
+                            //     )
+                            //   },
+                            //   text: title,
+                            // ),
+                            onExpandToggle: (item, getsExpanded) async {
+                              if (item.children.isNotEmpty) {
+                                return;
+                              }
+                              item.children.addAll(
+                                data.chapterList.map((chapter) {
+                                  return TreeViewItem(
+                                    onInvoked: (item, reason) async {
+                                      if (item.value != null) {
+                                        onTapChapter(data, item.value);
+                                        Navigator.pop(context);
+                                      }
+                                    },
+                                    value: chapter,
+                                    content: Text(
+                                      "${chapter.number}장",
+                                    ),
+                                  );
+                                }).toList(),
+                              );
+                            },
+                            children: [],
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  }),
             ),
           ],
         ),

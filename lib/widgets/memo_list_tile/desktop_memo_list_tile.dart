@@ -46,7 +46,7 @@ class DesktopMemoListTile extends StatelessWidget {
         ],
       ),
       child: ListTile(
-        tileColor: ButtonState.all(Colors.grey),
+        tileColor: ButtonState.all(isSelected ? Colors.orange : Colors.grey),
         onPressed: onTap,
         title: Text(
           memo.title,
