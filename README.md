@@ -22,7 +22,7 @@ flutter run
 
 ## Technology
 
-* [Bloc](https://bloclibrary.dev/#/) pattern
+* [Bloc pattern](https://bloclibrary.dev/#/)
 * [Clean Architecture](https://itnext.io/flutter-clean-architecture-b53ce9e19d5a)
 * [Functional Programming](https://pub.dev/packages/dartz)
 
@@ -48,7 +48,7 @@ flutter run
 │   │   ├── 📁 audio_player_view
 │   │   ├── 📁 bible_view
 │   │   ├── 📁 home_view
-│   │   ├── 📁 memo_edit_view
+│   │   ├── 📁 memo_edit_view ( 🚧 Work In Progress.. )
 │   │   ├── 📁 memo_view
 │   │   ├── 📁 quite_time_view
 │   │   └── 📁 setting_view
@@ -56,7 +56,7 @@ flutter run
 │       ├── 📁 audio_player_view
 │       ├── 📁 bible_view
 │       ├── 📁 home_view
-│       ├── 📁 memo_edit_view
+│       ├── 📁 memo_edit_view ( 🚧 Work In Progress.. )
 │       ├── 📁 memo_view
 │       ├── 📁 quite_time_view
 │       └── 📁 setting_view
