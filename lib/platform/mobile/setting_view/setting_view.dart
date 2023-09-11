@@ -1,4 +1,4 @@
-import 'package:everydaybible/enum/text_scale_factor.dart';
+import 'package:everydaybible/model/setting.dart';
 import 'package:everydaybible/platform/mobile/setting_view/bloc/setting_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -16,7 +16,15 @@ flutter run
 
 ## Screen shot
 
- 🚧 Work In Progress..
+![Mobile Screen](https://github.com/yoehwan/everyday_bible/assets/54878755/98b81fd7-459d-40a6-a964-031ba1d3f988)
+
+![Desktop Screen](https://github.com/yoehwan/everyday_bible/assets/54878755/af6ee6d6-ed0a-45b7-8f8c-96ed8a666e24)
+
+## Technology
+
+* [Bloc](https://bloclibrary.dev/#/) pattern
+* [Clean Architecture](https://itnext.io/flutter-clean-architecture-b53ce9e19d5a)
+* [Functional Programming](https://pub.dev/packages/dartz)
 
 ## Feature
 

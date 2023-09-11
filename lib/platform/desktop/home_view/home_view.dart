@@ -89,7 +89,7 @@ class _HomeViewState extends State<HomeView> {
             items: [
               quiteTimeView(),
               bibleView(),
-              // memoView(),
+              memoView(),
               settingView(),
             ],
           ),

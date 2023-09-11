@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:everydaybible/enum/text_scale_factor.dart';
+import 'package:everydaybible/model/setting.dart';
 import 'package:everydaybible/platform/desktop/audio_player_view/bloc/audio_player_bloc.dart';
 import 'package:everydaybible/platform/desktop/bible_view/bloc/bible_bloc.dart';
 import 'package:everydaybible/platform/desktop/home_view/bloc/home_bloc.dart';

@@ -14,12 +14,20 @@ class BibleState extends Equatable {
     this.selectedData,
     this.selectedChapter,
     GlobalKey<ScaffoldState>? drawerKey,
-  }) : drawerKey = drawerKey ?? GlobalKey();
+    TextEditingController? drawerSearchController,
+    ScrollController? drawerScrollController,
+  })  : drawerScrollController = drawerScrollController ?? ScrollController(),
+        drawerSearchController =
+            drawerSearchController ?? TextEditingController(),
+        drawerKey = drawerKey ?? GlobalKey();
   final BibleViewStatus status;
   final List<BibleData> bibleDataList;
   final BibleData? selectedData;
   final BibleChapter? selectedChapter;
   final GlobalKey<ScaffoldState> drawerKey;
+
+  final TextEditingController drawerSearchController;
+  final ScrollController drawerScrollController;
 
   @override
   List<Object?> get props => [
@@ -28,6 +36,8 @@ class BibleState extends Equatable {
         selectedData,
         selectedChapter,
         drawerKey,
+        drawerSearchController,
+        drawerScrollController,
       ];
 
   BibleState copyWith({
@@ -36,6 +46,8 @@ class BibleState extends Equatable {
     BibleData? selectedData,
     BibleChapter? selectedChapter,
     GlobalKey<ScaffoldState>? drawerKey,
+    TextEditingController? drawerSearchController,
+    ScrollController? drawerScrollController,
   }) {
     return BibleState(
       status: status ?? this.status,
@@ -43,6 +55,10 @@ class BibleState extends Equatable {
       selectedData: selectedData ?? this.selectedData,
       selectedChapter: selectedChapter ?? this.selectedChapter,
       drawerKey: drawerKey ?? this.drawerKey,
+      drawerSearchController:
+          drawerSearchController ?? this.drawerSearchController,
+      drawerScrollController:
+          drawerScrollController ?? this.drawerScrollController,
     );
   }
 }

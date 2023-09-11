@@ -65,11 +65,12 @@ class _HomeViewState extends State<HomeView> {
         final currentIndex = state.menuIndex;
         return Scaffold(
           body: PageView(
+            key: ValueKey(currentIndex),
+            physics: const NeverScrollableScrollPhysics(),
             controller: PageController(initialPage: currentIndex),
             children: const [
               BibleView(),
               QuiteTimeDashBoardView(),
-              // MemoView(),
               SettingView(),
             ],
           ),
@@ -83,7 +84,6 @@ class _HomeViewState extends State<HomeView> {
             destinations: [
               bibleMenuItem(),
               quiteTimeMenuItem(),
-              // memoMenuItem(),
               settinguItem()
             ],
           ),

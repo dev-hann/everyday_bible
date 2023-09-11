@@ -18,3 +18,5 @@ class BibleEventUpdatedChapter extends BibleEvent {
   @override
   List<Object> get props => [data, chapter];
 }
+
+class BibleEventOpenedDrawer extends BibleEvent {}

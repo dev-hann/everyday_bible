@@ -1,8 +1,6 @@
 part of bible_repo;
 
 class BibleImpl extends BibleRepo {
-  final BibleService service = BibleService();
-
   Map<String, dynamic> tmpDB = {};
 
   @override
