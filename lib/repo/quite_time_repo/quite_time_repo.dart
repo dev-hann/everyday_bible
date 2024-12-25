@@ -2,8 +2,8 @@ library qt_repo;
 
 import 'dart:async';
 
-import 'package:everydaybible/data_base/service/quite_time_service.dart';
 import 'package:everydaybible/repo/repo.dart';
+import 'package:everydaybible/service/quite_time_service.dart';
 part 'quite_time_impl.dart';
 
 abstract class QuiteTimeRepo extends Repo {

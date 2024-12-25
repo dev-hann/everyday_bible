@@ -42,11 +42,11 @@ class _MemoEditViewState extends State<MemoEditView> {
               // focusNode: state.focusNode,
               expands: true,
               maxLines: null,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.transparent,
-                ),
-              ),
+              // decoration: BoxDecoration(
+              //   border: Border.all(
+              //     color: Colors.transparent,
+              //   ),
+              // ),
               highlightColor: Colors.transparent,
               onChanged: (_) async {
                 final memo = widget.memoController.memo;
