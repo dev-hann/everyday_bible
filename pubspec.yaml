@@ -4,8 +4,7 @@ description: Everyday Read Bible Amen.
 version: 2.0.0+1
 
 environment:
-  sdk: ">=2.18.1 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: ^3.6.0
 
 dependencies:
   flutter:

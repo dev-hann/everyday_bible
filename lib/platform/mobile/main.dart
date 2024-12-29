@@ -12,7 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class App extends StatelessWidget {
-  const App({super.key});
+  const App({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,6 @@ class App extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             themeMode: setting.themeMode,
             darkTheme: ThemeData.dark().copyWith(
-              useMaterial3: true,
               typography: Typography.material2021(),
               appBarTheme: const AppBarTheme(
                 centerTitle: true,
@@ -48,7 +49,6 @@ class App extends StatelessWidget {
               ),
             ),
             theme: ThemeData.light().copyWith(
-              useMaterial3: true,
               typography: Typography.material2021(),
               appBarTheme: const AppBarTheme(
                 centerTitle: true,
@@ -78,7 +78,8 @@ class App extends StatelessWidget {
               ],
               child: MediaQuery(
                 data: MediaQuery.of(context).copyWith(
-                  textScaleFactor: setting.textScaleFactor.toScaleFactor(),
+                  textScaler: TextScaler.linear(
+                      setting.textScaleFactor.toScaleFactor()),
                 ),
                 child: const HomeView(),
               ),

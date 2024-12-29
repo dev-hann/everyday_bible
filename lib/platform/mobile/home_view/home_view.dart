@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({
+    super.key,
+  });
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -20,34 +22,6 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     bloc.add(HomeEventInited());
-  }
-
-  NavigationDestination bibleMenuItem() {
-    return const NavigationDestination(
-      icon: Icon(Icons.book),
-      label: "Bible",
-    );
-  }
-
-  NavigationDestination quiteTimeMenuItem() {
-    return const NavigationDestination(
-      icon: Icon(Icons.bookmark),
-      label: "QuiteTime",
-    );
-  }
-
-  NavigationDestination memoMenuItem() {
-    return const NavigationDestination(
-      icon: Icon(Icons.note),
-      label: "Memo",
-    );
-  }
-
-  NavigationDestination settinguItem() {
-    return const NavigationDestination(
-      icon: Icon(Icons.settings),
-      label: "Setting",
-    );
   }
 
   @override
@@ -82,9 +56,18 @@ class _HomeViewState extends State<HomeView> {
               );
             },
             destinations: [
-              bibleMenuItem(),
-              quiteTimeMenuItem(),
-              settinguItem()
+              NavigationDestination(
+                icon: Icon(Icons.book),
+                label: "Bible",
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.bookmark),
+                label: "QuiteTime",
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.settings),
+                label: "Setting",
+              ),
             ],
           ),
         );
