@@ -1,5 +1,3 @@
-library bible_repo;
-
 import 'dart:convert';
 
 import 'package:everydaybible/repo/repo.dart';

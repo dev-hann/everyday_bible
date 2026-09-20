@@ -44,7 +44,7 @@ class App extends StatelessWidget {
                 centerTitle: true,
                 scrolledUnderElevation: 0.0,
               ),
-              cardTheme: const CardTheme(
+              cardTheme: const CardThemeData(
                 margin: EdgeInsets.zero,
               ),
             ),
@@ -54,7 +54,7 @@ class App extends StatelessWidget {
                 centerTitle: true,
                 scrolledUnderElevation: 0.0,
               ),
-              cardTheme: const CardTheme(
+              cardTheme: const CardThemeData(
                 margin: EdgeInsets.zero,
               ),
             ),

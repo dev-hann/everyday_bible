@@ -1,4 +1,4 @@
-part of bible_repo;
+part of 'bible_repo.dart';
 
 class BibleImpl extends BibleRepo {
   Map<String, dynamic> tmpDB = {};

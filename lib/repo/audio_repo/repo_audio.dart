@@ -1,5 +1,3 @@
-library audio_repo;
-
 import 'dart:async';
 
 import 'package:everydaybible/model/audio/audio_state.dart';

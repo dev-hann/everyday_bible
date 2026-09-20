@@ -1,7 +1,7 @@
 name: everydaybible
 description: Everyday Read Bible Amen.
 
-version: 2.0.0+1
+version: 3.0.0+1
 
 environment:
   sdk: ^3.6.0
@@ -10,41 +10,41 @@ dependencies:
   flutter:
     sdk: flutter
 
-  font_awesome_flutter:
-  cupertino_icons: ^1.0.2
-  http:
-  intl:
+  cupertino_icons: ^1.0.9
+  http: ^1.6.0
+  intl: ^0.20.3
 
   # UI
-  fluent_ui: ^4.0.2
-  flutter_slidable:
-  table_calendar:
-  desktop_multi_window:
-  highlight_text:
+  font_awesome_flutter: ^11.0.0
+  flutter_slidable: ^4.0.3
+  table_calendar: ^3.2.1
+  highlight_text: ^1.8.0
 
   # Database
-  hive: ^2.0.0
-  hive_flutter: ^1.0.0
+  drift: ^2.35.0
 
   # StateManage
-  flutter_bloc:
-  bloc:
+  flutter_bloc: ^9.1.1
+  bloc: ^9.2.1
 
   # Network
-  dio: any
+  dio: ^5.11.1
 
   # Utils
-  equatable:
-  dartz:
-  html:
-  collection:
+  equatable: ^3.0.0
+  fpdart: ^1.2.0
+  html: ^0.15.7
+  collection: ^1.19.1
 
-  just_audio: ^0.9.29
-  just_audio_mpv: any
+  just_audio: ^0.10.6
+  path_provider: ^2.1.6
+  path: ^1.9.1
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.13.1
-  flutter_lints:
+  build_runner: ^2.16.1
+  drift_dev: ^2.35.0
+  flutter_launcher_icons: ^0.14.4
+  flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
 
@@ -53,8 +53,6 @@ flutter_launcher_icons:
   ios: true
   remove_alpha_ios: true
   image_path: "assets/logo.png"
-  macos:
-    generate: true
 flutter:
   uses-material-design: true
   fonts:

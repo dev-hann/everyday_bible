@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:everydaybible/model/failure.dart';
 import 'package:everydaybible/model/memo/memo.dart';
 import 'package:everydaybible/repo/memo_repo/memo_repo.dart';

@@ -9,7 +9,7 @@ Let's read `Bible` Everyday
 ## Getting Started
 
 ```text
-git clone https://guthub.com/yoehwan/everyday_bible.git
+git clone https://github.com/dev-hann/everyday_bible.git
 cd everyday_bible
 flutter run 
 ```
@@ -17,8 +17,6 @@ flutter run
 ## Screen shot
 
 ![Mobile Screen](https://github.com/yoehwan/everyday_bible/assets/54878755/98b81fd7-459d-40a6-a964-031ba1d3f988)
-
-![Desktop Screen](https://github.com/yoehwan/everyday_bible/assets/54878755/af6ee6d6-ed0a-45b7-8f8c-96ed8a666e24)
 
 ## Technology
 
@@ -39,25 +37,15 @@ flutter run
 
 ```text
 📁 lib
-├── 📁 data_base
-│   ├── 📁 data (🙈 Not Choose Yet..)
-│   └── 📁 service
 ├── 📁 model
 ├── 📁 platform
-│   ├── 📁 desktop
-│   │   ├── 📁 audio_player_view
-│   │   ├── 📁 bible_view
-│   │   ├── 📁 home_view
-│   │   ├── 📁 memo_edit_view ( 🚧 Work In Progress.. )
-│   │   ├── 📁 memo_view
-│   │   ├── 📁 quite_time_view
-│   │   └── 📁 setting_view
 │   └── 📁 mobile
 │       ├── 📁 audio_player_view
 │       ├── 📁 bible_view
 │       ├── 📁 home_view
 │       ├── 📁 memo_edit_view ( 🚧 Work In Progress.. )
 │       ├── 📁 memo_view
+│       ├── 📁 quite_time_dash_board_view
 │       ├── 📁 quite_time_view
 │       └── 📁 setting_view
 ├── 📁 repo
@@ -66,6 +54,7 @@ flutter run
 │   ├── 📁 memo_repo
 │   ├── 📁 quite_time_repo
 │   └── 📁 setting_repo
+├── 📁 service
 ├── 📁 use_case
 │   ├── 📁 audio_use_case
 │   ├── 📁 bible_use_case

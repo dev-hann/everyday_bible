@@ -1,4 +1,4 @@
-part of audio_repo;
+part of 'repo_audio.dart';
 
 class AudioImpl extends AudioRepo {
   final AudioPlayer player = AudioPlayer();

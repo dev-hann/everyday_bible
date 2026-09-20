@@ -1,5 +1,3 @@
-library qt_repo;
-
 import 'dart:async';
 
 import 'package:everydaybible/repo/repo.dart';

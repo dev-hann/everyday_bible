@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:everydaybible/model/failure.dart';
 import 'package:everydaybible/model/quite_time/quite_time.dart';
 import 'package:everydaybible/model/quite_time/quite_time_data.dart';

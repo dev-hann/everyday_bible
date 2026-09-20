@@ -1,4 +1,4 @@
-part of setting_repo;
+part of 'repo_setting.dart';
 
 class SettingImpl extends SettingRepo {
   @override

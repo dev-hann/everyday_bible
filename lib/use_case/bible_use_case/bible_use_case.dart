@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:everydaybible/model/bible/bible_data.dart';
 import 'package:everydaybible/model/failure.dart';
 import 'package:everydaybible/use_case/use_case.dart';

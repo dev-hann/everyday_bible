@@ -1,4 +1,4 @@
-part of qt_repo;
+part of 'quite_time_repo.dart';
 
 class QuiteTimeImpl extends QuiteTimeRepo {
   final QuiteTimeService service = QuiteTimeService();
