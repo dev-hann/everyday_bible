@@ -33,9 +33,16 @@ class Setting extends Equatable {
 
   factory Setting.fromMap(Map<String, dynamic> map) {
     return Setting(
-      themeMode: ThemeMode.values[map['brightness']],
-      textScaleFactor: TextScaleFactor.values[map['textScaleFactor']],
+      themeMode: ThemeMode.values[_toInt(map['themeMode']) ?? 2],
+      textScaleFactor:
+          TextScaleFactor.values[_toInt(map['textScaleFactor']) ?? 1],
     );
+  }
+
+  static int? _toInt(dynamic value) {
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value);
+    return null;
   }
 }
 

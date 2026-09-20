@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:everydaybible/data_base/app_database.dart';
 import 'package:everydaybible/repo/repo.dart';
 
 part 'memo_impl.dart';

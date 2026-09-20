@@ -1,24 +1,39 @@
 part of 'memo_repo.dart';
 
 class MemoImpl extends MemoRepo {
-  final Map<String, dynamic> tmpDB = {};
-  final StreamController<List<dynamic>> tmpStreamController =
-      StreamController.broadcast();
+  final AppDatabase _db = AppDatabase.instance;
 
-  @override
-  Stream<List<dynamic>> memoListStream() {
-    return tmpStreamController.stream;
+  List<Map<String, dynamic>> _cache = [];
+
+  MemoImpl() {
+    _db.select(_db.memos).watch().listen((rows) {
+      _cache = _toMaps(rows);
+    });
+  }
+
+  static List<Map<String, dynamic>> _toMaps(List<Memo> rows) {
+    return rows
+        .map((row) => <String, dynamic>{
+              'index': row.id,
+              'text': row.body,
+              'dateTime': row.createdAt,
+            })
+        .toList();
   }
 
   @override
-  List loadMemoList() {
-    return tmpDB.values.toList();
+  Stream<List<dynamic>> memoListStream() {
+    return _db.select(_db.memos).watch().map(_toMaps);
+  }
+
+  @override
+  List<dynamic> loadMemoList() {
+    return _cache;
   }
 
   @override
   Future removeMemo(String index) async {
-    tmpDB.remove(index);
-    tmpStreamController.add(tmpDB.values.toList());
+    await (_db.delete(_db.memos)..where((tbl) => tbl.id.equals(index))).go();
   }
 
   @override
@@ -26,11 +41,12 @@ class MemoImpl extends MemoRepo {
     required String index,
     required Map<String, dynamic> data,
   }) async {
-    if (!tmpDB.keys.contains(index)) {
-      tmpDB[index] = data;
-    } else {
-      tmpDB.update(index, (value) => data);
-    }
-    tmpStreamController.add(tmpDB.values.toList());
+    await _db.into(_db.memos).insertOnConflictUpdate(
+          MemosCompanion.insert(
+            id: index,
+            body: data['text'] as String,
+            createdAt: data['dateTime'] as int,
+          ),
+        );
   }
 }
