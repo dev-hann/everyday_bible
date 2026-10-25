@@ -426,14 +426,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  font_awesome_flutter:
-    dependency: "direct main"
-    description:
-      name: font_awesome_flutter
-      sha256: "09dcde8ab90ffae1a7d65ff2ef96fc62a17ad9d0ce7c127b317ded676b0d5935"
-      url: "https://pub.dev"
-    source: hosted
-    version: "11.0.0"
   forui:
     dependency: "direct main"
     description:
@@ -884,14 +876,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  simple_gesture_detector:
-    dependency: transitive
-    description:
-      name: simple_gesture_detector
-      sha256: ba2cd5af24ff20a0b8d609cec3f40e5b0744d2a71804a2616ae086b9c19d19a3
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1001,14 +985,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.5.0"
-  table_calendar:
-    dependency: "direct main"
-    description:
-      name: table_calendar
-      sha256: c46a7b6e853154bde099cc6b9d151268a721b16c24e6cacc5c9ee8dfe6a55243
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.3.0"
   term_glyph:
     dependency: transitive
     description:

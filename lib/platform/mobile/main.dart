@@ -59,26 +59,11 @@ class App extends StatelessWidget {
               title: 'Everyday Bible',
               debugShowCheckedModeBanner: false,
               themeMode: setting.themeMode,
-              darkTheme: ThemeData.dark().copyWith(
-                typography: Typography.material2021(),
-                appBarTheme: const AppBarTheme(
-                  centerTitle: true,
-                  scrolledUnderElevation: 0,
-                ),
-                cardTheme: const CardThemeData(
-                  margin: EdgeInsets.zero,
-                ),
-              ),
-              theme: ThemeData.light().copyWith(
-                typography: Typography.material2021(),
-                appBarTheme: const AppBarTheme(
-                  centerTitle: true,
-                  scrolledUnderElevation: 0,
-                ),
-                cardTheme: const CardThemeData(
-                  margin: EdgeInsets.zero,
-                ),
-              ),
+              // The Material shell theme only styles residual Material pieces
+              // (text selection toolbar, page transitions, default text);
+              // every visible widget is themed by the forui [FTheme] above.
+              darkTheme: ThemeData.dark(),
+              theme: ThemeData.light(),
               home: MultiBlocProvider(
                 providers: [
                   BlocProvider(
