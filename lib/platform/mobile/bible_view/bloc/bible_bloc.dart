@@ -11,20 +11,26 @@ import 'package:flutter/material.dart';
 part 'bible_event.dart';
 part 'bible_state.dart';
 
+/// Loads the Bible books and tracks the book and chapter shown in the
+/// reader.
 class BibleBloc extends Bloc<BibleEvent, BibleState> {
+  /// Creates the bloc backed by [repo].
   BibleBloc(BibleRepo repo)
       : useCase = BibleUseCase(repo),
         super(BibleState()) {
     on<BibleEventInited>(_onInited);
     on<BibleEventUpdatedChapter>(_onUpdatedChapter);
   }
+
+  /// Use case wrapping the Bible repository.
   final BibleUseCase useCase;
 
   FutureOr<void> _onInited(
-      BibleEventInited event, Emitter<BibleState> emit) async {
+    BibleEventInited event,
+    Emitter<BibleState> emit,
+  ) async {
     await useCase.initDataBase();
-    final either = useCase.loadBibleDataList();
-    either.fold(
+    useCase.loadBibleDataList().fold(
       (fail) {},
       (list) {
         emit(
@@ -47,7 +53,9 @@ class BibleBloc extends Bloc<BibleEvent, BibleState> {
   }
 
   FutureOr<void> _onUpdatedChapter(
-      BibleEventUpdatedChapter event, Emitter<BibleState> emit) async {
+    BibleEventUpdatedChapter event,
+    Emitter<BibleState> emit,
+  ) async {
     final chapter = event.chapter;
     emit(
       state.copyWith(

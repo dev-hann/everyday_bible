@@ -1,6 +1,8 @@
 part of 'bible_repo.dart';
 
+/// [BibleRepo] implementation keeping the parsed asset data in memory.
 class BibleImpl extends BibleRepo {
+  /// Parsed contents of `bible.json` keyed by book and chapter.
   Map<String, dynamic> tmpDB = {};
 
   @override
@@ -9,9 +11,9 @@ class BibleImpl extends BibleRepo {
   }
 
   @override
-  Future initDataBase() async {
-    final data = await rootBundle.loadString("./assets/data/bible.json");
-    tmpDB = json.decode(data);
+  Future<void> initDataBase() async {
+    final data = await rootBundle.loadString('./assets/data/bible.json');
+    tmpDB = json.decode(data) as Map<String, dynamic>;
   }
 
   @override

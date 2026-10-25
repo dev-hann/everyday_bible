@@ -1,17 +1,26 @@
+import 'dart:async';
+
 import 'package:everydaybible/model/memo/memo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+/// List tile showing a memo, swipeable to delete.
 class MobileMemoListTile extends StatelessWidget {
+  /// Creates a memo list tile.
   const MobileMemoListTile({
-    super.key,
     required this.memo,
     required this.onTap,
     required this.onTapDelete,
+    super.key,
   });
 
+  /// Memo displayed by this tile.
   final Memo memo;
+
+  /// Called when the tile body is tapped.
   final VoidCallback onTap;
+
+  /// Called when the memo is deleted via swipe or delete action.
   final VoidCallback onTapDelete;
 
   @override
@@ -19,7 +28,6 @@ class MobileMemoListTile extends StatelessWidget {
     return Slidable(
       key: UniqueKey(),
       endActionPane: ActionPane(
-        dragDismissible: true,
         dismissible: DismissiblePane(
           onDismissed: onTapDelete,
         ),
@@ -29,12 +37,15 @@ class MobileMemoListTile extends StatelessWidget {
             autoClose: false,
             onPressed: (context) {
               final controller = Slidable.of(context);
-              controller?.dismiss(
-                ResizeRequest(
-                  const Duration(milliseconds: 300),
-                  onTapDelete,
+              // Fire-and-forget: only the dismiss animation runs here.
+              unawaited(
+                controller?.dismiss(
+                  ResizeRequest(
+                    const Duration(milliseconds: 300),
+                    onTapDelete,
+                  ),
+                  duration: const Duration(milliseconds: 300),
                 ),
-                duration: const Duration(milliseconds: 300),
               );
             },
             backgroundColor: const Color(0xFFFE4A49),

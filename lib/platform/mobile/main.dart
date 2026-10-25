@@ -1,6 +1,7 @@
 import 'package:everydaybible/model/setting.dart';
 import 'package:everydaybible/platform/mobile/audio_player_view/bloc/audio_player_bloc.dart';
 import 'package:everydaybible/platform/mobile/bible_view/bloc/bible_bloc.dart';
+import 'package:everydaybible/platform/mobile/chat_view/bloc/chat_bloc.dart';
 import 'package:everydaybible/platform/mobile/home_view/bloc/home_bloc.dart';
 import 'package:everydaybible/platform/mobile/home_view/home_view.dart';
 import 'package:everydaybible/platform/mobile/memo_view/bloc/memo_bloc.dart';
@@ -11,7 +12,10 @@ import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+/// Root widget of the mobile app: loads settings and, once ready,
+/// builds the themed app shell with all view blocs.
 class App extends StatelessWidget {
+  /// Creates the app root widget.
   const App({
     super.key,
   });
@@ -35,14 +39,14 @@ class App extends StatelessWidget {
           }
           final setting = state.setting;
           return MaterialApp(
-            title: "Everyday Bible",
+            title: 'Everyday Bible',
             debugShowCheckedModeBanner: false,
             themeMode: setting.themeMode,
             darkTheme: ThemeData.dark().copyWith(
               typography: Typography.material2021(),
               appBarTheme: const AppBarTheme(
                 centerTitle: true,
-                scrolledUnderElevation: 0.0,
+                scrolledUnderElevation: 0,
               ),
               cardTheme: const CardThemeData(
                 margin: EdgeInsets.zero,
@@ -52,7 +56,7 @@ class App extends StatelessWidget {
               typography: Typography.material2021(),
               appBarTheme: const AppBarTheme(
                 centerTitle: true,
-                scrolledUnderElevation: 0.0,
+                scrolledUnderElevation: 0,
               ),
               cardTheme: const CardThemeData(
                 margin: EdgeInsets.zero,
@@ -67,6 +71,12 @@ class App extends StatelessWidget {
                   create: (_) => BibleBloc(Repo.of(context)),
                 ),
                 BlocProvider(
+                  create: (_) => ChatBloc(
+                    Repo.of(context),
+                    Repo.of(context),
+                  ),
+                ),
+                BlocProvider(
                   create: (_) => QuiteTimeDashBoardBloc(Repo.of(context)),
                 ),
                 BlocProvider(
@@ -79,7 +89,8 @@ class App extends StatelessWidget {
               child: MediaQuery(
                 data: MediaQuery.of(context).copyWith(
                   textScaler: TextScaler.linear(
-                      setting.textScaleFactor.toScaleFactor()),
+                    setting.textScaleFactor.toScaleFactor(),
+                  ),
                 ),
                 child: const HomeView(),
               ),

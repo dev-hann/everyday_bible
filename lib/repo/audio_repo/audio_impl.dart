@@ -1,8 +1,14 @@
 part of 'repo_audio.dart';
 
+/// [AudioRepo] implementation delegating playback to just_audio.
 class AudioImpl extends AudioRepo {
+  /// The just_audio player performing the actual playback.
   final AudioPlayer player = AudioPlayer();
+
+  /// Latest snapshot of the playback state.
   AudioState state = const AudioState();
+
+  /// Applies [callback] to [state] and broadcasts the new state.
   void updateState(AudioState Function(AudioState newState) callback) {
     state = callback(state);
     _streamController.add(state);
@@ -17,7 +23,7 @@ class AudioImpl extends AudioRepo {
   }
 
   @override
-  Future loadAudio(String audioURL) async {
+  Future<void> loadAudio(String audioURL) async {
     // if (player.audioSource != null) {
     //   player.dispose();
     // }
@@ -32,14 +38,14 @@ class AudioImpl extends AudioRepo {
       if (event == state.duration) {
         switch (player.loopMode) {
           case LoopMode.off:
-            player.pause();
-            break;
+            unawaited(player.pause());
           case LoopMode.all:
           case LoopMode.one:
-            player.pause().then((value) {
-              player.seek(Duration.zero);
-            });
-            break;
+            unawaited(
+              player.pause().then((value) {
+                unawaited(player.seek(Duration.zero));
+              }),
+            );
         }
       }
       updateState(
@@ -60,35 +66,35 @@ class AudioImpl extends AudioRepo {
   }
 
   @override
-  Future pauseAudio() async {
+  Future<void> pauseAudio() async {
     await player.pause();
     updateState((newState) => newState.copyWith(playing: false));
   }
 
   @override
-  Future playAudio() async {
+  Future<void> playAudio() async {
     await player.play();
     updateState((newState) => newState.copyWith(playing: true));
   }
 
   @override
-  Future seekAudio(Duration duration) {
+  Future<void> seekAudio(Duration duration) {
     return player.seek(duration);
   }
 
   @override
-  Future setLoopMode(LoopMode loopMode) async {
+  Future<void> setLoopMode(LoopMode loopMode) async {
     await player.setLoopMode(loopMode);
     updateState((newState) => newState.copyWith(loopMode: loopMode));
   }
 
   @override
-  Future setVolume(double value) {
+  Future<void> setVolume(double value) {
     return player.setVolume(value);
   }
 
   @override
-  Future stopAudio() {
+  Future<void> stopAudio() {
     return player.stop();
   }
 }

@@ -1,10 +1,14 @@
 import 'package:flutter/cupertino.dart';
 
+/// App logo image, drawn as a square of [size].
 class BibleLogo extends StatelessWidget {
+  /// Creates the logo widget.
   const BibleLogo({
     super.key,
     this.size = 24.0,
   });
+
+  /// Width and height of the logo square.
   final double size;
 
   @override
@@ -12,7 +16,7 @@ class BibleLogo extends StatelessWidget {
     return SizedBox.square(
       dimension: size,
       child: Image.asset(
-        "assets/logo.png",
+        'assets/logo.png',
       ),
     );
   }

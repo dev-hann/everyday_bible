@@ -1,11 +1,14 @@
-import 'package:everydaybible/platform/mobile/bible_view/bloc/bible_bloc.dart';
 import 'package:everydaybible/platform/mobile/bible_drawer_view/bible_drawer_view.dart';
+import 'package:everydaybible/platform/mobile/bible_view/bloc/bible_bloc.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:everydaybible/widgets/gospel_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+/// Bible reader screen: shows the verses of the selected book and chapter
+/// and opens a drawer for navigating between them.
 class BibleView extends StatefulWidget {
+  /// Creates the Bible reader screen.
   const BibleView({super.key});
 
   @override
@@ -26,7 +29,7 @@ class _BibleViewState extends State<BibleView>
     required String? title,
   }) {
     return AppBar(
-      title: Text(title ?? "Bible"),
+      title: Text(title ?? 'Bible'),
     );
   }
 
@@ -51,7 +54,7 @@ class _BibleViewState extends State<BibleView>
         return Scaffold(
           key: state.drawerKey,
           appBar: appBar(
-            title: "${currentData.name} ${currentChapter.number}장",
+            title: '${currentData.name} ${currentChapter.number}장',
           ),
           drawer: BibleDrawerView(
             dataList: dataList,
@@ -64,7 +67,7 @@ class _BibleViewState extends State<BibleView>
             },
           ),
           body: ListView(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             children: [
               for (int index = 0; index < verseList.length; index++)
                 VerseText(

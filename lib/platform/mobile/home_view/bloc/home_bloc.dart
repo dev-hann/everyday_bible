@@ -6,7 +6,10 @@ import 'package:equatable/equatable.dart';
 part 'home_event.dart';
 part 'home_state.dart';
 
+/// Tracks which tab of the bottom navigation bar is shown on the home
+/// screen.
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
+  /// Creates the bloc.
   HomeBloc() : super(const HomeState()) {
     on<HomeEventInited>(_onInited);
     on<HomeEventUpdatedIndex>(_onUpdatedIndex);
@@ -21,7 +24,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   FutureOr<void> _onUpdatedIndex(
-      HomeEventUpdatedIndex event, Emitter<HomeState> emit) {
+    HomeEventUpdatedIndex event,
+    Emitter<HomeState> emit,
+  ) {
     emit(
       state.copyWith(
         status: HomeViewStatus.success,

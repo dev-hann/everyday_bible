@@ -9,24 +9,32 @@ import 'package:everydaybible/use_case/quite_time_use_case/quite_time_use_case.d
 part 'quite_time_event.dart';
 part 'quite_time_state.dart';
 
+/// Loads the Quiet Time meditation content of the selected date.
 class QuiteTimeBloc extends Bloc<QuiteTimeEvent, QuiteTimeState> {
+  /// Creates the bloc backed by [repo].
   QuiteTimeBloc(QuiteTimeRepo repo)
       : useCase = QuiteTimeUseCase(repo),
         super(QuiteTimeState()) {
     on<QuiteTimeEventInited>(_onInited);
     on<QuiteTimeEventUpdatedDateTime>(_onUpdatedDateTime);
   }
+
+  /// Use case wrapping the Quiet Time repository.
   final QuiteTimeUseCase useCase;
 
   FutureOr<void> _onInited(
-      QuiteTimeEventInited event, Emitter<QuiteTimeState> emit) {
+    QuiteTimeEventInited event,
+    Emitter<QuiteTimeState> emit,
+  ) {
     add(
       QuiteTimeEventUpdatedDateTime(event.dateTime),
     );
   }
 
   FutureOr<void> _onUpdatedDateTime(
-      QuiteTimeEventUpdatedDateTime event, Emitter<QuiteTimeState> emit) async {
+    QuiteTimeEventUpdatedDateTime event,
+    Emitter<QuiteTimeState> emit,
+  ) async {
     final dateTime = event.dateTime;
     emit(
       state.copyWith(

@@ -1,15 +1,16 @@
 part of 'repo_setting.dart';
 
+/// [SettingRepo] implementation backed by the drift [AppDatabase].
 class SettingImpl extends SettingRepo {
-  final _db = AppDatabase.instance;
-
-  Map<String, String> _cache = {};
-
+  /// Opens the settings stream and keeps the in-memory cache in sync.
   SettingImpl() {
     _db.select(_db.settings).watch().listen((rows) {
       _cache = {for (final row in rows) row.key: row.value};
     });
   }
+  final AppDatabase _db = AppDatabase.instance;
+
+  Map<String, String> _cache = {};
 
   @override
   Map<String, dynamic> loadSetting() {
@@ -17,7 +18,7 @@ class SettingImpl extends SettingRepo {
   }
 
   @override
-  Future updateSetting(Map<String, dynamic> data) async {
+  Future<void> updateSetting(Map<String, dynamic> data) async {
     await _db.batch((batch) {
       for (final entry in data.entries) {
         batch.insert(

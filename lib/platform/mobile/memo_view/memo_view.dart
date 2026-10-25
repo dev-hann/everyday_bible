@@ -1,12 +1,16 @@
+import 'dart:async';
+
 import 'package:everydaybible/model/memo/memo.dart';
-import 'package:everydaybible/platform/mobile/memo_view/bloc/memo_bloc.dart';
 import 'package:everydaybible/platform/mobile/memo_edit_view/memo_editor_view.dart';
+import 'package:everydaybible/platform/mobile/memo_view/bloc/memo_bloc.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:everydaybible/widgets/memo_list_tile/mobile_memo_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+/// Screen listing all saved memos with add, edit, and delete actions.
 class MemoView extends StatefulWidget {
+  /// Creates the memo list screen.
   const MemoView({super.key});
 
   @override
@@ -23,18 +27,20 @@ class _MemoViewState extends State<MemoView> {
 
   AppBar appBar() {
     return AppBar(
-      title: const Text("Memo"),
+      title: const Text('Memo'),
       actions: [
         IconButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MemoEditorView.route(Memo()),
-            ).then((edited) {
-              if (edited != null) {
-                bloc.add(MemoEventUpdatedMemo(edited));
-              }
-            });
+            unawaited(
+              Navigator.push(
+                context,
+                MemoEditorView.route(Memo()),
+              ).then((edited) {
+                if (edited != null) {
+                  bloc.add(MemoEventUpdatedMemo(edited));
+                }
+              }),
+            );
           },
           icon: const Icon(Icons.add),
         ),
@@ -58,28 +64,30 @@ class _MemoViewState extends State<MemoView> {
           }
           final list = state.memoList;
           if (list.isEmpty) {
-            return const Text("Empty View");
+            return const Text('Empty View');
           }
           return ListView(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             children: list.map((memo) {
               return Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
+                padding: const EdgeInsets.only(bottom: 8),
                 child: Card(
                   clipBehavior: Clip.hardEdge,
                   child: MobileMemoListTile(
                     memo: memo,
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MemoEditorView.route(memo),
-                      ).then((edited) {
-                        if (edited != null) {
-                          bloc.add(
-                            MemoEventUpdatedMemo(edited),
-                          );
-                        }
-                      });
+                      unawaited(
+                        Navigator.push(
+                          context,
+                          MemoEditorView.route(memo),
+                        ).then((edited) {
+                          if (edited != null) {
+                            bloc.add(
+                              MemoEventUpdatedMemo(edited),
+                            );
+                          }
+                        }),
+                      );
                     },
                     onTapDelete: () {
                       bloc.add(

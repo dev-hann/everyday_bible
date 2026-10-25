@@ -3,7 +3,9 @@ import 'package:everydaybible/platform/mobile/setting_view/bloc/setting_bloc.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+/// Settings screen: dark mode toggle and text size factor selection.
 class SettingView extends StatefulWidget {
+  /// Creates the settings screen.
   const SettingView({super.key});
 
   @override
@@ -16,39 +18,39 @@ class _SettingViewState extends State<SettingView>
 
   AppBar appBar() {
     return AppBar(
-      title: const Text("Setting"),
+      title: const Text('Setting'),
     );
   }
 
   Widget themeWidget({
     required ThemeMode themeMode,
-    required Function(ThemeMode themeMode) onChanged,
+    required void Function(ThemeMode themeMode) onChanged,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text("Theme :"),
+        const Text('Theme :'),
         const Spacer(),
-        const Text("Dark"),
+        const Text('Dark'),
         Switch(
           value: themeMode.index == 1,
           onChanged: (value) {
             onChanged(value ? ThemeMode.light : ThemeMode.dark);
           },
         ),
-        const Text("Light"),
+        const Text('Light'),
       ],
     );
   }
 
   Widget textFactorWidget({
     required TextScaleFactor scaleFactor,
-    required Function(TextScaleFactor factor) onChanged,
+    required void Function(TextScaleFactor factor) onChanged,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text("TextFactor: "),
+        const Text('TextFactor: '),
         DropdownMenu(
           initialSelection: scaleFactor,
           onSelected: (value) {
@@ -76,7 +78,7 @@ class _SettingViewState extends State<SettingView>
         return Scaffold(
           appBar: appBar(),
           body: ListView(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             children: [
               themeWidget(
                 themeMode: setting.themeMode,
@@ -88,7 +90,7 @@ class _SettingViewState extends State<SettingView>
                   );
                 },
               ),
-              const SizedBox(height: 8.0),
+              const SizedBox(height: 8),
               textFactorWidget(
                 scaleFactor: setting.textScaleFactor,
                 onChanged: (factor) {

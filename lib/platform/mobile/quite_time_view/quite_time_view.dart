@@ -8,31 +8,39 @@ import 'package:everydaybible/widgets/gospel_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+/// Full-screen Quiet Time reader for one day: title, gospel verses, and
+/// the meditation audio player bar.
 class QuiteTimeView extends StatefulWidget {
+  /// Creates the reader for the given [data].
   const QuiteTimeView({
-    super.key,
     required this.data,
+    super.key,
   });
 
+  /// The day's Quiet Time data shown by this reader.
   final QuiteTimeData data;
 
-  static PageRoute route({
+  /// Returns the route that opens the reader for [data], providing the
+  /// blocs it needs.
+  static PageRoute<void> route({
     required BuildContext context,
     required QuiteTimeData data,
   }) {
-    return MaterialPageRoute(builder: (_) {
-      return MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (_) => QuiteTimeBloc(Repo.of(context)),
-          ),
-          BlocProvider<AudioPlayerBloc>.value(
-            value: BlocProvider.of(context),
-          ),
-        ],
-        child: QuiteTimeView(data: data),
-      );
-    });
+    return MaterialPageRoute<void>(
+      builder: (_) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => QuiteTimeBloc(Repo.of(context)),
+            ),
+            BlocProvider<AudioPlayerBloc>.value(
+              value: BlocProvider.of(context),
+            ),
+          ],
+          child: QuiteTimeView(data: data),
+        );
+      },
+    );
   }
 
   @override
@@ -56,7 +64,7 @@ class _QuiteTimeViewState extends State<QuiteTimeView> {
 
   AppBar appBar() {
     return AppBar(
-      title: const Text("QuiteTimeContent"),
+      title: const Text('QuiteTimeContent'),
     );
   }
 
@@ -81,9 +89,9 @@ class _QuiteTimeViewState extends State<QuiteTimeView> {
               ListView(
                 padding: const EdgeInsets.only(
                   bottom: kToolbarHeight * 2,
-                  left: 16.0,
-                  right: 16.0,
-                  top: 16.0,
+                  left: 16,
+                  right: 16,
+                  top: 16,
                 ),
                 children: [
                   Align(
@@ -94,22 +102,22 @@ class _QuiteTimeViewState extends State<QuiteTimeView> {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 16),
                   for (final item in quiteTime.gospelList)
                     VerseText(
                       index: item.verse,
                       text: item.gospel,
-                    )
+                    ),
                 ],
               ),
               const Align(
                 alignment: Alignment.bottomCenter,
                 child: IntrinsicHeight(
                   child: Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8),
                     child: Card(
                       child: Padding(
-                        padding: EdgeInsets.all(8.0),
+                        padding: EdgeInsets.all(8),
                         child: AudioPlayerView(),
                       ),
                     ),

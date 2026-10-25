@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 
+/// Bottom bar of the Quiet Time reader that plays the daily meditation
+/// audio with a play/pause button, a seek bar, and the elapsed/total time.
 class AudioPlayerView extends StatefulWidget {
+  /// Creates the audio player bar.
   const AudioPlayerView({super.key});
 
   @override
@@ -37,7 +40,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
     required AudioState audioState,
     required Duration position,
     required Duration duration,
-    required Function(Duration value) onChanged,
+    required void Function(Duration value) onChanged,
   }) {
     switch (audioState.state) {
       case ProcessingState.loading:
@@ -47,7 +50,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
       case ProcessingState.ready:
       case ProcessingState.completed:
     }
-    final ValueNotifier valueNotifier =
+    final valueNotifier =
         ValueNotifier(position.inMilliseconds / duration.inMilliseconds);
     return ValueListenableBuilder(
       valueListenable: valueNotifier,
@@ -68,10 +71,10 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
   }
 
   String convertDurationText(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$twoDigitMinutes:$twoDigitSeconds";
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    final twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return '$twoDigitMinutes:$twoDigitSeconds';
   }
 
   Widget durationText({
@@ -80,7 +83,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
   }) {
     final current = convertDurationText(position);
     final total = convertDurationText(duration);
-    return Text("$current / $total");
+    return Text('$current / $total');
   }
 
   @override
@@ -111,7 +114,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
               isPlaying: audioState.playing,
               processingState: audioState.state,
             ),
-            const SizedBox(width: 4.0),
+            const SizedBox(width: 4),
             Expanded(
               child: Row(
                 children: [
@@ -125,7 +128,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
                       },
                     ),
                   ),
-                  const SizedBox(width: 4.0),
+                  const SizedBox(width: 4),
                   durationText(
                     position: position,
                     duration: duration,

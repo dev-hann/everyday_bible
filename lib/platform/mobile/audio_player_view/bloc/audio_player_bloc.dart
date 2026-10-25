@@ -10,7 +10,10 @@ import 'package:intl/intl.dart';
 part 'audio_player_event.dart';
 part 'audio_player_state.dart';
 
+/// Loads and controls the meditation audio of the selected date: playback,
+/// pause, seek, and volume.
 class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
+  /// Creates the bloc backed by [repo].
   AudioPlayerBloc(AudioRepo repo)
       : useCase = AudioUseCase(repo),
         super(AudioPlayerState()) {
@@ -22,10 +25,13 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     on<AudioPlayerEventPaused>(_onPaused);
   }
 
+  /// Use case wrapping the audio repository.
   final AudioUseCase useCase;
 
   FutureOr<void> _onInited(
-      AudioPlayerEventInited event, Emitter<AudioPlayerState> emit) async {
+    AudioPlayerEventInited event,
+    Emitter<AudioPlayerState> emit,
+  ) async {
     final audioState = state.audioState;
     if (audioState.url.isNotEmpty) {
       await useCase.stopAudio();
@@ -51,7 +57,9 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
   }
 
   FutureOr<void> _onLoadedAudio(
-      AudioPlayerEventLoadedAudio event, Emitter<AudioPlayerState> emit) async {
+    AudioPlayerEventLoadedAudio event,
+    Emitter<AudioPlayerState> emit,
+  ) async {
     emit(
       state.copyWith(
         status: AudioPlayerViewStatus.loading,
@@ -65,23 +73,32 @@ class AudioPlayerBloc extends Bloc<AudioPlayerEvent, AudioPlayerState> {
     );
   }
 
+  /// Seeks playback to the position of [event].
   FutureOr<void> onSeekPosition(
-      AudioPlayerEventSeekPosition event, Emitter<AudioPlayerState> emit) {
-    useCase.seekAudio(event.duration);
+    AudioPlayerEventSeekPosition event,
+    Emitter<AudioPlayerState> emit,
+  ) {
+    unawaited(useCase.seekAudio(event.duration));
   }
 
   FutureOr<void> _onChangedVolume(
-      AudioPlayerEventChangedVolume event, Emitter<AudioPlayerState> emit) {
-    useCase.setVolume(event.volume);
+    AudioPlayerEventChangedVolume event,
+    Emitter<AudioPlayerState> emit,
+  ) {
+    unawaited(useCase.setVolume(event.volume));
   }
 
   FutureOr<void> _onPlayed(
-      AudioPlayerEventPlayed event, Emitter<AudioPlayerState> emit) {
-    useCase.playAudio();
+    AudioPlayerEventPlayed event,
+    Emitter<AudioPlayerState> emit,
+  ) {
+    unawaited(useCase.playAudio());
   }
 
   FutureOr<void> _onPaused(
-      AudioPlayerEventPaused event, Emitter<AudioPlayerState> emit) {
-    useCase.pauseAudio();
+    AudioPlayerEventPaused event,
+    Emitter<AudioPlayerState> emit,
+  ) {
+    unawaited(useCase.pauseAudio());
   }
 }

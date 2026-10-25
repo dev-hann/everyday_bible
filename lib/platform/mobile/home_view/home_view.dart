@@ -1,4 +1,5 @@
 import 'package:everydaybible/platform/mobile/bible_view/bible_view.dart';
+import 'package:everydaybible/platform/mobile/chat_view/chat_view.dart';
 import 'package:everydaybible/platform/mobile/home_view/bloc/home_bloc.dart';
 import 'package:everydaybible/platform/mobile/quite_time_dash_board_view/quite_time_dash_board_view.dart';
 import 'package:everydaybible/platform/mobile/setting_view/setting_view.dart';
@@ -6,7 +7,10 @@ import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+/// Root screen of the app with bottom navigation between the Bible reader,
+/// the Quiet Time dashboard, and the settings.
 class HomeView extends StatefulWidget {
+  /// Creates the home screen.
   const HomeView({
     super.key,
   });
@@ -21,7 +25,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    bloc.add(HomeEventInited());
+    bloc.add(const HomeEventInited());
   }
 
   @override
@@ -43,6 +47,7 @@ class _HomeViewState extends State<HomeView> {
             physics: const NeverScrollableScrollPhysics(),
             controller: PageController(initialPage: currentIndex),
             children: const [
+              ChatView(),
               BibleView(),
               QuiteTimeDashBoardView(),
               SettingView(),
@@ -55,18 +60,23 @@ class _HomeViewState extends State<HomeView> {
                 HomeEventUpdatedIndex(index),
               );
             },
-            destinations: [
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.chat_bubble_outline),
+                selectedIcon: Icon(Icons.chat_bubble),
+                label: 'AI',
+              ),
               NavigationDestination(
                 icon: Icon(Icons.book),
-                label: "Bible",
+                label: 'Bible',
               ),
               NavigationDestination(
                 icon: Icon(Icons.bookmark),
-                label: "QuiteTime",
+                label: 'QuiteTime',
               ),
               NavigationDestination(
                 icon: Icon(Icons.settings),
-                label: "Setting",
+                label: 'Setting',
               ),
             ],
           ),

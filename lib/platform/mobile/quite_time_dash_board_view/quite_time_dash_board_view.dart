@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+/// Quiet Time tab: a calendar for picking a date and a summary card that
+/// opens the reader for that day.
 class QuiteTimeDashBoardView extends StatefulWidget {
+  /// Creates the dashboard view.
   const QuiteTimeDashBoardView({super.key});
 
   @override
@@ -26,17 +29,17 @@ class _QuiteTimeDashBoardViewState extends State<QuiteTimeDashBoardView>
 
   AppBar appBar() {
     return AppBar(
-      title: const Text("Quite Time"),
+      title: const Text('Quite Time'),
     );
   }
 
   Widget calendarWidget({
     required DateTime dateTime,
-    required Function(DateTime dateTime) onChanged,
+    required void Function(DateTime dateTime) onChanged,
   }) {
     final now = DateTime.now();
     return Card(
-      child: TableCalendar(
+      child: TableCalendar<Object?>(
         availableGestures: AvailableGestures.horizontalSwipe,
         currentDay: dateTime,
         focusedDay: dateTime,
@@ -65,7 +68,7 @@ class _QuiteTimeDashBoardViewState extends State<QuiteTimeDashBoardView>
         Text(
           data.dateTime.toString(),
         ),
-        const SizedBox(height: 16.0),
+        const SizedBox(height: 16),
         GestureDetector(
           onTap: () {
             Navigator.push(
@@ -78,7 +81,7 @@ class _QuiteTimeDashBoardViewState extends State<QuiteTimeDashBoardView>
           },
           child: Card(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8),
               child: Column(
                 children: [
                   Text(
@@ -86,7 +89,7 @@ class _QuiteTimeDashBoardViewState extends State<QuiteTimeDashBoardView>
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   Text(
-                    "${data.bibleName} ${data.chapter}",
+                    '${data.bibleName} ${data.chapter}',
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   Text(data.summary),
@@ -95,7 +98,7 @@ class _QuiteTimeDashBoardViewState extends State<QuiteTimeDashBoardView>
                     child: IgnorePointer(
                       child: TextButton(
                         onPressed: () {},
-                        child: const Text("자세히 보기.."),
+                        child: const Text('자세히 보기..'),
                       ),
                     ),
                   ),
@@ -129,7 +132,7 @@ class _QuiteTimeDashBoardViewState extends State<QuiteTimeDashBoardView>
             (element) => element.isSameDateTime(selectedDateTime),
           );
           return ListView(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             children: [
               calendarWidget(
                 dateTime: selectedDateTime,
@@ -139,7 +142,7 @@ class _QuiteTimeDashBoardViewState extends State<QuiteTimeDashBoardView>
                   );
                 },
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 16),
               body(
                 data: selectedData,
               ),
