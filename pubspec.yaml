@@ -27,6 +27,7 @@ dependencies:
   http: ^1.6.0
   intl: ^0.20.3
   just_audio: ^0.10.6
+  meta: ^1.17.0
   path: ^1.9.1
   path_provider: ^2.1.6
   table_calendar: ^3.3.0
@@ -37,6 +38,9 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
   flutter_test:
     sdk: flutter
+  integration_test:
+    sdk: flutter
+  mocktail: ^1.0.5
   very_good_analysis: ^11.0.0
 
 flutter_launcher_icons:

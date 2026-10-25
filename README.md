@@ -47,6 +47,7 @@ flutter test        # run tests
 
 - Lint preset: [very_good_analysis](https://pub.dev/packages/very_good_analysis) — strict mode; every public member is documented.
 - CI runs analyze + test on every push/PR (`.github/workflows/ci.yml`).
+- Testing guide (conventions per layer, e2e): [`docs/testing.md`](docs/testing.md).
 - Architecture decisions are recorded in [`docs/adr/`](docs/adr/).
 - Agent/human contributor guide: [`AGENTS.md`](AGENTS.md).
 

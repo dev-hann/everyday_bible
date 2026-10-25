@@ -70,9 +70,26 @@ Dependency rule: model ← repo ← use_case ← bloc ← view. Never import upw
 - ADR-0004 drift replaces hive as storage
 - ADR-0005 fpdart for functional error handling (replaced dartz)
 - ADR-0006 very_good_analysis strict preset + API docs
+- ADR-0007 Test suite foundation
 
 When making a new architecture-level decision, add an ADR
 (`docs/adr/NNNN-kebab-title.md`) — status, context, decision, consequences.
+
+## Testing
+
+Full guide: [`docs/testing.md`](docs/testing.md). Key rules:
+
+- Test layout mirrors `lib/`. Gate for any change: `flutter analyze` = 0
+  issues AND `flutter test` = all pass.
+- No `bloc_test` (dependency conflict, ADR-0007) — use the hand-rolled
+  stream pattern: listen → add event → `await bloc.stream.firstWhere(
+  <terminal state>)` → `close()`. Never close before the terminal state
+  (blocs chain follow-up `add()`s).
+- Mock repos (abstract interfaces) with mocktail; run real use cases.
+- Widget tests: fake repos with finite streams (`Stream.value`) — infinite
+  streams deadlock bloc event queues.
+- E2E lives in `integration_test/`, runs on a real device only
+  (`flutter test integration_test -d <device>`), not in per-PR CI.
 
 ## Conventions
 
