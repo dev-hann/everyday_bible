@@ -70,9 +70,8 @@ void main() {
     await repo.updateSetting(<String, dynamic>{'themeMode': '0'});
     await _until(() => repo.loadSetting()['themeMode'] == '0');
 
-    final rows = await AppDatabase.instance
-        .select(AppDatabase.instance.settings)
-        .get();
+    final rows =
+        await AppDatabase.instance.select(AppDatabase.instance.settings).get();
 
     expect(rows, hasLength(1));
     expect(rows.single.key, 'themeMode');

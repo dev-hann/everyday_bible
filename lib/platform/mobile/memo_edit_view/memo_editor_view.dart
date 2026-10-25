@@ -1,6 +1,7 @@
 import 'package:everydaybible/model/memo/memo.dart';
 import 'package:everydaybible/widgets/memo_editor_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:forui/forui.dart';
 
 /// Full-screen editor for a single memo; pops with the edited memo when the
 /// save button is pressed.
@@ -29,37 +30,33 @@ class MemoEditorView extends StatefulWidget {
 }
 
 class _MemoEditorViewState extends State<MemoEditorView> {
-  AppBar appBar() {
-    return AppBar(
-      title: const Text('Memo Edit View'),
-      actions: [
-        IconButton(
-          onPressed: () {
-            Navigator.pop(
-              context,
-              widget.controller.memo,
-            );
-          },
-          icon: const Icon(Icons.save),
-        ),
-      ],
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(),
-      body: TextField(
-        controller: widget.controller,
+    return FScaffold(
+      header: FHeader.nested(
+        prefixes: [
+          FHeaderAction(
+            icon: const Icon(FLucideIcons.arrowLeft),
+            onPress: () => Navigator.pop(context),
+          ),
+        ],
+        suffixes: [
+          FHeaderAction(
+            icon: const Icon(FLucideIcons.save),
+            onPress: () {
+              Navigator.pop(
+                context,
+                widget.controller.memo,
+              );
+            },
+          ),
+        ],
+        title: const Text('Memo Edit View'),
+      ),
+      child: FTextField.multiline(
+        control: FTextFieldControl.managed(controller: widget.controller),
         expands: true,
-        maxLines: null,
+        minLines: null,
       ),
     );
   }

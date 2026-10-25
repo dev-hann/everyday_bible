@@ -7,6 +7,7 @@ import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:everydaybible/widgets/gospel_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forui/forui.dart';
 
 /// Full-screen Quiet Time reader for one day: title, gospel verses, and
 /// the meditation audio player bar.
@@ -62,12 +63,6 @@ class _QuiteTimeViewState extends State<QuiteTimeView> {
     );
   }
 
-  AppBar appBar() {
-    return AppBar(
-      title: const Text('QuiteTimeContent'),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<QuiteTimeBloc, QuiteTimeState>(
@@ -82,13 +77,21 @@ class _QuiteTimeViewState extends State<QuiteTimeView> {
         }
         final quiteTime = state.quiteTime!;
 
-        return Scaffold(
-          appBar: appBar(),
-          body: Stack(
+        return FScaffold(
+          header: FHeader.nested(
+            prefixes: [
+              FHeaderAction(
+                icon: const Icon(FLucideIcons.arrowLeft),
+                onPress: () => Navigator.maybePop(context),
+              ),
+            ],
+            title: const Text('QuiteTimeContent'),
+          ),
+          child: Stack(
             children: [
               ListView(
                 padding: const EdgeInsets.only(
-                  bottom: kToolbarHeight * 2,
+                  bottom: 120,
                   left: 16,
                   right: 16,
                   top: 16,
@@ -98,7 +101,7 @@ class _QuiteTimeViewState extends State<QuiteTimeView> {
                     alignment: Alignment.topCenter,
                     child: Text(
                       quiteTime.data.title,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: context.theme.typography.body.xl,
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -112,14 +115,12 @@ class _QuiteTimeViewState extends State<QuiteTimeView> {
               ),
               const Align(
                 alignment: Alignment.bottomCenter,
-                child: IntrinsicHeight(
-                  child: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Card(
-                      child: Padding(
-                        padding: EdgeInsets.all(8),
-                        child: AudioPlayerView(),
-                      ),
+                child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: FCard(
+                    child: Padding(
+                      padding: EdgeInsets.all(8),
+                      child: AudioPlayerView(),
                     ),
                   ),
                 ),

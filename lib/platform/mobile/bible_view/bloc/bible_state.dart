@@ -16,21 +16,19 @@ enum BibleViewStatus {
 }
 
 /// State of the Bible reader: the loaded books, the current selection, and
-/// the controllers of the navigation drawer.
+/// the controllers of the chapter picker sheet.
 class BibleState extends Equatable {
-  /// Creates the state, creating fresh drawer controllers when omitted.
+  /// Creates the state, creating fresh picker controllers when omitted.
   BibleState({
     this.status = BibleViewStatus.init,
     this.bibleDataList = const [],
     this.selectedData,
     this.selectedChapter,
-    GlobalKey<ScaffoldState>? drawerKey,
     TextEditingController? drawerSearchController,
     ScrollController? drawerScrollController,
   })  : drawerScrollController = drawerScrollController ?? ScrollController(),
         drawerSearchController =
-            drawerSearchController ?? TextEditingController(),
-        drawerKey = drawerKey ?? GlobalKey();
+            drawerSearchController ?? TextEditingController();
 
   /// Lifecycle status of the view.
   final BibleViewStatus status;
@@ -44,13 +42,10 @@ class BibleState extends Equatable {
   /// The chapter currently selected, if the data is loaded.
   final BibleChapter? selectedChapter;
 
-  /// Key used to open the reader's drawer.
-  final GlobalKey<ScaffoldState> drawerKey;
-
-  /// Controller of the drawer's book search field.
+  /// Controller of the picker's book search field.
   final TextEditingController drawerSearchController;
 
-  /// Controller of the drawer's chapter list scroll.
+  /// Controller of the picker's chapter list scroll.
   final ScrollController drawerScrollController;
 
   @override
@@ -59,7 +54,6 @@ class BibleState extends Equatable {
         bibleDataList,
         selectedData,
         selectedChapter,
-        drawerKey,
         drawerSearchController,
         drawerScrollController,
       ];
@@ -70,7 +64,6 @@ class BibleState extends Equatable {
     List<BibleData>? bibleDataList,
     BibleData? selectedData,
     BibleChapter? selectedChapter,
-    GlobalKey<ScaffoldState>? drawerKey,
     TextEditingController? drawerSearchController,
     ScrollController? drawerScrollController,
   }) {
@@ -79,7 +72,6 @@ class BibleState extends Equatable {
       bibleDataList: bibleDataList ?? this.bibleDataList,
       selectedData: selectedData ?? this.selectedData,
       selectedChapter: selectedChapter ?? this.selectedChapter,
-      drawerKey: drawerKey ?? this.drawerKey,
       drawerSearchController:
           drawerSearchController ?? this.drawerSearchController,
       drawerScrollController:

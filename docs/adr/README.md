@@ -13,3 +13,4 @@ architecture-level change; never delete a rejected one — mark it superseded.
 | 0006 | very_good_analysis strict preset + API doc policy | Accepted |
 | 0007 | Test suite foundation | Accepted |
 | 0008 | Firebase AI Logic for the AI chat feature | Accepted |
+| 0009 | forui as the design system foundation | Accepted |

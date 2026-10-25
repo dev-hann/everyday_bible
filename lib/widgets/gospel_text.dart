@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forui/forui.dart';
 
 /// Renders a single Bible verse: a numbered heading row plus its text.
 class VerseText extends StatelessWidget {
@@ -21,7 +22,7 @@ class VerseText extends StatelessWidget {
       children: [
         Text('$index'),
         const SizedBox(width: 8),
-        const Expanded(child: Divider()),
+        const Expanded(child: FDivider()),
       ],
     );
   }

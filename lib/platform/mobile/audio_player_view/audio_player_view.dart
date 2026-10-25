@@ -3,6 +3,7 @@ import 'package:everydaybible/platform/mobile/audio_player_view/bloc/audio_playe
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forui/forui.dart';
 import 'package:just_audio/just_audio.dart';
 
 /// Bottom bar of the Quiet Time reader that plays the daily meditation
@@ -17,6 +18,7 @@ class AudioPlayerView extends StatefulWidget {
 
 class _AudioPlayerViewState extends State<AudioPlayerView> {
   AudioPlayerBloc get bloc => BlocProvider.of(context);
+
   Widget stateIcon({
     required VoidCallback onTapPlay,
     required bool isPlaying,
@@ -30,9 +32,11 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
       case ProcessingState.ready:
       case ProcessingState.completed:
     }
-    return IconButton(
-      onPressed: onTapPlay,
-      icon: Icon(!isPlaying ? Icons.play_arrow : Icons.pause),
+    return FButton.icon(
+      onPress: onTapPlay,
+      child: Icon(
+        !isPlaying ? FLucideIcons.play : FLucideIcons.pause,
+      ),
     );
   }
 
@@ -50,21 +54,18 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
       case ProcessingState.ready:
       case ProcessingState.completed:
     }
-    final valueNotifier =
-        ValueNotifier(position.inMilliseconds / duration.inMilliseconds);
-    return ValueListenableBuilder(
-      valueListenable: valueNotifier,
-      builder: (context, value, _) {
-        return Slider(
-          value: value,
-          onChanged: (value) {
-            valueNotifier.value = value;
-          },
-          onChangeEnd: (value) {
-            onChanged(
-              Duration(milliseconds: (duration.inMilliseconds * value).toInt()),
-            );
-          },
+    final total = duration.inMilliseconds;
+    final fraction = total <= 0 ? 0.0 : position.inMilliseconds / total;
+    return FSlider(
+      control: FSliderControl.liftedContinuous(
+        value: FSliderValue(max: fraction.clamp(0, 1)),
+        onChange: (value) {},
+      ),
+      onEnd: (value) {
+        onChanged(
+          Duration(
+            milliseconds: (total * (value.max - value.min)).round(),
+          ),
         );
       },
     );

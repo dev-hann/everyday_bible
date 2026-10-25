@@ -2,6 +2,7 @@ import 'package:everydaybible/model/setting.dart';
 import 'package:everydaybible/platform/mobile/setting_view/bloc/setting_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forui/forui.dart';
 
 /// Settings screen: dark mode toggle and text size factor selection.
 class SettingView extends StatefulWidget {
@@ -16,30 +17,17 @@ class _SettingViewState extends State<SettingView>
     with AutomaticKeepAliveClientMixin {
   SettingBloc get bloc => BlocProvider.of(context);
 
-  AppBar appBar() {
-    return AppBar(
-      title: const Text('Setting'),
-    );
-  }
-
   Widget themeWidget({
     required ThemeMode themeMode,
     required void Function(ThemeMode themeMode) onChanged,
   }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text('Theme :'),
-        const Spacer(),
-        const Text('Dark'),
-        Switch(
-          value: themeMode.index == 1,
-          onChanged: (value) {
-            onChanged(value ? ThemeMode.light : ThemeMode.dark);
-          },
-        ),
-        const Text('Light'),
-      ],
+    return FSwitch(
+      label: const Text('Theme'),
+      description: const Text('Dark / Light'),
+      value: themeMode == ThemeMode.light,
+      onChange: (value) {
+        onChanged(value ? ThemeMode.light : ThemeMode.dark);
+      },
     );
   }
 
@@ -47,25 +35,19 @@ class _SettingViewState extends State<SettingView>
     required TextScaleFactor scaleFactor,
     required void Function(TextScaleFactor factor) onChanged,
   }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text('TextFactor: '),
-        DropdownMenu(
-          initialSelection: scaleFactor,
-          onSelected: (value) {
-            if (value != null) {
-              onChanged(value);
-            }
-          },
-          dropdownMenuEntries: TextScaleFactor.values.map((e) {
-            return DropdownMenuEntry(
-              value: e,
-              label: e.name,
-            );
-          }).toList(),
-        ),
-      ],
+    return FSelect<TextScaleFactor>(
+      control: FSelectControl.lifted(
+        value: scaleFactor,
+        onChange: (factor) {
+          if (factor != null) {
+            onChanged(factor);
+          }
+        },
+      ),
+      hint: 'TextFactor',
+      items: {
+        for (final factor in TextScaleFactor.values) factor.name: factor,
+      },
     );
   }
 
@@ -75,9 +57,9 @@ class _SettingViewState extends State<SettingView>
     return BlocBuilder<SettingBloc, SettingState>(
       builder: (context, state) {
         final setting = state.setting;
-        return Scaffold(
-          appBar: appBar(),
-          body: ListView(
+        return FScaffold(
+          header: const FHeader(title: Text('Setting')),
+          child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
               themeWidget(

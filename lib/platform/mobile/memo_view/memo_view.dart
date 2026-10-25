@@ -7,6 +7,7 @@ import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:everydaybible/widgets/memo_list_tile/mobile_memo_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forui/forui.dart';
 
 /// Screen listing all saved memos with add, edit, and delete actions.
 class MemoView extends StatefulWidget {
@@ -25,34 +26,36 @@ class _MemoViewState extends State<MemoView> {
     bloc.add(const MemoEventInited());
   }
 
-  AppBar appBar() {
-    return AppBar(
-      title: const Text('Memo'),
-      actions: [
-        IconButton(
-          onPressed: () {
-            unawaited(
-              Navigator.push(
-                context,
-                MemoEditorView.route(Memo()),
-              ).then((edited) {
-                if (edited != null) {
-                  bloc.add(MemoEventUpdatedMemo(edited));
-                }
-              }),
-            );
-          },
-          icon: const Icon(Icons.add),
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(),
-      body: BlocBuilder<MemoBloc, MemoState>(
+    return FScaffold(
+      header: FHeader.nested(
+        prefixes: [
+          FHeaderAction(
+            icon: const Icon(FLucideIcons.arrowLeft),
+            onPress: () => Navigator.maybePop(context),
+          ),
+        ],
+        suffixes: [
+          FHeaderAction(
+            icon: const Icon(FLucideIcons.plus),
+            onPress: () {
+              unawaited(
+                Navigator.push(
+                  context,
+                  MemoEditorView.route(Memo()),
+                ).then((edited) {
+                  if (edited != null) {
+                    bloc.add(MemoEventUpdatedMemo(edited));
+                  }
+                }),
+              );
+            },
+          ),
+        ],
+        title: const Text('Memo'),
+      ),
+      child: BlocBuilder<MemoBloc, MemoState>(
         builder: (context, state) {
           final status = state.status;
           switch (status) {
@@ -71,7 +74,7 @@ class _MemoViewState extends State<MemoView> {
             children: list.map((memo) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
-                child: Card(
+                child: FCard(
                   clipBehavior: Clip.hardEdge,
                   child: MobileMemoListTile(
                     memo: memo,

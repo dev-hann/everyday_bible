@@ -27,10 +27,8 @@ void main() {
 
     test('Inited loads the cached list and follows table changes', () async {
       final controller = StreamController<List<dynamic>>.broadcast();
-      when(() => repo.loadMemoList())
-          .thenReturn(<dynamic>[firstMemo.toMap()]);
-      when(() => repo.memoListStream())
-          .thenAnswer((_) => controller.stream);
+      when(() => repo.loadMemoList()).thenReturn(<dynamic>[firstMemo.toMap()]);
+      when(() => repo.memoListStream()).thenAnswer((_) => controller.stream);
 
       final bloc = MemoBloc(repo);
       final initial = bloc.state;
@@ -63,8 +61,7 @@ void main() {
         () async {
       final controller = StreamController<List<dynamic>>.broadcast();
       when(() => repo.loadMemoList()).thenThrow(Exception('corrupt cache'));
-      when(() => repo.memoListStream())
-          .thenAnswer((_) => controller.stream);
+      when(() => repo.memoListStream()).thenAnswer((_) => controller.stream);
 
       final bloc = MemoBloc(repo);
       final initial = bloc.state;
@@ -144,8 +141,7 @@ void main() {
     });
 
     test('RemovedMemo deletes the memo without changing the state', () async {
-      when(() => repo.removeMemo(firstMemo.index))
-          .thenAnswer((_) async {});
+      when(() => repo.removeMemo(firstMemo.index)).thenAnswer((_) async {});
 
       final bloc = MemoBloc(repo);
       final states = <MemoState>[];
@@ -177,8 +173,7 @@ void main() {
         () async {
       final controller = StreamController<List<dynamic>>.broadcast();
       when(() => repo.loadMemoList()).thenReturn(<dynamic>[]);
-      when(() => repo.memoListStream())
-          .thenAnswer((_) => controller.stream);
+      when(() => repo.memoListStream()).thenAnswer((_) => controller.stream);
       when(
         () => repo.updateMemo(
           index: firstMemo.index,

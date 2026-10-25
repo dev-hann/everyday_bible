@@ -4,11 +4,12 @@ import 'package:everydaybible/platform/mobile/bible_view/bloc/bible_bloc.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forui/forui.dart';
 
-/// Drawer of the Bible reader listing every book and its chapters so the
-/// user can jump to any chapter.
+/// Chapter picker of the Bible reader listing every book and its chapters
+/// so the user can jump to any chapter. Shown inside a side sheet.
 class BibleDrawerView extends StatefulWidget {
-  /// Creates the drawer for [dataList] with [currentData] and
+  /// Creates the picker for [dataList] with [currentData] and
   /// [currentChapter] highlighted.
   const BibleDrawerView({
     required this.dataList,
@@ -37,157 +38,89 @@ class BibleDrawerView extends StatefulWidget {
 class _BibleDrawerViewState extends State<BibleDrawerView> {
   BibleBloc get bloc => BlocProvider.of(context);
 
-  Widget searchTextfield({
-    required TextEditingController searchController,
-  }) {
-    return TextField(
-      controller: searchController,
-      decoration: const InputDecoration(
-        prefixIcon: Icon(Icons.search),
-      ),
-    );
-  }
-
   Widget chapterWidget({
     required bool isSelected,
     required BibleChapter item,
+    required VoidCallback onTap,
   }) {
-    return Padding(
-      padding: const EdgeInsets.all(4),
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.orange : Colors.white10,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: Center(
-            child: Text('${item.number}장'),
-          ),
-        ),
+    return GestureDetector(
+      onTap: onTap,
+      child: FBadge(
+        variant: isSelected ? FBadgeVariant.primary : FBadgeVariant.secondary,
+        child: Text('${item.number}장'),
       ),
-    );
-  }
-
-  Widget capterList({
-    required TextEditingController searchController,
-    required BibleData data,
-    required bool Function(BibleChapter chapter) isSelected,
-    required void Function(BibleChapter chapter) onTapChapter,
-  }) {
-    return ValueListenableBuilder<TextEditingValue>(
-      valueListenable: searchController,
-      builder: (context, value, _) {
-        final title = data.name;
-        final query = value.text;
-        if (!title.contains(query)) {
-          return const SizedBox();
-        }
-        return ExpansionTile(
-          initiallyExpanded: data == widget.currentData,
-          tilePadding: EdgeInsets.zero,
-          title: Row(
-            children: [
-              Text(title),
-              const SizedBox(width: 4),
-              const Expanded(child: Divider()),
-            ],
-          ),
-          children: data.chapterList
-              .map(
-                (item) => GestureDetector(
-                  onTap: () {
-                    onTapChapter(item);
-                  },
-                  child: chapterWidget(
-                    isSelected: isSelected(item),
-                    item: item,
-                  ),
-                ),
-              )
-              .toList(),
-        );
-      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      width: MediaQuery.of(context).size.width * 0.6,
-      child: SafeArea(
-        child: BlocBuilder<BibleBloc, BibleState>(
-          builder: (context, state) {
-            final status = state.status;
-            switch (status) {
-              case BibleViewStatus.init:
-                return const BibleLoading();
-              case BibleViewStatus.loading:
-              case BibleViewStatus.failure:
-              case BibleViewStatus.success:
-            }
-            final searchController = state.drawerSearchController;
-            final scrollController = state.drawerScrollController;
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: searchTextfield(
-                    searchController: searchController,
-                  ),
+    return BlocBuilder<BibleBloc, BibleState>(
+      builder: (context, state) {
+        final status = state.status;
+        switch (status) {
+          case BibleViewStatus.init:
+            return const BibleLoading();
+          case BibleViewStatus.loading:
+          case BibleViewStatus.failure:
+          case BibleViewStatus.success:
+        }
+        final searchController = state.drawerSearchController;
+        final scrollController = state.drawerScrollController;
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: FTextField(
+                control: FTextFieldControl.managed(
+                  controller: searchController,
                 ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      children: state.bibleDataList.map((data) {
-                        return ValueListenableBuilder<TextEditingValue>(
-                          valueListenable: searchController,
-                          builder: (context, value, _) {
-                            final title = data.name;
-                            final query = value.text;
-                            if (!title.contains(query)) {
-                              return const SizedBox();
-                            }
-                            return ExpansionTile(
+                hint: 'search',
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                controller: scrollController,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ValueListenableBuilder<TextEditingValue>(
+                  valueListenable: searchController,
+                  builder: (context, value, _) {
+                    final query = value.text;
+                    return FAccordion(
+                      children: [
+                        for (final data in state.bibleDataList)
+                          if (data.name.contains(query))
+                            FAccordionItem(
                               initiallyExpanded: data == widget.currentData,
-                              tilePadding: EdgeInsets.zero,
-                              title: Row(
-                                // key: state.scrollKeyMap[data],
-                                children: [
-                                  Text(title),
-                                  const SizedBox(width: 4),
-                                  const Expanded(child: Divider()),
-                                ],
+                              title: Align(
+                                alignment: AlignmentDirectional.centerStart,
+                                child: Text(data.name),
                               ),
-                              children: data.chapterList
-                                  .map(
-                                    (item) => GestureDetector(
+                              child: Wrap(
+                                spacing: 4,
+                                runSpacing: 4,
+                                children: [
+                                  for (final chapter in data.chapterList)
+                                    chapterWidget(
+                                      isSelected:
+                                          chapter == state.selectedChapter,
+                                      item: chapter,
                                       onTap: () {
-                                        widget.onTapChapter(data, item);
+                                        widget.onTapChapter(data, chapter);
                                         Navigator.pop(context);
                                       },
-                                      child: chapterWidget(
-                                        isSelected:
-                                            item == state.selectedChapter,
-                                        item: item,
-                                      ),
                                     ),
-                                  )
-                                  .toList(),
-                            );
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ),
+                                ],
+                              ),
+                            ),
+                      ],
+                    );
+                  },
                 ),
-              ],
-            );
-          },
-        ),
-      ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
