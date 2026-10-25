@@ -34,8 +34,7 @@ void main() {
       // Echo the requested date so the data is treated as already loaded.
       when(() => repo.requestQuiteTimeData(any<DateTime>())).thenAnswer(
         (invocation) async => dataMap(
-          (invocation.positionalArguments.first as DateTime)
-              .toIso8601String(),
+          (invocation.positionalArguments.first as DateTime).toIso8601String(),
         ),
       );
 

@@ -118,9 +118,8 @@ void main() {
     );
     await _until(() => repo.loadMemoList().length == 1);
 
-    final rows = await AppDatabase.instance
-        .select(AppDatabase.instance.memos)
-        .get();
+    final rows =
+        await AppDatabase.instance.select(AppDatabase.instance.memos).get();
 
     expect(rows, hasLength(1));
     expect(rows.single.id, '1000');

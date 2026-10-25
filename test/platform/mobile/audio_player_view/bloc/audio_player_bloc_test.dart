@@ -111,8 +111,7 @@ void main() {
       verify(() => repo.loadAudio(otherDayURL)).called(1);
     });
 
-    test('play, pause, seek, and volume events only drive the repo',
-        () async {
+    test('play, pause, seek, and volume events only drive the repo', () async {
       when(() => repo.playAudio()).thenAnswer((_) async {});
       when(() => repo.pauseAudio()).thenAnswer((_) async {});
       when(() => repo.seekAudio(const Duration(seconds: 30)))

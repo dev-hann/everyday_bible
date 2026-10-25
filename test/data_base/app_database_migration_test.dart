@@ -5,10 +5,12 @@ import 'package:everydaybible/data_base/app_database.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Future<Set<String>> _tableNames(AppDatabase db) async {
-  final rows = await db.customSelect(
-    "SELECT name FROM sqlite_master WHERE type = 'table' "
-    "AND name NOT LIKE 'sqlite_%'",
-  ).get();
+  final rows = await db
+      .customSelect(
+        "SELECT name FROM sqlite_master WHERE type = 'table' "
+        "AND name NOT LIKE 'sqlite_%'",
+      )
+      .get();
 
   return <String>{for (final row in rows) row.read<String>('name')};
 }

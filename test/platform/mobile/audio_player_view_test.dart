@@ -74,14 +74,13 @@ void main() {
 
 class _FakeAudioRepo extends AudioRepo {
   _FakeAudioRepo({AudioState? initialState})
-    : _initialState =
-          initialState ??
-          const AudioState(
-            url: 'https://example.com/qt.mp3',
-            state: ProcessingState.ready,
-            duration: Duration(minutes: 10),
-            position: Duration(minutes: 1),
-          );
+      : _initialState = initialState ??
+            const AudioState(
+              url: 'https://example.com/qt.mp3',
+              state: ProcessingState.ready,
+              duration: Duration(minutes: 10),
+              position: Duration(minutes: 1),
+            );
 
   final AudioState _initialState;
   final List<String> calls = <String>[];
