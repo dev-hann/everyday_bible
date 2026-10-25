@@ -21,6 +21,7 @@ dependencies:
   flutter_bloc: ^9.1.1
   flutter_slidable: ^4.0.3
   font_awesome_flutter: ^11.0.0
+  forui: ^0.27.6
   fpdart: ^1.2.0
   highlight_text: ^1.8.0
   html: ^0.15.7
