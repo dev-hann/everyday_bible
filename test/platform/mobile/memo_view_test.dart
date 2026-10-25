@@ -8,6 +8,7 @@ import 'package:everydaybible/repo/memo_repo/memo_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:forui/forui.dart';
 
 void main() {
   testWidgets('renders the memo list from the repo cache', (tester) async {
@@ -19,10 +20,13 @@ void main() {
       _FakeMemoRepo(memos.map((memo) => memo.toMap()).toList()),
     );
     await tester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<MemoBloc>.value(
-          value: bloc,
-          child: const MemoView(),
+      FTheme(
+        data: FTheme.neutral.light.touch,
+        child: MaterialApp(
+          home: BlocProvider<MemoBloc>.value(
+            value: bloc,
+            child: const MemoView(),
+          ),
         ),
       ),
     );
@@ -39,10 +43,13 @@ void main() {
   testWidgets('shows the empty view when no memos exist', (tester) async {
     final bloc = MemoBloc(_FakeMemoRepo(<Map<String, dynamic>>[]));
     await tester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<MemoBloc>.value(
-          value: bloc,
-          child: const MemoView(),
+      FTheme(
+        data: FTheme.neutral.light.touch,
+        child: MaterialApp(
+          home: BlocProvider<MemoBloc>.value(
+            value: bloc,
+            child: const MemoView(),
+          ),
         ),
       ),
     );
@@ -55,23 +62,26 @@ void main() {
   testWidgets('memo editor pops with the edited memo on save', (tester) async {
     Memo? popped;
     await tester.pumpWidget(
-      MaterialApp(
-        home: Builder(
-          builder: (context) {
-            return TextButton(
-              onPressed: () {
-                unawaited(
-                  Navigator.push(
-                    context,
-                    MemoEditorView.route(
-                      Memo(rawText: '이전 제목\n이전 본문'),
-                    ),
-                  ).then((value) => popped = value),
-                );
-              },
-              child: const Text('open editor'),
-            );
-          },
+      FTheme(
+        data: FTheme.neutral.light.touch,
+        child: MaterialApp(
+          home: Builder(
+            builder: (context) {
+              return FButton(
+                onPress: () {
+                  unawaited(
+                    Navigator.push(
+                      context,
+                      MemoEditorView.route(
+                        Memo(rawText: '이전 제목\n이전 본문'),
+                      ),
+                    ).then((value) => popped = value),
+                  );
+                },
+                child: const Text('open editor'),
+              );
+            },
+          ),
         ),
       ),
     );
@@ -80,14 +90,14 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Memo Edit View'), findsOneWidget);
 
-    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.tap(find.byIcon(FLucideIcons.arrowLeft));
     await tester.pumpAndSettle();
     expect(popped, isNull);
 
     await tester.tap(find.text('open editor'));
     await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextField), '새 제목\n새 본문');
-    await tester.tap(find.byIcon(Icons.save));
+    await tester.enterText(find.byType(FTextField), '새 제목\n새 본문');
+    await tester.tap(find.byIcon(FLucideIcons.save));
     await tester.pumpAndSettle();
 
     expect(popped, isNotNull);

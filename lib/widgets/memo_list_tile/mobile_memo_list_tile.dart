@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:everydaybible/model/memo/memo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:forui/forui.dart';
 
 /// List tile showing a memo, swipeable to delete.
 class MobileMemoListTile extends StatelessWidget {
@@ -25,6 +26,7 @@ class MobileMemoListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.theme.colors;
     return Slidable(
       key: UniqueKey(),
       endActionPane: ActionPane(
@@ -48,15 +50,15 @@ class MobileMemoListTile extends StatelessWidget {
                 ),
               );
             },
-            backgroundColor: const Color(0xFFFE4A49),
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
+            backgroundColor: colors.destructive,
+            foregroundColor: colors.destructiveForeground,
+            icon: FLucideIcons.trash2,
             label: 'Delete',
           ),
         ],
       ),
-      child: ListTile(
-        onTap: onTap,
+      child: FTile(
+        onPress: onTap,
         title: Text(
           memo.title,
           maxLines: 1,
