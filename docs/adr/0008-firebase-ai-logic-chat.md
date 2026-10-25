@@ -1,4 +1,4 @@
-# ADR-0007: Firebase AI Logic for the AI chat feature
+# ADR-0008: Firebase AI Logic for the AI chat feature
 
 - **Status**: Accepted
 - **Date**: 2026-10-25
