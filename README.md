@@ -20,12 +20,29 @@ flutter run
 
 ## Technology
 
-* [Bloc pattern](https://bloclibrary.dev/#/)
-* [Clean Architecture](https://itnext.io/flutter-clean-architecture-b53ce9e19d5a)
-* [Functional Programming](https://pub.dev/packages/dartz)
+* [Flutter](https://flutter.dev) (mobile only — Android / iOS)
+* [Bloc pattern](https://bloclibrary.dev/#/) for state management
+* [Clean Architecture](https://itnext.io/flutter-clean-architecture-b53ce9e19d5a) — view → bloc → use_case → repo
+* [drift](https://drift.simonbinder.eu/) (SQLite) for local storage
+* [fpdart](https://pub.dev/packages/fpdart) for functional error handling (`Either<Failure, T>`)
+* [just_audio](https://pub.dev/packages/just_audio) for audio playback
+
+## Development
+
+```bash
+flutter pub get     # install dependencies
+flutter analyze     # lint (very_good_analysis) — must be clean
+flutter test        # run tests
+```
+
+- Lint preset: [very_good_analysis](https://pub.dev/packages/very_good_analysis) — strict mode; every public member is documented.
+- CI runs analyze + test on every push/PR (`.github/workflows/ci.yml`).
+- Architecture decisions are recorded in [`docs/adr/`](docs/adr/).
+- Agent/human contributor guide: [`AGENTS.md`](AGENTS.md).
 
 ## Feature
 
+* AI Chat ( scripture-grounded explanations via Firebase AI Logic )
 * Bible
 * Quite Time
 * Memo ( 🚧 Work In Progress..)
@@ -37,11 +54,15 @@ flutter run
 
 ```text
 📁 lib
+├── 📁 data_base
+│   └── drift database (app_database.dart + generated .g.dart)
 ├── 📁 model
 ├── 📁 platform
 │   └── 📁 mobile
 │       ├── 📁 audio_player_view
+│       ├── 📁 bible_drawer_view
 │       ├── 📁 bible_view
+│       ├── 📁 chat_view
 │       ├── 📁 home_view
 │       ├── 📁 memo_edit_view ( 🚧 Work In Progress.. )
 │       ├── 📁 memo_view
@@ -51,6 +72,7 @@ flutter run
 ├── 📁 repo
 │   ├── 📁 audio_repo
 │   ├── 📁 bible_repo
+│   ├── 📁 chat_repo
 │   ├── 📁 memo_repo
 │   ├── 📁 quite_time_repo
 │   └── 📁 setting_repo
@@ -58,6 +80,7 @@ flutter run
 ├── 📁 use_case
 │   ├── 📁 audio_use_case
 │   ├── 📁 bible_use_case
+│   ├── 📁 chat_use_case
 │   ├── 📁 memo_use_case
 │   ├── 📁 quite_time_use_case
 │   └── 📁 setting_use_case
