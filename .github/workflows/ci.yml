@@ -19,6 +19,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Restore Firebase credentials
+        run: |
+          echo "${{ secrets.FIREBASE_OPTIONS_BASE64 }}" | base64 --decode > lib/firebase_options.dart
+          echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > android/app/google-services.json
+
       - name: Analyze
         run: flutter analyze
 
