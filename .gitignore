@@ -46,3 +46,12 @@ app.*.map.json
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
 flutter_jank_metrics_*.json
+
+# Firebase credentials (contain API keys — never commit real ones).
+# Restore locally via `flutterfire configure` (see README → Development).
+android/app/google-services.json
+lib/firebase_options.dart
+
+# Agent tooling artifacts
+.agents/
+skills-lock.json

@@ -35,6 +35,16 @@ flutter analyze     # lint (very_good_analysis) — must be clean
 flutter test        # run tests
 ```
 
+> **Firebase setup (required to build/run):** `lib/firebase_options.dart` and
+> `android/app/google-services.json` contain API keys and are **gitignored**
+> (see `google-services.json.example` for the expected shape). Restore them
+> locally with:
+>
+> ```bash
+> dart pub global activate flutterfire_cli
+> flutterfire configure
+> ```
+
 - Lint preset: [very_good_analysis](https://pub.dev/packages/very_good_analysis) — strict mode; every public member is documented.
 - CI runs analyze + test on every push/PR (`.github/workflows/ci.yml`).
 - Architecture decisions are recorded in [`docs/adr/`](docs/adr/).
