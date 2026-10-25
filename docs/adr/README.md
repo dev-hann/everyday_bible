@@ -11,3 +11,4 @@ architecture-level change; never delete a rejected one — mark it superseded.
 | 0004 | drift replaces hive as local storage | Accepted |
 | 0005 | fpdart for functional error handling | Accepted |
 | 0006 | very_good_analysis strict preset + API doc policy | Accepted |
+| 0007 | Test suite foundation | Accepted |

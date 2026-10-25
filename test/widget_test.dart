@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('App boots to loading state with stub repos', (tester) async {
+  testWidgets('App boots to loading state', (tester) async {
     await tester.pumpWidget(
       MultiRepositoryProvider(
         providers: [

@@ -1,5 +1,4 @@
 import 'package:everydaybible/platform/mobile/bible_view/bible_view.dart';
-import 'package:everydaybible/platform/mobile/chat_view/chat_view.dart';
 import 'package:everydaybible/platform/mobile/home_view/bloc/home_bloc.dart';
 import 'package:everydaybible/platform/mobile/quite_time_dash_board_view/quite_time_dash_board_view.dart';
 import 'package:everydaybible/platform/mobile/setting_view/setting_view.dart';
@@ -47,7 +46,6 @@ class _HomeViewState extends State<HomeView> {
             physics: const NeverScrollableScrollPhysics(),
             controller: PageController(initialPage: currentIndex),
             children: const [
-              ChatView(),
               BibleView(),
               QuiteTimeDashBoardView(),
               SettingView(),
@@ -61,11 +59,6 @@ class _HomeViewState extends State<HomeView> {
               );
             },
             destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.chat_bubble_outline),
-                selectedIcon: Icon(Icons.chat_bubble),
-                label: 'AI',
-              ),
               NavigationDestination(
                 icon: Icon(Icons.book),
                 label: 'Bible',

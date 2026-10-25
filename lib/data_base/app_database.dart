@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
+import 'package:meta/meta.dart';
 
 part 'app_database.g.dart';
 
@@ -75,6 +76,11 @@ class ChatMessages extends Table {
 @DriftDatabase(tables: [Memos, Settings, ChatSessions, ChatMessages])
 class AppDatabase extends _$AppDatabase {
   AppDatabase._() : super(driftDatabase(name: 'everyday_bible'));
+
+  /// Testing constructor — runs the database against the provided executor
+  /// (typically an in-memory `NativeDatabase`).
+  @visibleForTesting
+  AppDatabase.forTesting(super.e);
 
   /// Shared singleton instance of the database.
   static final AppDatabase instance = AppDatabase._();
