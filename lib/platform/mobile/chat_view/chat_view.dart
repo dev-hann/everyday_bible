@@ -6,6 +6,7 @@ import 'package:everydaybible/platform/mobile/chat_view/bloc/chat_bloc.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:forui/forui.dart';
 import 'package:intl/intl.dart';
 
 /// Main chat view: ask questions and receive scripture-grounded answers.
@@ -64,45 +65,47 @@ class _ChatViewState extends State<ChatView> {
 
   void _openHistory() {
     unawaited(
-      showModalBottomSheet<void>(
+      showFSheet<void>(
         context: context,
+        side: FLayout.btt,
         builder: (sheetContext) {
           return SafeArea(
-            child: BlocBuilder<ChatBloc, ChatState>(
-              builder: (context, state) {
-                final sessions = state.sessions;
-                if (sessions.isEmpty) {
-                  return const ListTile(
-                    title: Text('저장된 대화가 없어요'),
-                  );
-                }
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: sessions.length,
-                  itemBuilder: (context, index) {
-                    final session = sessions[index];
-                    return ListTile(
-                      leading: const Icon(Icons.forum_outlined),
-                      title: Text(
-                        session.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      subtitle: Text(
-                        DateFormat('yyyy.MM.dd HH:mm').format(
-                          DateTime.fromMillisecondsSinceEpoch(
-                            session.updatedAt,
+            child: BlocProvider<ChatBloc>.value(
+              value: bloc,
+              child: BlocBuilder<ChatBloc, ChatState>(
+                builder: (context, state) {
+                  final sessions = state.sessions;
+                  if (sessions.isEmpty) {
+                    return FTile(title: const Text('저장된 대화가 없어요'));
+                  }
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: sessions.length,
+                    itemBuilder: (context, index) {
+                      final session = sessions[index];
+                      return FTile(
+                        prefix: const Icon(FLucideIcons.messagesSquare),
+                        title: Text(
+                          session.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Text(
+                          DateFormat('yyyy.MM.dd HH:mm').format(
+                            DateTime.fromMillisecondsSinceEpoch(
+                              session.updatedAt,
+                            ),
                           ),
                         ),
-                      ),
-                      onTap: () {
-                        bloc.add(ChatEventSessionSelected(session.id));
-                        Navigator.of(sheetContext).pop();
-                      },
-                    );
-                  },
-                );
-              },
+                        onPress: () {
+                          bloc.add(ChatEventSessionSelected(session.id));
+                          Navigator.of(sheetContext).pop();
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           );
         },
@@ -120,26 +123,23 @@ class _ChatViewState extends State<ChatView> {
           case ChatViewStatus.success:
         }
         _scheduleScroll(state);
-        return Scaffold(
-          resizeToAvoidBottomInset: true,
-          appBar: AppBar(
-            title: const Text('AI 성경 해설'),
-            actions: [
-              IconButton(
-                tooltip: '지난 대화',
-                icon: const Icon(Icons.history),
-                onPressed: _openHistory,
+        return FScaffold(
+          header: FHeader.nested(
+            suffixes: [
+              FHeaderAction(
+                icon: const Icon(FLucideIcons.history),
+                onPress: _openHistory,
               ),
-              IconButton(
-                tooltip: '새 대화',
-                icon: const Icon(Icons.add_comment_outlined),
-                onPressed: () {
+              FHeaderAction(
+                icon: const Icon(FLucideIcons.messageCirclePlus),
+                onPress: () {
                   bloc.add(const ChatEventNewSessionStarted());
                 },
               ),
             ],
+            title: const Text('AI 성경 해설'),
           ),
-          body: Column(
+          child: Column(
             children: [
               Expanded(
                 child: state.messages.isEmpty && !state.isStreaming
@@ -216,7 +216,7 @@ class _MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isUser = message.role == ChatRole.user;
-    final scheme = Theme.of(context).colorScheme;
+    final colors = context.theme.colors;
     final body = streaming ? '${message.content}▌' : message.content;
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
@@ -227,8 +227,7 @@ class _MessageBubble extends StatelessWidget {
           maxWidth: MediaQuery.of(context).size.width * 0.82,
         ),
         decoration: BoxDecoration(
-          color:
-              isUser ? scheme.primaryContainer : scheme.surfaceContainerHighest,
+          color: isUser ? colors.primary : colors.secondary,
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),
             topRight: const Radius.circular(16),
@@ -238,7 +237,7 @@ class _MessageBubble extends StatelessWidget {
         ),
         child: SelectableText(
           body,
-          style: Theme.of(context).textTheme.bodyMedium,
+          style: context.theme.typography.body.md,
         ),
       ),
     );
@@ -255,6 +254,7 @@ class _EmptyChat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = context.theme;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
@@ -262,19 +262,19 @@ class _EmptyChat extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              Icons.auto_stories_outlined,
+              FLucideIcons.bookOpen,
               size: 56,
-              color: Theme.of(context).colorScheme.primary,
+              color: theme.colors.primary,
             ),
             const SizedBox(height: 12),
             Text(
               '무엇이든 물어보세요',
-              style: Theme.of(context).textTheme.titleMedium,
+              style: theme.typography.body.lg,
             ),
             const SizedBox(height: 6),
             Text(
               '구절을 언급하면 본문을 찾아 성경적으로 풀어드려요',
-              style: Theme.of(context).textTheme.bodySmall,
+              style: theme.typography.body.sm,
             ),
             const SizedBox(height: 20),
             Wrap(
@@ -283,9 +283,12 @@ class _EmptyChat extends StatelessWidget {
               alignment: WrapAlignment.center,
               children: [
                 for (final example in _ChatViewState._examples)
-                  ActionChip(
-                    label: Text(example),
-                    onPressed: () => onExampleTap(example),
+                  FButton(
+                    variant: FButtonVariant.secondary,
+                    size: FButtonSizeVariant.sm,
+                    mainAxisSize: MainAxisSize.min,
+                    onPress: () => onExampleTap(example),
+                    child: Text(example),
                   ),
               ],
             ),
@@ -319,25 +322,12 @@ class _InputBar extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              child: TextField(
-                controller: controller,
+              child: FTextField(
+                control: FTextFieldControl.managed(controller: controller),
                 enabled: enabled,
+                hint: '질문을 입력하세요',
                 minLines: 1,
                 maxLines: 5,
-                decoration: InputDecoration(
-                  hintText: '질문을 입력하세요',
-                  filled: true,
-                  fillColor:
-                      Theme.of(context).colorScheme.surfaceContainerHighest,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(24),
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 18,
-                    vertical: 10,
-                  ),
-                ),
               ),
             ),
             const SizedBox(width: 8),
@@ -345,10 +335,9 @@ class _InputBar extends StatelessWidget {
               valueListenable: controller,
               builder: (context, value, _) {
                 final canSend = enabled && value.text.trim().isNotEmpty;
-                return IconButton.filled(
-                  icon: const Icon(Icons.send_outlined),
-                  onPressed:
-                      canSend ? () => onSubmitted(controller.text) : null,
+                return FButton.icon(
+                  onPress: canSend ? () => onSubmitted(controller.text) : null,
+                  child: const Icon(FLucideIcons.sendHorizontal),
                 );
               },
             ),
