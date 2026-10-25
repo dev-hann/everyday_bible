@@ -20,7 +20,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:forui/forui.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 void main() {
   testWidgets(
@@ -72,7 +71,7 @@ void main() {
       await tester.tap(find.text('QuiteTime'));
       await tester.pumpAndSettle();
       expect(homeBloc.state.menuIndex, 2);
-      expect(find.byType(TableCalendar<Object?>), findsOneWidget);
+      expect(find.byType(FCalendar), findsOneWidget);
       expect(find.byType(QuiteTimeDashBoardView), findsOneWidget);
 
       await tester.tap(find.text('Setting'));

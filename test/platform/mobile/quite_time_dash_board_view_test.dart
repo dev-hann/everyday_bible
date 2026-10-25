@@ -4,27 +4,36 @@ import 'package:everydaybible/repo/quite_time_repo/quite_time_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:forui/forui.dart';
 
 void main() {
+  Future<void> pumpView(
+    WidgetTester tester,
+    QuiteTimeDashBoardBloc bloc,
+  ) async {
+    await tester.pumpWidget(
+      FTheme(
+        data: FTheme.neutral.light.touch,
+        child: MaterialApp(
+          home: BlocProvider<QuiteTimeDashBoardBloc>.value(
+            value: bloc,
+            child: const QuiteTimeDashBoardView(),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+  }
+
   testWidgets('renders the calendar and the selected day summary', (
     tester,
   ) async {
     final bloc = QuiteTimeDashBoardBloc(_FakeQuiteTimeRepo());
-    await tester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<QuiteTimeDashBoardBloc>.value(
-          value: bloc,
-          child: const QuiteTimeDashBoardView(),
-        ),
-      ),
-    );
-
-    await tester.pumpAndSettle();
+    await pumpView(tester, bloc);
 
     final now = DateTime.now();
     expect(find.text('Quite Time'), findsOneWidget);
-    expect(find.byType(TableCalendar<Object?>), findsOneWidget);
+    expect(find.byType(FCalendar), findsOneWidget);
     expect(find.text('묵상 제목 ${now.month}-${now.day}'), findsOneWidget);
     expect(find.text('창세기 1장'), findsOneWidget);
     expect(find.text('자세히 보기..'), findsOneWidget);
@@ -34,16 +43,8 @@ void main() {
     tester,
   ) async {
     final bloc = QuiteTimeDashBoardBloc(_FakeQuiteTimeRepo());
-    await tester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<QuiteTimeDashBoardBloc>.value(
-          value: bloc,
-          child: const QuiteTimeDashBoardView(),
-        ),
-      ),
-    );
+    await pumpView(tester, bloc);
 
-    await tester.pumpAndSettle();
     await tester.tap(find.text('15'));
     await tester.pumpAndSettle();
 

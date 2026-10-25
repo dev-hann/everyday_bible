@@ -5,7 +5,7 @@ import 'package:everydaybible/platform/mobile/quite_time_view/quite_time_view.da
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:forui/forui.dart';
 
 /// Quiet Time tab: a calendar for picking a date and a summary card that
 /// opens the reader for that day.
@@ -21,37 +21,51 @@ class _QuiteTimeDashBoardViewState extends State<QuiteTimeDashBoardView>
     with AutomaticKeepAliveClientMixin {
   QuiteTimeDashBoardBloc get bloc => BlocProvider.of(context);
 
+  final DateTime now = DateTime.now();
+
   @override
   void initState() {
     super.initState();
     bloc.add(const QuiteTimeDashBoardEventInited());
   }
 
-  AppBar appBar() {
-    return AppBar(
-      title: const Text('Quite Time'),
-    );
-  }
-
   Widget calendarWidget({
     required DateTime dateTime,
     required void Function(DateTime dateTime) onChanged,
   }) {
-    final now = DateTime.now();
-    return Card(
-      child: TableCalendar<Object?>(
-        availableGestures: AvailableGestures.horizontalSwipe,
-        currentDay: dateTime,
-        focusedDay: dateTime,
-        headerStyle: const HeaderStyle(
-          titleCentered: true,
-          formatButtonVisible: false,
+    return FCard(
+      // The grid calendar is a fixed 7 day-cells wide; a slimmer card
+      // padding keeps it inside a phone's content width.
+      style: const FCardStyleDelta.delta(
+        padding: EdgeInsetsGeometryDelta.value(EdgeInsets.all(8)),
+      ),
+      child: FCalendar.grid(
+        control: FGridCalendarControl(
+          start: now.add(const Duration(days: -365)),
+          end: now,
+          today: now,
+          initial: dateTime,
         ),
-        firstDay: now.add(const Duration(days: -365)),
-        lastDay: now,
-        onDaySelected: (selectedDay, focusedDay) {
-          onChanged(selectedDay);
-        },
+        style: const FCalendarStyleDelta.delta(
+          padding: EdgeInsetsGeometryDelta.value(EdgeInsets.zero),
+          dayPickerStyle: FCalendarDayPickerStyleDelta.delta(
+            daySize: Size(48, 44),
+          ),
+          headerStyle: FCalendarHeaderStyleDelta.delta(
+            tappablePadding: EdgeInsetsGeometryDelta.value(
+              EdgeInsets.symmetric(horizontal: 4),
+            ),
+          ),
+        ),
+        selectionControl: FDateSelectionControl.liftedSingle(
+          value: dateTime,
+          toggleable: false,
+          onChange: (date) {
+            if (date != null) {
+              onChanged(date);
+            }
+          },
+        ),
       ),
     );
   }
@@ -62,6 +76,7 @@ class _QuiteTimeDashBoardViewState extends State<QuiteTimeDashBoardView>
     if (data == null) {
       return const BibleLoading();
     }
+    final typography = context.theme.typography;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -79,27 +94,25 @@ class _QuiteTimeDashBoardViewState extends State<QuiteTimeDashBoardView>
               ),
             );
           },
-          child: Card(
+          child: FCard(
             child: Padding(
               padding: const EdgeInsets.all(8),
               child: Column(
                 children: [
                   Text(
                     data.title,
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: typography.body.lg,
                   ),
                   Text(
                     '${data.bibleName} ${data.chapter}',
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: typography.body.sm,
                   ),
                   Text(data.summary),
                   Align(
                     alignment: Alignment.bottomRight,
-                    child: IgnorePointer(
-                      child: TextButton(
-                        onPressed: () {},
-                        child: const Text('자세히 보기..'),
-                      ),
+                    child: Text(
+                      '자세히 보기..',
+                      style: TextStyle(color: context.theme.colors.primary),
                     ),
                   ),
                 ],
@@ -114,9 +127,9 @@ class _QuiteTimeDashBoardViewState extends State<QuiteTimeDashBoardView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
-      appBar: appBar(),
-      body: BlocBuilder<QuiteTimeDashBoardBloc, QuiteTimeDashBoardState>(
+    return FScaffold(
+      header: const FHeader(title: Text('Quite Time')),
+      child: BlocBuilder<QuiteTimeDashBoardBloc, QuiteTimeDashBoardState>(
         builder: (context, state) {
           final status = state.status;
           switch (status) {
