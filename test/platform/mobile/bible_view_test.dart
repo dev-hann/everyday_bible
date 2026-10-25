@@ -5,22 +5,29 @@ import 'package:everydaybible/widgets/gospel_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:forui/forui.dart';
 
 void main() {
+  Future<void> pumpView(WidgetTester tester, BibleBloc bloc) async {
+    await tester.pumpWidget(
+      FTheme(
+        data: FTheme.neutral.light.touch,
+        child: MaterialApp(
+          home: BlocProvider<BibleBloc>.value(
+            value: bloc,
+            child: const BibleView(),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+  }
+
   testWidgets('renders the verses of the first loaded chapter', (
     tester,
   ) async {
     final bloc = BibleBloc(_FakeBibleRepo());
-    await tester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<BibleBloc>.value(
-          value: bloc,
-          child: const BibleView(),
-        ),
-      ),
-    );
-
-    await tester.pumpAndSettle();
+    await pumpView(tester, bloc);
 
     expect(find.text('창세기 1장'), findsOneWidget);
     expect(find.byType(VerseText), findsNWidgets(2));
@@ -28,19 +35,13 @@ void main() {
     expect(find.text('1'), findsOneWidget);
   });
 
-  testWidgets('drawer jumps to the selected book and chapter', (tester) async {
+  testWidgets('chapter sheet jumps to the selected book and chapter', (
+    tester,
+  ) async {
     final bloc = BibleBloc(_FakeBibleRepo());
-    await tester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<BibleBloc>.value(
-          value: bloc,
-          child: const BibleView(),
-        ),
-      ),
-    );
+    await pumpView(tester, bloc);
 
-    await tester.pumpAndSettle();
-    bloc.state.drawerKey.currentState!.openDrawer();
+    await tester.tap(find.byType(FHeaderAction));
     await tester.pumpAndSettle();
 
     expect(find.text('창세기'), findsOneWidget);
@@ -49,33 +50,25 @@ void main() {
     await tester.tap(find.text('요한복음'));
     await tester.pumpAndSettle();
 
-    final johnTile = find.ancestor(
+    final johnItem = find.ancestor(
       of: find.text('요한복음'),
-      matching: find.byType(ExpansionTile),
+      matching: find.byType(FAccordionItem),
     );
-    await tester.tap(find.descendant(of: johnTile, matching: find.text('1장')));
+    await tester.tap(find.descendant(of: johnItem, matching: find.text('1장')));
     await tester.pumpAndSettle();
 
     expect(find.text('요한복음 1장'), findsOneWidget);
     expect(find.textContaining('태초에 말씀이 계시니라'), findsOneWidget);
   });
 
-  testWidgets('drawer search filters the book list', (tester) async {
+  testWidgets('chapter sheet search filters the book list', (tester) async {
     final bloc = BibleBloc(_FakeBibleRepo());
-    await tester.pumpWidget(
-      MaterialApp(
-        home: BlocProvider<BibleBloc>.value(
-          value: bloc,
-          child: const BibleView(),
-        ),
-      ),
-    );
+    await pumpView(tester, bloc);
 
-    await tester.pumpAndSettle();
-    bloc.state.drawerKey.currentState!.openDrawer();
+    await tester.tap(find.byType(FHeaderAction));
     await tester.pumpAndSettle();
 
-    await tester.enterText(find.byType(TextField), '요한');
+    await tester.enterText(find.byType(FTextField), '요한');
     await tester.pump();
 
     expect(find.text('창세기'), findsNothing);
