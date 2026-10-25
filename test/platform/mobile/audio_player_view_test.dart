@@ -5,6 +5,7 @@ import 'package:everydaybible/repo/audio_repo/repo_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:forui/forui.dart';
 import 'package:just_audio/just_audio.dart';
 
 void main() {
@@ -15,11 +16,14 @@ void main() {
     final repo = _FakeAudioRepo(initialState: initialState);
     final bloc = AudioPlayerBloc(repo);
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: BlocProvider<AudioPlayerBloc>.value(
-            value: bloc,
-            child: const AudioPlayerView(),
+      FTheme(
+        data: FTheme.neutral.light.touch,
+        child: MaterialApp(
+          home: Center(
+            child: BlocProvider<AudioPlayerBloc>.value(
+              value: bloc,
+              child: const AudioPlayerView(),
+            ),
           ),
         ),
       ),
@@ -35,8 +39,8 @@ void main() {
     (tester) async {
       final repo = await pumpView(tester);
 
-      expect(find.byIcon(Icons.play_arrow), findsOneWidget);
-      expect(find.byType(Slider), findsOneWidget);
+      expect(find.byIcon(FLucideIcons.play), findsOneWidget);
+      expect(find.byType(FSlider), findsOneWidget);
       expect(find.text('01:00 / 10:00'), findsOneWidget);
       expect(
         repo.calls,
@@ -51,8 +55,9 @@ void main() {
   ) async {
     final repo = await pumpView(tester);
 
-    await tester.tap(find.byIcon(Icons.play_arrow));
-    await tester.pump();
+    await tester.tap(find.byIcon(FLucideIcons.play));
+    // Let FButton's press-state timer finish before the test ends.
+    await tester.pump(const Duration(milliseconds: 600));
 
     expect(repo.calls, contains('play'));
   });
@@ -65,9 +70,9 @@ void main() {
         initialState: const AudioState(state: ProcessingState.buffering),
       );
 
-      expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      expect(find.byType(Slider), findsNothing);
-      expect(find.byType(IconButton), findsNothing);
+      expect(find.byType(FCircularProgress), findsOneWidget);
+      expect(find.byType(FSlider), findsNothing);
+      expect(find.byIcon(FLucideIcons.play), findsNothing);
     },
   );
 }

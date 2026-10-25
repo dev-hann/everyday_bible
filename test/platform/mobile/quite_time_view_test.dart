@@ -7,6 +7,7 @@ import 'package:everydaybible/repo/quite_time_repo/quite_time_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:forui/forui.dart';
 import 'package:just_audio/just_audio.dart';
 
 void main() {
@@ -24,25 +25,30 @@ void main() {
     );
 
     await tester.pumpWidget(
-      MultiRepositoryProvider(
-        providers: [
-          RepositoryProvider<QuiteTimeRepo>.value(value: _FakeQuiteTimeRepo()),
-        ],
-        child: BlocProvider<AudioPlayerBloc>.value(
-          value: audioBloc,
-          child: MaterialApp(
-            home: Builder(
-              builder: (context) {
-                return TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      QuiteTimeView.route(context: context, data: data),
-                    );
-                  },
-                  child: const Text('open reader'),
-                );
-              },
+      FTheme(
+        data: FTheme.neutral.light.touch,
+        child: MultiRepositoryProvider(
+          providers: [
+            RepositoryProvider<QuiteTimeRepo>.value(
+              value: _FakeQuiteTimeRepo(),
+            ),
+          ],
+          child: BlocProvider<AudioPlayerBloc>.value(
+            value: audioBloc,
+            child: MaterialApp(
+              home: Builder(
+                builder: (context) {
+                  return FButton(
+                    onPress: () {
+                      Navigator.push(
+                        context,
+                        QuiteTimeView.route(context: context, data: data),
+                      );
+                    },
+                    child: const Text('open reader'),
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -55,7 +61,7 @@ void main() {
     expect(find.text('QuiteTimeContent'), findsOneWidget);
     expect(find.text('말씀을 따라 살아가는 하루'), findsOneWidget);
     expect(find.textContaining('태초에 하나님이 천지를 창조하시니라'), findsOneWidget);
-    expect(find.byIcon(Icons.play_arrow), findsOneWidget);
+    expect(find.byIcon(FLucideIcons.play), findsOneWidget);
   });
 }
 

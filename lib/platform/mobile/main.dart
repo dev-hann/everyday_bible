@@ -34,7 +34,11 @@ class App extends StatelessWidget {
           switch (status) {
             case SettingViewStatus.init:
             case SettingViewStatus.loading:
-              return const BibleLoading();
+              // forui widgets need an FTheme ancestor even while loading.
+              return FTheme(
+                data: FTheme.neutral.light.touch,
+                child: const BibleLoading(),
+              );
             case SettingViewStatus.failure:
             case SettingViewStatus.success:
           }

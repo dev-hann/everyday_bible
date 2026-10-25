@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:forui/forui.dart';
 
 /// Loading indicator shown while Bible or QT data is being fetched.
 class BibleLoading extends StatelessWidget {
@@ -8,7 +9,7 @@ class BibleLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-      child: CircularProgressIndicator(),
+      child: FCircularProgress(),
     );
   }
 }
