@@ -1,6 +1,7 @@
 import 'package:everydaybible/model/audio/audio_state.dart';
 import 'package:everydaybible/model/chat/chat_message.dart';
 import 'package:everydaybible/model/chat/chat_session.dart';
+import 'package:everydaybible/model/setting.dart';
 import 'package:everydaybible/platform/mobile/audio_player_view/bloc/audio_player_bloc.dart';
 import 'package:everydaybible/platform/mobile/bible_view/bible_view.dart';
 import 'package:everydaybible/platform/mobile/bible_view/bloc/bible_bloc.dart';
@@ -17,6 +18,7 @@ import 'package:everydaybible/repo/quite_time_repo/quite_time_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:forui/forui.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -33,23 +35,28 @@ void main() {
       final settingBloc = SettingBloc()..add(const SettingEventInited());
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: MultiBlocProvider(
-            providers: [
-              BlocProvider<HomeBloc>.value(value: homeBloc),
-              BlocProvider<ChatBloc>.value(value: chatBloc),
-              BlocProvider<BibleBloc>.value(value: bibleBloc),
-              BlocProvider<QuiteTimeDashBoardBloc>.value(value: quiteTimeBloc),
-              BlocProvider<AudioPlayerBloc>.value(value: audioBloc),
-              BlocProvider<SettingBloc>.value(value: settingBloc),
-            ],
-            child: const HomeView(),
+        FTheme(
+          data: FTheme.neutral.light.touch,
+          child: MaterialApp(
+            home: MultiBlocProvider(
+              providers: [
+                BlocProvider<HomeBloc>.value(value: homeBloc),
+                BlocProvider<ChatBloc>.value(value: chatBloc),
+                BlocProvider<BibleBloc>.value(value: bibleBloc),
+                BlocProvider<QuiteTimeDashBoardBloc>.value(
+                  value: quiteTimeBloc,
+                ),
+                BlocProvider<AudioPlayerBloc>.value(value: audioBloc),
+                BlocProvider<SettingBloc>.value(value: settingBloc),
+              ],
+              child: const HomeView(),
+            ),
           ),
         ),
       );
       await tester.pumpAndSettle();
 
-      expect(find.byType(NavigationBar), findsOneWidget);
+      expect(find.byType(FBottomNavigationBar), findsOneWidget);
       expect(find.text('AI'), findsOneWidget);
       expect(find.text('Bible'), findsOneWidget);
       expect(find.text('QuiteTime'), findsOneWidget);
@@ -71,8 +78,11 @@ void main() {
       await tester.tap(find.text('Setting'));
       await tester.pumpAndSettle();
       expect(homeBloc.state.menuIndex, 3);
-      expect(find.text('Theme :'), findsOneWidget);
-      expect(find.text('TextFactor: '), findsOneWidget);
+      expect(find.byType(FSwitch), findsOneWidget);
+      expect(
+        find.byWidgetPredicate((w) => w is FSelect<TextScaleFactor>),
+        findsOneWidget,
+      );
     },
   );
 }
