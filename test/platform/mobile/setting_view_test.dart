@@ -1,21 +1,56 @@
 import 'package:everydaybible/model/setting.dart';
+import 'package:everydaybible/model/update/app_release.dart';
 import 'package:everydaybible/platform/mobile/setting_view/bloc/setting_bloc.dart';
+import 'package:everydaybible/platform/mobile/setting_view/bloc/update_bloc.dart';
 import 'package:everydaybible/platform/mobile/setting_view/setting_view.dart';
+import 'package:everydaybible/repo/apk_install_repo/apk_install_repo.dart';
+import 'package:everydaybible/repo/update_repo/update_repo.dart';
+import 'package:everydaybible/use_case/update_use_case/update_use_case.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:forui/forui.dart';
+import 'package:fpdart/fpdart.dart';
+import 'package:mocktail/mocktail.dart';
+
+class _MockUpdateRepo extends Mock implements UpdateRepo {}
+
+class _MockApkInstallRepo extends Mock implements ApkInstallRepo {}
 
 void main() {
   Future<SettingBloc> pumpView(WidgetTester tester) async {
     final bloc = SettingBloc()..add(const SettingEventInited());
+    final updateRepo = _MockUpdateRepo();
+    final apkRepo = _MockApkInstallRepo();
+    when(updateRepo.getLatestRelease).thenAnswer(
+      (_) async => const Right(
+        AppRelease(
+          version: '3.0.0',
+          htmlUrl: 'https://github.com/dev-hann/everyday_bible',
+        ),
+      ),
+    );
     await tester.pumpWidget(
       FTheme(
         data: FTheme.neutral.light.touch,
         child: MaterialApp(
-          home: BlocProvider<SettingBloc>.value(
-            value: bloc,
-            child: const SettingView(),
+          home: MultiRepositoryProvider(
+            providers: [
+              RepositoryProvider<UpdateRepo>.value(value: updateRepo),
+              RepositoryProvider<ApkInstallRepo>.value(value: apkRepo),
+            ],
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<SettingBloc>.value(value: bloc),
+                BlocProvider<UpdateBloc>(
+                  create: (_) => UpdateBloc(
+                    useCase: UpdateUseCase(updateRepo, apkRepo),
+                    resolveCurrentVersion: () async => '3.0.0',
+                  ),
+                ),
+              ],
+              child: const SettingView(),
+            ),
           ),
         ),
       ),
@@ -37,6 +72,16 @@ void main() {
       findsOneWidget,
     );
     expect(tester.widget<FSwitch>(find.byType(FSwitch)).value, isFalse);
+  });
+
+  testWidgets('renders the version section with the installed version', (
+    tester,
+  ) async {
+    await pumpView(tester);
+
+    expect(find.text('버전'), findsOneWidget);
+    expect(find.textContaining('v3.0.0'), findsWidgets);
+    expect(find.textContaining('최신 버전'), findsOneWidget);
   });
 
   testWidgets('tapping the theme switch flips the theme mode setting', (
