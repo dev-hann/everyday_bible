@@ -73,6 +73,8 @@ Dependency rule: model ← repo ← use_case ← bloc ← view. Never import upw
 - ADR-0007 Test suite foundation
 - ADR-0008 Firebase AI Logic for the AI chat feature
 - ADR-0009 forui as the design system foundation
+- ADR-0010 GitHub Actions release pipeline
+- ADR-0011 in-app update via GitHub Releases
 
 When making a new architecture-level decision, add an ADR
 (`docs/adr/NNNN-kebab-title.md`) — status, context, decision, consequences.
