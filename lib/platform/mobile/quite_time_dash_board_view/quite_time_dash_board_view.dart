@@ -95,28 +95,29 @@ class _QuiteTimeDashBoardViewState extends State<QuiteTimeDashBoardView>
             );
           },
           child: FCard(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                children: [
-                  Text(
-                    data.title,
-                    style: typography.body.lg,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  data.title,
+                  style: typography.body.lg,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${data.bibleName} ${data.chapter}',
+                  style: typography.body.sm,
+                ),
+                const SizedBox(height: 4),
+                Text(data.summary),
+                const SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Text(
+                    '자세히 보기..',
+                    style: TextStyle(color: context.theme.colors.primary),
                   ),
-                  Text(
-                    '${data.bibleName} ${data.chapter}',
-                    style: typography.body.sm,
-                  ),
-                  Text(data.summary),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Text(
-                      '자세히 보기..',
-                      style: TextStyle(color: context.theme.colors.primary),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

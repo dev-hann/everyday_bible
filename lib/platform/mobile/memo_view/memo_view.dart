@@ -74,30 +74,29 @@ class _MemoViewState extends State<MemoView> {
             children: list.map((memo) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
-                child: FCard(
-                  clipBehavior: Clip.hardEdge,
-                  child: MobileMemoListTile(
-                    memo: memo,
-                    onTap: () {
-                      unawaited(
-                        Navigator.push(
-                          context,
-                          MemoEditorView.route(memo),
-                        ).then((edited) {
-                          if (edited != null) {
-                            bloc.add(
-                              MemoEventUpdatedMemo(edited),
-                            );
-                          }
-                        }),
-                      );
-                    },
-                    onTapDelete: () {
-                      bloc.add(
-                        MemoEventRemovedMemo(memo),
-                      );
-                    },
-                  ),
+                // FTile alone: wrapping it in an FCard would stack the
+                // card padding on top of the tile's own padding.
+                child: MobileMemoListTile(
+                  memo: memo,
+                  onTap: () {
+                    unawaited(
+                      Navigator.push(
+                        context,
+                        MemoEditorView.route(memo),
+                      ).then((edited) {
+                        if (edited != null) {
+                          bloc.add(
+                            MemoEventUpdatedMemo(edited),
+                          );
+                        }
+                      }),
+                    );
+                  },
+                  onTapDelete: () {
+                    bloc.add(
+                      MemoEventRemovedMemo(memo),
+                    );
+                  },
                 ),
               );
             }).toList(),
