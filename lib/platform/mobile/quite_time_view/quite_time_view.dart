@@ -118,10 +118,14 @@ class _QuiteTimeViewState extends State<QuiteTimeView> {
                 child: Padding(
                   padding: EdgeInsets.all(8),
                   child: FCard(
-                    child: Padding(
-                      padding: EdgeInsets.all(8),
-                      child: AudioPlayerView(),
+                    // Slimmer than the default 16 so the player bar stays
+                    // compact; the outer padding already floats it.
+                    style: FCardStyleDelta.delta(
+                      padding: EdgeInsetsGeometryDelta.value(
+                        EdgeInsets.all(8),
+                      ),
                     ),
+                    child: AudioPlayerView(),
                   ),
                 ),
               ),
