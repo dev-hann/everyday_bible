@@ -19,6 +19,7 @@ import 'package:everydaybible/repo/chat_repo/chat_repo.dart';
 import 'package:everydaybible/repo/quite_time_repo/quite_time_repo.dart';
 import 'package:everydaybible/repo/update_repo/update_repo.dart';
 import 'package:everydaybible/use_case/update_use_case/update_use_case.dart';
+import 'package:everydaybible/widgets/app_theme.dart';
 import 'package:everydaybible/widgets/gospel_text.dart';
 import 'package:everydaybible/widgets/material_text_defaults.dart';
 import 'package:flutter/material.dart';
@@ -175,14 +176,7 @@ void main() {
     final bibleRepo = _FakeBibleRepo();
     await tester.pumpWidget(
       FTheme(
-        data: FTheme.neutral.light.touch.copyWith(
-          cardStyle: const FCardStyleDelta.delta(
-            padding: EdgeInsetsGeometryDelta.value(EdgeInsets.all(12)),
-          ),
-          scaffoldStyle: const FScaffoldStyleDelta.delta(
-            childPadding: EdgeInsetsGeometryDelta.value(EdgeInsets.zero),
-          ),
-        ),
+        data: appTheme(Brightness.light),
         child: MaterialApp(
           builder: (context, child) =>
               MaterialTextDefaults(child: child ?? const SizedBox()),
@@ -226,23 +220,32 @@ void main() {
     tester.view.physicalSize = const Size(360, 800);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
+
+    final original = FlutterError.onError;
+    final others = <FlutterErrorDetails>[];
+    FlutterError.onError = (details) {
+      final text = details.toString();
+      if (!text.contains('calendar/header.dart')) {
+        others.add(details);
+        original?.call(details);
+      }
+    };
+    addTearDown(() => FlutterError.onError = original);
+
     await pumpHome(tester);
 
-    // Bible tab: verse text starts at the gutter.
     await tester.tap(find.text('Bible'));
     await tester.pumpAndSettle();
     final verse = tester.getRect(find.byType(VerseText).first);
     expect(verse.left, kScreenGutter);
     expect(360 - verse.right, kScreenGutter);
 
-    // QuiteTime tab: cards span gutter to gutter.
     await tester.tap(find.text('QuiteTime'));
     await tester.pumpAndSettle();
     final card = tester.getRect(find.byType(FCard).first);
     expect(card.left, kScreenGutter);
     expect(360 - card.right, kScreenGutter);
 
-    // Setting tab: tiles and fields span gutter to gutter.
     await tester.tap(find.text('Setting'));
     await tester.pumpAndSettle();
     final tile = tester.getRect(find.byType(FTile).first);

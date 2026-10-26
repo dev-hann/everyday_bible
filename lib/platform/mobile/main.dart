@@ -12,6 +12,7 @@ import 'package:everydaybible/repo/apk_install_repo/apk_install_repo.dart';
 import 'package:everydaybible/repo/repo.dart';
 import 'package:everydaybible/repo/update_repo/update_repo.dart';
 import 'package:everydaybible/use_case/update_use_case/update_use_case.dart';
+import 'package:everydaybible/widgets/app_theme.dart';
 import 'package:everydaybible/widgets/bible_loading.dart';
 import 'package:everydaybible/widgets/material_text_defaults.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,6 @@ class App extends StatelessWidget {
           switch (status) {
             case SettingViewStatus.init:
             case SettingViewStatus.loading:
-              // forui widgets need an FTheme ancestor even while loading.
               return FTheme(
                 data: FTheme.neutral.light.touch,
                 child: const BibleLoading(),
@@ -48,8 +48,6 @@ class App extends StatelessWidget {
             case SettingViewStatus.success:
           }
           final setting = state.setting;
-          // The forui design tokens follow the user's theme mode so that
-          // forui widgets and the Material shell stay in the same brightness.
           final brightness = switch (setting.themeMode) {
             ThemeMode.light => Brightness.light,
             ThemeMode.dark => Brightness.dark,
@@ -57,39 +55,13 @@ class App extends StatelessWidget {
               WidgetsBinding.instance.platformDispatcher.platformBrightness,
           };
           return FTheme(
-            // App-wide forui density:
-            // - cards use 12 instead of the default 16;
-            // - the scaffold page padding is zeroed because the home shell
-            //   nests an FScaffold per tab (12 + 12 would stack to 24 on
-            //   top of every list view's own 16px gutter).
-            data: (brightness == Brightness.dark
-                    ? FTheme.neutral.dark.touch
-                    : FTheme.neutral.light.touch)
-                .copyWith(
-              cardStyle: const FCardStyleDelta.delta(
-                padding: EdgeInsetsGeometryDelta.value(
-                  EdgeInsets.all(12),
-                ),
-              ),
-              scaffoldStyle: const FScaffoldStyleDelta.delta(
-                childPadding: EdgeInsetsGeometryDelta.value(
-                  EdgeInsets.zero,
-                ),
-              ),
-            ),
+            data: appTheme(brightness),
             child: MaterialApp(
               title: 'Everyday Bible',
               debugShowCheckedModeBanner: false,
               themeMode: setting.themeMode,
-              // The Material shell theme only styles residual Material pieces
-              // (text selection toolbar, page transitions, default text);
-              // every visible widget is themed by the forui [FTheme] above.
               darkTheme: ThemeData.dark(),
               theme: ThemeData.light(),
-              // FScaffold routes carry no Material ancestor, so bare Text
-              // widgets would fall back to the yellow-underlined debug style;
-              // the transparent Material restores default text styling for
-              // every route under the navigator.
               builder: (context, child) =>
                   MaterialTextDefaults(child: child ?? const SizedBox()),
               home: MultiBlocProvider(

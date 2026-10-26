@@ -1,5 +1,6 @@
 import 'package:everydaybible/model/memo/memo.dart';
 import 'package:flutter/material.dart';
+import 'package:forui/forui.dart';
 
 /// Text editing controller that mirrors edits into a [Memo] and renders
 /// its first line as a large title.
@@ -26,11 +27,14 @@ class MemoEditorController extends TextEditingController {
     required bool withComposing,
     TextStyle? style,
   }) {
+    final titleStyle = FTheme.of(
+      context,
+    ).typography.display.sm.copyWith(fontWeight: FontWeight.w600);
     return TextSpan(
       children: [
         TextSpan(
           text: '${memo.title}\n',
-          style: const TextStyle(fontSize: 30),
+          style: titleStyle,
         ),
         TextSpan(text: memo.content),
       ],

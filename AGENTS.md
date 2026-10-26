@@ -32,6 +32,10 @@ Never commit with failing analyze.
   (Bible/QT/memo/audio). No boilerplate filler.
 - Do NOT add `// ignore:` comments or disable rules. Fix the code instead.
   Existing ignores must carry a reason comment.
+- Do not write narration comments: no `//` explaining what the code does,
+  change history, or audit/fix backstory. Inline comments are only for a
+  non-obvious constraint the code cannot express, one line maximum.
+  (The required `///` API docs above are unaffected.)
 - At the dynamic/JSON boundary, cast explicitly (`data['x'] as String`,
   `(data['x'] ?? '') as String`). Preserve nullability exactly — a previously
   nullable value stays nullable.

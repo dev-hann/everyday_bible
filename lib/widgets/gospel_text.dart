@@ -33,8 +33,6 @@ class VerseText extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         indexView(),
-        // The enclosing list view already insets horizontally; only the
-        // vertical rhythm between verses is added here.
         Padding(
           padding: const EdgeInsets.only(top: 4, bottom: 12),
           child: SelectableText(text),

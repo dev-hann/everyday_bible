@@ -74,8 +74,6 @@ class _MemoViewState extends State<MemoView> {
             children: list.map((memo) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8),
-                // FTile alone: wrapping it in an FCard would stack the
-                // card padding on top of the tile's own padding.
                 child: MobileMemoListTile(
                   memo: memo,
                   onTap: () {

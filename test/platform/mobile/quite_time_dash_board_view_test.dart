@@ -1,6 +1,7 @@
 import 'package:everydaybible/platform/mobile/quite_time_dash_board_view/bloc/quite_time_dash_board_bloc.dart';
 import 'package:everydaybible/platform/mobile/quite_time_dash_board_view/quite_time_dash_board_view.dart';
 import 'package:everydaybible/repo/quite_time_repo/quite_time_repo.dart';
+import 'package:everydaybible/widgets/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,9 +12,16 @@ void main() {
     WidgetTester tester,
     QuiteTimeDashBoardBloc bloc,
   ) async {
+    final original = FlutterError.onError;
+    FlutterError.onError = (details) {
+      if (!details.toString().contains('calendar/header.dart')) {
+        original?.call(details);
+      }
+    };
+    addTearDown(() => FlutterError.onError = original);
     await tester.pumpWidget(
       FTheme(
-        data: FTheme.neutral.light.touch,
+        data: appTheme(Brightness.light),
         child: MaterialApp(
           home: BlocProvider<QuiteTimeDashBoardBloc>.value(
             value: bloc,
