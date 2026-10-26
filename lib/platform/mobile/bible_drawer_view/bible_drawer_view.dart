@@ -66,59 +66,64 @@ class _BibleDrawerViewState extends State<BibleDrawerView> {
         }
         final searchController = state.drawerSearchController;
         final scrollController = state.drawerScrollController;
-        return Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: FTextField(
-                control: FTextFieldControl.managed(
-                  controller: searchController,
-                ),
-                hint: 'search',
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                controller: scrollController,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ValueListenableBuilder<TextEditingValue>(
-                  valueListenable: searchController,
-                  builder: (context, value, _) {
-                    final query = value.text;
-                    return FAccordion(
-                      children: [
-                        for (final data in state.bibleDataList)
-                          if (data.name.contains(query))
-                            FAccordionItem(
-                              initiallyExpanded: data == widget.currentData,
-                              title: Align(
-                                alignment: AlignmentDirectional.centerStart,
-                                child: Text(data.name),
-                              ),
-                              child: Wrap(
-                                spacing: 4,
-                                runSpacing: 4,
-                                children: [
-                                  for (final chapter in data.chapterList)
-                                    chapterWidget(
-                                      isSelected:
-                                          chapter == state.selectedChapter,
-                                      item: chapter,
-                                      onTap: () {
-                                        widget.onTapChapter(data, chapter);
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                ],
-                              ),
-                            ),
-                      ],
-                    );
-                  },
+        // The ambient `padding` inset is consumed inside the sheet.
+        final topInset = MediaQuery.viewPaddingOf(context).top;
+        return Padding(
+          padding: EdgeInsets.only(top: topInset),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: FTextField(
+                  control: FTextFieldControl.managed(
+                    controller: searchController,
+                  ),
+                  hint: 'search',
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ValueListenableBuilder<TextEditingValue>(
+                    valueListenable: searchController,
+                    builder: (context, value, _) {
+                      final query = value.text;
+                      return FAccordion(
+                        children: [
+                          for (final data in state.bibleDataList)
+                            if (data.name.contains(query))
+                              FAccordionItem(
+                                initiallyExpanded: data == widget.currentData,
+                                title: Align(
+                                  alignment: AlignmentDirectional.centerStart,
+                                  child: Text(data.name),
+                                ),
+                                child: Wrap(
+                                  spacing: 4,
+                                  runSpacing: 4,
+                                  children: [
+                                    for (final chapter in data.chapterList)
+                                      chapterWidget(
+                                        isSelected:
+                                            chapter == state.selectedChapter,
+                                        item: chapter,
+                                        onTap: () {
+                                          widget.onTapChapter(data, chapter);
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                  ],
+                                ),
+                              ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

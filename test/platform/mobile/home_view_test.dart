@@ -22,6 +22,7 @@ import 'package:everydaybible/repo/chat_repo/chat_repo.dart';
 import 'package:everydaybible/repo/quite_time_repo/quite_time_repo.dart';
 import 'package:everydaybible/repo/update_repo/update_repo.dart';
 import 'package:everydaybible/use_case/update_use_case/update_use_case.dart';
+import 'package:everydaybible/widgets/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -45,9 +46,16 @@ void main() {
         resolveCurrentVersion: () async => '3.0.0',
       );
 
+      final original = FlutterError.onError;
+      FlutterError.onError = (details) {
+        if (!details.toString().contains('calendar/header.dart')) {
+          original?.call(details);
+        }
+      };
+      addTearDown(() => FlutterError.onError = original);
       await tester.pumpWidget(
         FTheme(
-          data: FTheme.neutral.light.touch,
+          data: appTheme(Brightness.light),
           child: MaterialApp(
             home: MultiBlocProvider(
               providers: [

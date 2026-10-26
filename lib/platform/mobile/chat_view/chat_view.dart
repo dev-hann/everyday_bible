@@ -21,8 +21,6 @@ class ChatView extends StatefulWidget {
 }
 
 class _ChatViewState extends State<ChatView> {
-  // Line breaks keep each chip inside FButton's non-wrapping content row
-  // on a 360dp screen.
   static const List<String> _examples = [
     '요한복음 3:16을 풀어줘',
     '오늘 읽던 본문 한 구절 골라서\n묵상을 도와줘',
@@ -126,6 +124,7 @@ class _ChatViewState extends State<ChatView> {
         }
         _scheduleScroll(state);
         return FScaffold(
+          resizeToAvoidBottomInset: false,
           header: FHeader.nested(
             suffixes: [
               FHeaderAction(
@@ -333,6 +332,8 @@ class _InputBar extends StatelessWidget {
                 hint: '질문을 입력하세요',
                 minLines: 1,
                 maxLines: 5,
+                textInputAction: TextInputAction.send,
+                onEditingComplete: () => onSubmitted(controller.text),
               ),
             ),
             const SizedBox(width: 8),

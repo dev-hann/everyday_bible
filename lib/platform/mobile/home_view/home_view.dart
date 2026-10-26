@@ -23,10 +23,19 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   HomeBloc get bloc => BlocProvider.of(context);
 
+  // Recreating this per build drops input focus during keyboard insets.
+  late final PageController pageController = PageController();
+
   @override
   void initState() {
     super.initState();
     bloc.add(const HomeEventInited());
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -42,43 +51,52 @@ class _HomeViewState extends State<HomeView> {
           case HomeViewStatus.success:
         }
         final currentIndex = state.menuIndex;
-        return FScaffold(
-          footer: FBottomNavigationBar(
-            index: currentIndex,
-            onChange: (index) {
-              bloc.add(
-                HomeEventUpdatedIndex(index),
-              );
-            },
-            children: const [
-              FBottomNavigationBarItem(
-                icon: Icon(FLucideIcons.messageSquare),
-                label: Text('AI'),
-              ),
-              FBottomNavigationBarItem(
-                icon: Icon(FLucideIcons.bookOpen),
-                label: Text('Bible'),
-              ),
-              FBottomNavigationBarItem(
-                icon: Icon(FLucideIcons.bookmark),
-                label: Text('QuiteTime'),
-              ),
-              FBottomNavigationBarItem(
-                icon: Icon(FLucideIcons.settings),
-                label: Text('Setting'),
-              ),
-            ],
-          ),
-          child: PageView(
-            key: ValueKey(currentIndex),
-            physics: const NeverScrollableScrollPhysics(),
-            controller: PageController(initialPage: currentIndex),
-            children: const [
-              ChatView(),
-              BibleView(),
-              QuiteTimeDashBoardView(),
-              SettingView(),
-            ],
+        return BlocListener<HomeBloc, HomeState>(
+          listenWhen: (previous, next) => previous.menuIndex != next.menuIndex,
+          listener: (context, state) {
+            pageController.animateToPage(
+              state.menuIndex,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+            );
+          },
+          child: FScaffold(
+            footer: FBottomNavigationBar(
+              index: currentIndex,
+              onChange: (index) {
+                bloc.add(
+                  HomeEventUpdatedIndex(index),
+                );
+              },
+              children: const [
+                FBottomNavigationBarItem(
+                  icon: Icon(FLucideIcons.messageSquare),
+                  label: Text('AI'),
+                ),
+                FBottomNavigationBarItem(
+                  icon: Icon(FLucideIcons.bookOpen),
+                  label: Text('Bible'),
+                ),
+                FBottomNavigationBarItem(
+                  icon: Icon(FLucideIcons.bookmark),
+                  label: Text('QuiteTime'),
+                ),
+                FBottomNavigationBarItem(
+                  icon: Icon(FLucideIcons.settings),
+                  label: Text('Setting'),
+                ),
+              ],
+            ),
+            child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: pageController,
+              children: const [
+                ChatView(),
+                BibleView(),
+                QuiteTimeDashBoardView(),
+                SettingView(),
+              ],
+            ),
           ),
         );
       },
