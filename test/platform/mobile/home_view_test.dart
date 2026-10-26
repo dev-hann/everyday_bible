@@ -1,7 +1,10 @@
 import 'package:everydaybible/model/audio/audio_state.dart';
 import 'package:everydaybible/model/chat/chat_message.dart';
 import 'package:everydaybible/model/chat/chat_session.dart';
+import 'package:everydaybible/model/failure.dart';
 import 'package:everydaybible/model/setting.dart';
+import 'package:everydaybible/model/update/app_release.dart';
+import 'package:everydaybible/model/update/download_progress.dart';
 import 'package:everydaybible/platform/mobile/audio_player_view/bloc/audio_player_bloc.dart';
 import 'package:everydaybible/platform/mobile/bible_view/bible_view.dart';
 import 'package:everydaybible/platform/mobile/bible_view/bloc/bible_bloc.dart';
@@ -11,14 +14,19 @@ import 'package:everydaybible/platform/mobile/home_view/home_view.dart';
 import 'package:everydaybible/platform/mobile/quite_time_dash_board_view/bloc/quite_time_dash_board_bloc.dart';
 import 'package:everydaybible/platform/mobile/quite_time_dash_board_view/quite_time_dash_board_view.dart';
 import 'package:everydaybible/platform/mobile/setting_view/bloc/setting_bloc.dart';
+import 'package:everydaybible/platform/mobile/setting_view/bloc/update_bloc.dart';
+import 'package:everydaybible/repo/apk_install_repo/apk_install_repo.dart';
 import 'package:everydaybible/repo/audio_repo/repo_audio.dart';
 import 'package:everydaybible/repo/bible_repo/bible_repo.dart';
 import 'package:everydaybible/repo/chat_repo/chat_repo.dart';
 import 'package:everydaybible/repo/quite_time_repo/quite_time_repo.dart';
+import 'package:everydaybible/repo/update_repo/update_repo.dart';
+import 'package:everydaybible/use_case/update_use_case/update_use_case.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:forui/forui.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:just_audio/just_audio.dart';
 
 void main() {
@@ -32,6 +40,10 @@ void main() {
       final quiteTimeBloc = QuiteTimeDashBoardBloc(_FakeQuiteTimeRepo());
       final audioBloc = AudioPlayerBloc(_FakeAudioRepo());
       final settingBloc = SettingBloc()..add(const SettingEventInited());
+      final updateBloc = UpdateBloc(
+        useCase: UpdateUseCase(_FakeUpdateRepo(), _FakeApkInstallRepo()),
+        resolveCurrentVersion: () async => '3.0.0',
+      );
 
       await tester.pumpWidget(
         FTheme(
@@ -47,6 +59,7 @@ void main() {
                 ),
                 BlocProvider<AudioPlayerBloc>.value(value: audioBloc),
                 BlocProvider<SettingBloc>.value(value: settingBloc),
+                BlocProvider<UpdateBloc>.value(value: updateBloc),
               ],
               child: const HomeView(),
             ),
@@ -84,6 +97,41 @@ void main() {
       );
     },
   );
+}
+
+class _FakeUpdateRepo extends UpdateRepo {
+  @override
+  Future<Either<Failure, AppRelease>> getLatestRelease() async {
+    return const Right(
+      AppRelease(
+        version: '3.0.0',
+        htmlUrl: 'https://github.com/dev-hann/everyday_bible',
+      ),
+    );
+  }
+}
+
+class _FakeApkInstallRepo extends ApkInstallRepo {
+  @override
+  Stream<DownloadProgress> download(String url) => const Stream.empty();
+
+  @override
+  Future<Either<Failure, bool>> canRequestPackageInstalls() async {
+    return const Right(true);
+  }
+
+  @override
+  Future<Either<Failure, Unit>> launchInstaller() async {
+    return const Right(unit);
+  }
+
+  @override
+  Future<Either<Failure, Unit>> openInstallPermissionSettings() async {
+    return const Right(unit);
+  }
+
+  @override
+  void cancelDownload() {}
 }
 
 class _FakeChatRepo extends ChatRepo {
