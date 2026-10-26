@@ -57,9 +57,26 @@ class App extends StatelessWidget {
               WidgetsBinding.instance.platformDispatcher.platformBrightness,
           };
           return FTheme(
-            data: brightness == Brightness.dark
-                ? FTheme.neutral.dark.touch
-                : FTheme.neutral.light.touch,
+            // App-wide forui density:
+            // - cards use 12 instead of the default 16;
+            // - the scaffold page padding is zeroed because the home shell
+            //   nests an FScaffold per tab (12 + 12 would stack to 24 on
+            //   top of every list view's own 16px gutter).
+            data: (brightness == Brightness.dark
+                    ? FTheme.neutral.dark.touch
+                    : FTheme.neutral.light.touch)
+                .copyWith(
+              cardStyle: const FCardStyleDelta.delta(
+                padding: EdgeInsetsGeometryDelta.value(
+                  EdgeInsets.all(12),
+                ),
+              ),
+              scaffoldStyle: const FScaffoldStyleDelta.delta(
+                childPadding: EdgeInsetsGeometryDelta.value(
+                  EdgeInsets.zero,
+                ),
+              ),
+            ),
             child: MaterialApp(
               title: 'Everyday Bible',
               debugShowCheckedModeBanner: false,

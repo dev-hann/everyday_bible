@@ -46,15 +46,27 @@ class _QuiteTimeDashBoardViewState extends State<QuiteTimeDashBoardView>
           today: now,
           initial: dateTime,
         ),
-        style: const FCalendarStyleDelta.delta(
-          padding: EdgeInsetsGeometryDelta.value(EdgeInsets.zero),
-          dayPickerStyle: FCalendarDayPickerStyleDelta.delta(
-            daySize: Size(48, 44),
+        style: FCalendarStyleDelta.delta(
+          padding: const EdgeInsetsGeometryDelta.value(EdgeInsets.zero),
+          dayPickerStyle: const FCalendarDayPickerStyleDelta.delta(
+            // 44 matches forui's touch default: 7 cells fit the card at
+            // 360dp without the grid overflowing the content width.
+            daySize: Size(44, 44),
           ),
           headerStyle: FCalendarHeaderStyleDelta.delta(
-            tappablePadding: EdgeInsetsGeometryDelta.value(
-              EdgeInsets.symmetric(horizontal: 4),
+            tappablePadding: const EdgeInsetsGeometryDelta.value(
+              EdgeInsetsDirectional.only(
+                start: 2,
+                top: 4,
+                bottom: 4,
+              ),
             ),
+            // The month/year labels default to the large display type; at
+            // 360dp the two labels plus the arrows overflow the card, so
+            // they are sized down to the body scale.
+            headerTextStyle: FVariantsDelta.delta([
+              FVariantOperation.all(const TextStyleDelta.delta(fontSize: 16)),
+            ]),
           ),
         ),
         selectionControl: FDateSelectionControl.liftedSingle(
