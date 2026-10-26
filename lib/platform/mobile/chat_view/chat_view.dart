@@ -21,10 +21,12 @@ class ChatView extends StatefulWidget {
 }
 
 class _ChatViewState extends State<ChatView> {
+  // Line breaks keep each chip inside FButton's non-wrapping content row
+  // on a 360dp screen.
   static const List<String> _examples = [
     '요한복음 3:16을 풀어줘',
-    '오늘 읽던 본문 한 구절 골라서 묵상을 도와줘',
-    '시편 23편에서 위로받는 방법을 알려줘',
+    '오늘 읽던 본문 한 구절 골라서\n묵상을 도와줘',
+    '시편 23편에서\n위로받는 방법을 알려줘',
   ];
 
   final TextEditingController _inputController = TextEditingController();
@@ -221,10 +223,10 @@ class _MessageBubble extends StatelessWidget {
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 6),
-        padding: const EdgeInsets.all(14),
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.all(12),
         constraints: BoxConstraints(
-          maxWidth: MediaQuery.of(context).size.width * 0.82,
+          maxWidth: MediaQuery.of(context).size.width * 0.8,
         ),
         decoration: BoxDecoration(
           color: isUser ? colors.primary : colors.secondary,
@@ -288,7 +290,10 @@ class _EmptyChat extends StatelessWidget {
                     size: FButtonSizeVariant.sm,
                     mainAxisSize: MainAxisSize.min,
                     onPress: () => onExampleTap(example),
-                    child: Text(example),
+                    child: Text(
+                      example,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
               ],
             ),
